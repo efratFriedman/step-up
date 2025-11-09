@@ -1,0 +1,150 @@
+
+.formContainer {
+    max-width: 400px; 
+    width: 100%;
+    margin: 0 auto; 
+    padding: 30px;
+    background-color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+    direction: ltr; 
+    min-height: 100vh;
+    box-sizing: border-box; 
+}
+
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+.inputGroup {
+    margin-bottom: 25px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd; 
+}
+
+.inputField {
+    flex-grow: 1;
+    border: none;
+    padding: 10px 0;
+    font-size: 16px;
+    outline: none;
+    background-color: transparent;
+    color: #333;
+}
+
+.inputField::placeholder {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.icon {
+    color: #888;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.terms {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 25px;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.terms input[type="checkbox"] {
+    margin-top: 4px;
+    margin-right: 10px;
+    accent-color: #333; 
+}
+
+.terms label {
+    color: #555;
+    line-height: 1.4;
+}
+
+.termsLink {
+    font-weight: 600;
+    color: #333;
+}
+
+.continueButton {
+    width: 100%;
+    padding: 14px;
+    background-color: #717171;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.orDivider {
+    text-align: center;
+    margin: 18px 0;
+    color: #999;
+    font-size: 14px;
+}
+
+.googleButton {
+    width: 100%;
+    padding: 12px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.googleIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.signInLink {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 15px;
+    color: #555;
+}
+
+.signInText {
+    color: #333; 
+    text-decoration: none;
+    font-weight: 600;
+}
+
+@media (min-width: 401px) {
+    .formContainer {
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        min-height: auto; 
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+}
