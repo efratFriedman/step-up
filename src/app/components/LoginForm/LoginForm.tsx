@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import styles from "./LoginForm.module.css"; // אם את רוצה להוסיף עיצוב בהמשך
+import styles from "./LoginForm.module.css";
+import { FaEnvelope, FaLock, FaEye } from 'react-icons/fa';
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -25,7 +27,7 @@ export default function LoginForm() {
       if (response.ok) {
         const data = await response.json();
         console.log("Login successful:", data);
-        router.push("/"); // ניתוב הביתה אחרי התחברות
+        router.push("/");
       } else {
         setError("Invalid email or password");
       }
@@ -34,29 +36,67 @@ export default function LoginForm() {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <h2>Log In</h2>
 
-      <label>Email:</label>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
+    return (
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h2>Log In</h2>
+  
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email</label>
+          <div className={styles.inputWrapper}>
+            <input
+              type="email"
+              placeholder="Enter email address"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              required
+              className={styles.inputField}
+            />
+            <FaEnvelope className={styles.icon} />
+          </div>
+        </div>
+  
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password</label>
+          <div className={styles.inputWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Your password"
+              value={password}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              required
+              className={styles.inputField}
+            />
+            <FaEye 
+               className={styles.icon} 
+               onClick={() => setShowPassword(!showPassword)}
+               style={{ cursor: 'pointer' }}
+            />
+          </div>
+        </div>
+  
 
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+        {error && <p className={styles.error}>{error}</p>}
+        
+        <button type="submit" className={styles.loginButton}>
+          Log In
+        </button>
+  
+        <p className={styles.orDivider}>Or</p>
 
-      {error && <p className={styles.error}>{error}</p>}
+        <button type="button" className={styles.googleButton}>
+          <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" 
+              alt="Google logo" 
+              className={styles.googleIcon} 
+          />
+          Sign in with Google
+        </button>
 
-      <button type="submit">Log In</button>
-    </form>
-  );
+        <p className={styles.signUpLink}>
+          Don't have an Account? <a href="/signup" className={styles.signUpText}>Sign Up</a>
+        </p>
+  
+      </form>
+    );
 }

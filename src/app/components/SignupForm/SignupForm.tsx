@@ -142,7 +142,7 @@ export default function SignupForm() {
         Sign in with Google
       </button>
       <p className={styles.signInLink}>
-        Have an Account? <a href="/signin" className={styles.signInText}>Sign In</a>
+        Have an Account? <a href="/login" className={styles.signInText}>Sign In</a>
       </p>
 
       {message && <p className={styles.message}>{message}</p>}
