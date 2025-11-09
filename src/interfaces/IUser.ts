@@ -4,9 +4,9 @@ export interface IUser extends Document {
   name: string;
   email: string;
   phone: string;
-  birthDate?: Date;
+  birthDate: Date;
   password: string;
   profileImg?: string;       
-  habits: Types.ObjectId[];  
-  posts: Types.ObjectId[];  
+  habits?: Types.ObjectId[];  
+  posts?: Types.ObjectId[];  
 }
