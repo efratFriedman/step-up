@@ -2,6 +2,7 @@
 import { useState, FormEvent, ChangeEvent, FocusEvent, MouseEvent } from "react";
 import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
+import { signInWithGoogle } from "@/services/authService";
 
 export default function SignupForm() {
   const [name, setName] = useState("");
@@ -30,10 +31,19 @@ export default function SignupForm() {
   }
 
   const handleDateBlur = (e: FocusEvent<HTMLInputElement>) => {
-      if (!birthDate) {
-          e.currentTarget.type = 'text';
-      }
+    if (!birthDate) {
+      e.currentTarget.type = 'text';
+    }
   }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const user = await signInWithGoogle();
+      setMessage(`Welcome, ${user.displayName}`);
+    } catch {
+      setMessage("Google sign-in failed");
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer}>
@@ -58,7 +68,7 @@ export default function SignupForm() {
         <label className={styles.label}>BirthDate</label>
         <div className={styles.inputWrapper}>
           <input
-            type="text" 
+            type="text"
             placeholder="Enter a date"
             value={birthDate}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBirthDate(e.target.value)}
@@ -112,10 +122,10 @@ export default function SignupForm() {
             required
             className={styles.inputField}
           />
-          <FaEye 
-             className={styles.icon} 
-             onClick={() => setShowPassword(!showPassword)}
-             style={{ cursor: 'pointer' }}
+          <FaEye
+            className={styles.icon}
+            onClick={() => setShowPassword(!showPassword)}
+            style={{ cursor: 'pointer' }}
           />
         </div>
       </div>
@@ -133,11 +143,11 @@ export default function SignupForm() {
 
       <p className={styles.orDivider}>Or</p>
 
-      <button type="button" className={styles.googleButton}>
-        <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" 
-            alt="Google logo" 
-            className={styles.googleIcon} 
+      <button type="button" className={styles.googleButton} onClick={handleGoogleSignIn}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+          alt="Google logo"
+          className={styles.googleIcon}
         />
         Sign in with Google
       </button>
