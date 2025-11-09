@@ -9,5 +9,5 @@ export interface IHabit extends Document {
     hour: number;
     minute: number;
   };
-  days: string[];      
+  days: string[];  
 }
