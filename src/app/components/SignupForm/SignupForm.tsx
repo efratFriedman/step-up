@@ -5,7 +5,6 @@ import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/f
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/services/firebaseService";
 import { useUserStore } from "@/app/store/userStore";
-import { log } from "console";
 
 export default function SignupForm() {
   const [name, setName] = useState("");
@@ -98,10 +97,7 @@ export default function SignupForm() {
       }
       
       setUser(savedUser.user);
-
-      
-
-      router.push("/");
+     router.push("/");
 
 
       clearTimeout(timeout);
