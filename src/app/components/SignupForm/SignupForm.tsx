@@ -20,27 +20,27 @@ export default function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-      if (!name || !password || !birthDate || !phone || !email) {
+    if (!name || !password || !birthDate || !phone || !email) {
       setError("Please fill in all required fields");
       return;
     }
-  
+
     try {
       console.log("Sending signup request with:", { name, password, birthDate, phone, email });
-  
+
       const response = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, password, birthDate, phone, email }),
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         setError(data.message || "Something went wrong.");
         return;
       }
-  
+
       console.log("Signup successful:", data);
       router.push("/");
     } catch (err) {
@@ -48,7 +48,7 @@ export default function SignupForm() {
       setError("Network error. Please try again later.");
     }
   };
-  
+
 
   const handleDateFocus = (e: FocusEvent<HTMLInputElement>) => {
     e.currentTarget.type = 'date';
@@ -59,9 +59,9 @@ export default function SignupForm() {
       e.currentTarget.type = 'text';
     }
   }
- 
-  
-   
+
+
+
 
   const handleGoogleSignIn = async () => {
     if (loading) return;
@@ -70,18 +70,41 @@ export default function SignupForm() {
     try {
       const timeout = setTimeout(() => setLoading(false), 6000);
 
-      await signInWithGoogle();
+      const user = await signInWithGoogle();
+      const userData = {
+        name: user.displayName,
+        email: user.email,
+        googleId: user.uid,
+        avatar: user.photoURL,
+        password: null,
+      };
+      const response = await fetch("/api/googleSignup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+      const savedUser = await response.json();
+      if (!response.ok) {
+        setError(savedUser.message || "Something went wrong");
+        return;
+      }
+
+      // מעדכנים Zustand
+      // setUser(savedUser);
+
+      router.push("/");
+
 
       clearTimeout(timeout);
     } catch (error: any) {
       console.error(" Sign-in error:", error.code || error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
-  <form onSubmit={handleSubmit} className={styles.formContainer} noValidate>
+    <form onSubmit={handleSubmit} className={styles.formContainer} noValidate>
       <h1 className={styles.title}>Sign Up</h1>
       <div className={styles.inputGroup}>
         <label className={styles.label}>Username</label>
