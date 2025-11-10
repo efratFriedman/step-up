@@ -6,32 +6,22 @@ import jwt from "jsonwebtoken";
 export async function POST(request: Request) {
     try {
         await dbConnect();
-        const { name, email, googleId, profileImg } = await request.json();
+        const { email, googleId } = await request.json();
 
-        if (!name || !email || !googleId) {
+        if (!email || !googleId) {
             return NextResponse.json(
-                { message: "Missing required Google user data" },
+                { message: "Missing Google user data" },
                 { status: 400 }
             );
         }
 
-        let user = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (user) {
-            if (!user.googleId) {
-                user.googleId = googleId;
-                if (profileImg) user.profileImg = profileImg;
-                await user.save();
-            }
-        } else {
-            user = new User({
-                name,
-                email,
-                googleId,
-                profileImg: profileImg || "",
-                password: null,
-            });
-            await user.save();
+        if (!user) {
+            return NextResponse.json(
+                { message: "User not found", redirectTo: "/signup" },
+                { status: 404 }
+            );
         }
 
         const token = jwt.sign(
@@ -41,8 +31,13 @@ export async function POST(request: Request) {
         );
 
         const response = NextResponse.json({
-            message: `Welcome ${name}!`,
-            user: { id: user._id, name: user.name, email: user.email, profileImg: user.profileImg },
+            message: `Welcome back ${user.name}!`,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                profileImg: user.profileImg
+            }
         });
 
         response.cookies.set("token", token, {
@@ -53,8 +48,9 @@ export async function POST(request: Request) {
         });
 
         return response;
+
     } catch (error) {
-        console.error("Google signup error:", error);
+        console.error("Google login error:", error);
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 }
