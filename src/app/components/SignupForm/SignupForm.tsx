@@ -51,7 +51,7 @@ export default function SignupForm() {
     } catch (error: any) {
       console.error("❌ Sign-in error:", error.code || error);
     } finally {
-      setLoading(false); // תמיד משחרר את הנעילה
+      setLoading(false); 
     }
   };
 
