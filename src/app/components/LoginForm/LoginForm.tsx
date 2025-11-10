@@ -17,32 +17,31 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setError("");
-  
+
     try {
-      console.log("Sending login request with:", { email, password });
-  
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-  
-      const data = await response.json();
-  
-      if (!response.ok) {
-        setError(data.message || "Something went wrong.");
-        return;
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login successful:", data);
+        router.push("/");
+      } else {
+        setError("Invalid email or password");
       }
-  
-      console.log("Login successful:", data);
-      router.push("/");
     } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Network error. Please try again later.");
+      setError("Something went wrong. Please try again later.");
     }
   };
-  
+
+  const handleGoogleSignIn = async () => {
+    if (loading) return;
+    setLoading(true);
 
     try {
       const timeout = setTimeout(() => setLoading(false), 6000);
@@ -60,7 +59,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <img className={styles.logoImg}src="/fullLogo.png" alt="full logo" />
+      <img className={styles.logoImg} src="/fullLogo.png" alt="full logo" />
       <h2>Log In</h2>
       <div className={styles.inputGroup}>
         <label className={styles.label}>Email</label>
