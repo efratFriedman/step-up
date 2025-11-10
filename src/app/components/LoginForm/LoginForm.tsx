@@ -53,15 +53,15 @@ export default function LoginForm() {
     } catch (error: any) {
       console.error("❌ Sign-in error:", error.code || error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      <img className={styles.logoImg}src="/fullLogo.png" alt="full logo" />
       <h2>Log In</h2>
-
       <div className={styles.inputGroup}>
         <label className={styles.label}>Email</label>
         <div className={styles.inputWrapper}>
