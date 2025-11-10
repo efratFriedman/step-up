@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { IUser } from '@/interfaces/IUser';
+import { IUserClient } from '@/interfaces/IUserClient';
 
 interface UserState {
-  user: IUser | null;
-  setUser: (user: IUser) => void;
+  user: IUserClient | null;
+  setUser: (user: IUserClient) => void;
   clearUser: () => void;
 }
 
@@ -16,7 +16,7 @@ export const useUserStore = create<UserState>()(
       clearUser: () => set({ user: null }),
     }),
     {
-      name: 'user-storage', 
+      name: 'user-storage',
     }
   )
 );
