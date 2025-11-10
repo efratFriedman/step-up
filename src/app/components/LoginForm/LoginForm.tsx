@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
@@ -42,19 +41,42 @@ export default function LoginForm() {
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setLoading(true);
-
+    setError("");
+  
     try {
-      const timeout = setTimeout(() => setLoading(false), 6000);
+      const user = await signInWithGoogle(); 
+      const userData = {
+        email: user.email,
+        googleId: user.uid,
+        name: user.displayName,
+        avatar: user.photoURL
+      };
 
-      await signInWithGoogle();
-
-      clearTimeout(timeout);
+      const response = await fetch("/api/googleLogin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+  
+      const data = await response.json();
+  
+      if (response.status === 200) {
+        alert(data.message);
+        router.push("/");
+      } else if (response.status === 404) {
+        router.push("/signup");
+      } else {
+        setError(data.message || "Something went wrong");
+      }
+  
     } catch (error: any) {
-      console.error("❌ Sign-in error:", error.code || error);
+      console.error("Google sign-in error:", error.code || error);
+      setError("Something went wrong during Google sign-in");
     } finally {
       setLoading(false);
     }
   };
+  
 
 
   return (

@@ -89,8 +89,7 @@ export default function SignupForm() {
         return;
       }
 
-      // מעדכנים Zustand
-      // setUser(savedUser);
+
 
       router.push("/");
 
