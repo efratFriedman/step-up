@@ -1,8 +1,8 @@
 "use client";
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
-import { FaEnvelope, FaLock, FaEye } from 'react-icons/fa';
+import { FaEnvelope, FaEye } from 'react-icons/fa';
 import { signInWithGoogle } from "@/services/firebaseService";
 import { useUserStore } from "@/app/store/userStore";
 

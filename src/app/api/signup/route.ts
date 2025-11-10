@@ -21,16 +21,16 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidBirthDate(birthDate)) {
       return NextResponse.json(
-        { message: "the email is not valid" },
+        { message: "the date is not valid" },
         { status: 400 }
       );
     }
 
-    if (!isValidPassword(password)) {
+    if (!isValidEmail(email)) {
       return NextResponse.json(
-        { message: "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character." },
+        { message: "the email is not valid" },
         { status: 400 }
       );
     }
@@ -42,12 +42,16 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!isValidBirthDate(birthDate)) {
+    if (!isValidPassword(password)) {
       return NextResponse.json(
-        { message: "the date is not valid" },
+        { message: "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character." },
         { status: 400 }
       );
     }
+
+    
+
+   
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -74,7 +78,7 @@ export async function POST(request: Request) {
     );
 
     const response = NextResponse.json({
-      message: `Welcome ${name}! Your account has been created.`,
+      message:`Welcome ${name}! Your account has been created.`,
     });
    
     response.cookies.set("token", token, {

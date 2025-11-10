@@ -10,17 +10,20 @@ export function isValidPassword(password: string): boolean {
     .string()
     .min(8)
     .regex(
-      /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
       "Password must contain at least one uppercase, lowercase, number and special character"
     );
   return schema.safeParse(password).success;
 }
 
+
+
 export function isValidPhone(phone: string): boolean {
+  const cleanedPhone = phone.trim().replace(/[-\s]/g, ""); 
   const schema = z
     .string()
     .regex(/^(\+972|0)([234589]|5[0-9])\d{7}$/, "Invalid Israeli phone number");
-  return schema.safeParse(phone).success;
+  return schema.safeParse(cleanedPhone).success;
 }
 
 export function isValidBirthDate(birthDate: string): boolean {
@@ -37,3 +40,4 @@ export function isValidBirthDate(birthDate: string): boolean {
 
   return schema.safeParse(birthDate).success;
 }
+

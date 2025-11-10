@@ -15,7 +15,7 @@ export default function SignupForm() {
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+
 
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
@@ -23,9 +23,9 @@ export default function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setMessage("");
     if (!name || !password || !birthDate || !phone || !email) {
-      setError("Please fill in all required fields");
+      setMessage("Please fill in all required fields");
       return;
     }
 
@@ -41,7 +41,7 @@ export default function SignupForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || "Something went wrong.");
+        setMessage(data.message || "Something went wrong.");
         return;
       }
 
@@ -52,7 +52,7 @@ export default function SignupForm() {
       router.push("/");
     } catch (err) {
       console.error("Fetch error:", err);
-      setError("Network error. Please try again later.");
+      setMessage("Network error. Please try again later.");
     }
   };
 
@@ -92,7 +92,7 @@ export default function SignupForm() {
       });
       const savedUser = await response.json();
       if (!response.ok) {
-        setError(savedUser.message || "Something went wrong");
+        setMessage(savedUser.message || "Something went wrong");
         return;
       }
       
