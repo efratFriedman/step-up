@@ -3,6 +3,7 @@ import { useState, FormEvent, ChangeEvent, FocusEvent, MouseEvent } from "react"
 import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
 import { signInWithGoogle } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 export default function SignupForm() {
   const [name, setName] = useState("");
@@ -13,19 +14,41 @@ export default function SignupForm() {
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const res = await fetch("/api/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, password, birthDate, phone, email }),
-    });
-
-    const data = await res.json();
-    setMessage(data.message);
+    setError("");
+      if (!name || !password || !birthDate || !phone || !email) {
+      setError("Please fill in all required fields");
+      return;
+    }
+  
+    try {
+      console.log("Sending signup request with:", { name, password, birthDate, phone, email });
+  
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, password, birthDate, phone, email }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        setError(data.message || "Something went wrong.");
+        return;
+      }
+  
+      console.log("Signup successful:", data);
+      router.push("/");
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Network error. Please try again later.");
+    }
   };
+  
 
   const handleDateFocus = (e: FocusEvent<HTMLInputElement>) => {
     e.currentTarget.type = 'date';
@@ -36,7 +59,9 @@ export default function SignupForm() {
       e.currentTarget.type = 'text';
     }
   }
-
+ 
+  
+   
 
   const handleGoogleSignIn = async () => {
     if (loading) return;
@@ -49,16 +74,15 @@ export default function SignupForm() {
 
       clearTimeout(timeout);
     } catch (error: any) {
-      console.error("❌ Sign-in error:", error.code || error);
+      console.error(" Sign-in error:", error.code || error);
     } finally {
-      setLoading(false); // תמיד משחרר את הנעילה
+      setLoading(false); 
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.formContainer}>
+  <form onSubmit={handleSubmit} className={styles.formContainer} noValidate>
       <h1 className={styles.title}>Sign Up</h1>
-
       <div className={styles.inputGroup}>
         <label className={styles.label}>Username</label>
         <div className={styles.inputWrapper}>
@@ -78,7 +102,7 @@ export default function SignupForm() {
         <label className={styles.label}>BirthDate</label>
         <div className={styles.inputWrapper}>
           <input
-            type="text"
+            type="date"
             placeholder="Enter a date"
             value={birthDate}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBirthDate(e.target.value)}

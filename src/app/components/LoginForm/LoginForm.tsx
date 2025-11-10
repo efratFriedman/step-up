@@ -12,30 +12,57 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   setError("");
+
+  //   try {
+  //     const response = await fetch("/api/login", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+      
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log("Login successful:", data);
+  //       router.push("/");
+  //     } else {
+  //       setError("Invalid email or password");
+  //     }
+  //   } catch (err) {
+  //     setError("Something went wrong. Please try again later.");
+  //   }
+  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setError("");
-
+  
     try {
+      console.log("Sending login request with:", { email, password });
+  
       const response = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful:", data);
-        router.push("/");
-      } else {
-        setError("Invalid email or password");
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        setError(data.message || "Something went wrong.");
+        return;
       }
+  
+      console.log("Login successful:", data);
+      router.push("/");
     } catch (err) {
-      setError("Something went wrong. Please try again later.");
+      console.error("Fetch error:", err);
+      setError("Network error. Please try again later.");
     }
   };
-
+  
 
     return (
       <form onSubmit={handleSubmit} className={styles.form}>

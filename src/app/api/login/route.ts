@@ -4,16 +4,45 @@ import User from "@/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+function isValidEmail(email: string) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function isValidPassword(password: string) {
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+}
+
 export async function POST(request: Request) {
   try {
     await dbConnect();
     const { email, password } = await request.json();
+
+    
 
     console.log("Login attempt:", { email });
 
     if (!email || !password) {
       return NextResponse.json(
         { message: "Please enter both email and password" },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidEmail(email)) {
+      console.log("email")
+      return NextResponse.json(
+        { message: "the email is not valid" },
+        { status: 400 }
+      );
+    }
+
+    if (!isValidPassword(password)) {
+      console.log("password")
+      return NextResponse.json(
+        { message: "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character." },
         { status: 400 }
       );
     }
@@ -54,6 +83,7 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    return NextResponse.json({ message: "Server error" }
+                           , { status: 500 });
   }
 }
