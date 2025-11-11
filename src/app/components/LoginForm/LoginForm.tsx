@@ -83,8 +83,6 @@ export default function LoginForm() {
     }
   };
 
-
-
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <img className={styles.logoImg} src="/fullLogo.png" alt="full logo" />

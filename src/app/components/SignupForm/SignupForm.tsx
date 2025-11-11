@@ -62,9 +62,6 @@ export default function SignupForm() {
     }
   }
 
-
-
-
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setLoading(true);
