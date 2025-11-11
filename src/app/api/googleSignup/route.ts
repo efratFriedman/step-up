@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import User from "@/models/User";
+import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
     try {
         await dbConnect();
-        const { name, email, googleId, profileImg } = await request.json();
+        const body = await request.json();
+        const { name, email, googleId, profileImg } = body;
 
         if (!name || !email || !googleId) {
             return NextResponse.json(
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
             await user.save();
         }
 
+
         const token = jwt.sign(
             { id: user._id, email: user.email },
             process.env.JWT_SECRET!,
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
 
         return response;
     } catch (error) {
-        console.error("Google signup error:", error);
+        console.error("❌ Google signup error:", error);
         return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useState,ChangeEvent, FocusEvent} from "react";
+import { useState, ChangeEvent, FocusEvent } from "react";
 import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
@@ -30,7 +30,6 @@ export default function SignupForm() {
     }
 
     try {
-      console.log("Sending signup request with:", { name, password, birthDate, phone, email });
 
       const response = await fetch("/api/signup", {
         method: "POST",
@@ -44,11 +43,7 @@ export default function SignupForm() {
         setMessage(data.message || "Something went wrong.");
         return;
       }
-
       setUser(data.user);
-
-      console.log("Signup successful:", data);
-
       router.push("/");
     } catch (err) {
       console.error("Fetch error:", err);
@@ -83,7 +78,6 @@ export default function SignupForm() {
         email: user.email,
         googleId: user.uid,
         profileImg: user.photoURL,
-        password: null,
       };
       const response = await fetch("/api/googleSignup", {
         method: "POST",
@@ -95,9 +89,9 @@ export default function SignupForm() {
         setMessage(savedUser.message || "Something went wrong");
         return;
       }
-      
+
       setUser(savedUser.user);
-     router.push("/");
+      router.push("/");
 
 
       clearTimeout(timeout);
