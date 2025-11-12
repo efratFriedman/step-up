@@ -4,16 +4,6 @@ import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import { IHabitClient, useHabitStore } from "@/app/store/useHobbyStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 
-// export interface IHabitClient {
-//   userId: string;
-//   name: string;
-//   description?: string;
-//   categoryId?: string;
-//   reminderTime?: { hour: number; minute: number };
-//   days?: string[];
-// }
-
-
 export default function NewHabit() {
   const [isOpen, setIsOpen] = useState(false);
   const { categories, fetchCategories } = useCategoriesStore();
