@@ -11,8 +11,6 @@ export async function POST(request: Request) {
     await dbConnect();
     const { email, password } = await request.json();
 
-    
-
     console.log("Login attempt:", { email });
 
     if (!email || !password) {

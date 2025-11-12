@@ -49,10 +49,6 @@ export async function POST(request: Request) {
       );
     }
 
-    
-
-   
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
