@@ -18,7 +18,7 @@ interface HabitStore {
     description?: string;
     categoryId?: string;
     reminderTime?: { hour: number; minute: number };
-    days?: string[];
+    days?: boolean[];
   }
   
 

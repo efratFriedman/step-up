@@ -8,16 +8,11 @@ import styles from '@/app/components/Habit/AddHabit/HabitForm/HabitForm.module.c
 import CategorySelect from "../CategorySelect/CategorySelect";
 import ReminderTime from "../ReminderTime/ReminderTime";
 interface HabitFormProps {
-    categories: ICategoryFront[];
+    categories: ICategory[];
     onSubmit: (data: HabitFormData) => void;
     onCancel?: () => void;
 }
-export interface ICategoryFront {
-    _id: string;
-    name: string;
-    image?: string;
-    colorTheme?: string;
-}
+
 export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormProps) {
     const { register, handleSubmit, control, formState } = useForm<HabitFormData>({
         resolver: zodResolver(habitSchema),
