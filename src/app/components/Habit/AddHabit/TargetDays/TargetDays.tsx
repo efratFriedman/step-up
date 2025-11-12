@@ -11,7 +11,7 @@ interface TargetDaysProps {
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export default function TargetDays({ control, name = "targetDays", error }: TargetDaysProps) {
+export default function TargetDays({ control, name = "days", error }: TargetDaysProps) {
     return (
         <div className={styles.targetDaysContainer}>
             <label className={styles.label}>Target Days</label>

@@ -1,10 +1,10 @@
 "use client";
 import { useState } from 'react';
 import styles from './CategorySelect.module.css';
-import { ICategoryFront } from '../HabitForm/HabitForm';
+import { ICategory } from '@/interfaces/ICategory';
 
 interface CategorySelectProps {
-    categories: ICategoryFront[];
+    categories: ICategory[];
     value: string; 
     onChange: (value: string) => void; 
     error?: any; 
