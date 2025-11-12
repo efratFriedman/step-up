@@ -34,7 +34,6 @@ export default function ReminderTime({ value, onChange, error }: ReminderTimePro
         return (
             <div className={styles.inputWrapper}>
               <div className={styles.timeDisplay}>
-                <span className={styles.clockIcon}>🕒</span>
         
                 <input
                   type="time"

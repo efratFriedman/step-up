@@ -6,7 +6,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: #006E8C;
 }
 
 .daysWrapper {
@@ -30,13 +30,13 @@
 }
 
 .unselectedDay {
-    background-color: #ffffff; 
-    color: rgb(0, 0, 0); 
+    background-color:#AAD1DA; 
+    color: #006E8C; 
 }
 
 .selectedDay {
-    background-color: black; 
-    color: white;
+    background-color: #006E8C; 
+    color: #AAD1DA;
 }
 
 .error {

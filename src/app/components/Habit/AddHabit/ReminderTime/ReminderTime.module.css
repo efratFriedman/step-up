@@ -1,4 +1,5 @@
-.inputWrapper {
+.inputWrapper {    
+    color: #006E8C;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -16,12 +17,14 @@
   }
   
   .timePicker {
+    background-color:rgb(224, 244, 244); 
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 0.5rem 0.8rem;
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
+    width: 280px;
   }
   
   .timePicker:focus {

@@ -78,7 +78,7 @@ export default function NewHabit() {
   return (
     <div>
       <button
-        className="btn-primary p-2 rounded"
+        style={{ backgroundColor: "#AAD1DA", color: "#006E8C" }}
         onClick={() => setIsOpen(true)}
       >
         + Add Habit

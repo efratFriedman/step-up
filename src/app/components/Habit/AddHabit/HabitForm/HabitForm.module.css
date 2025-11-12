@@ -17,13 +17,13 @@
 
 .label {
     font-weight: 600;
-    color: #111827;
+    color: #006E8C;
     font-size: 14px;
 }
 
 .input,
 .textarea {
-    background-color: #f7f7f8; 
+    background-color:rgb(224, 244, 244); 
     border: 1px solid transparent;
     border-radius: 10px;
     padding: 12px 14px;
@@ -32,7 +32,7 @@
     transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
     width: 100%;
     box-sizing: border-box;
-    color: #0f172a;
+    color: #006E8C;
 }
 
 .textarea {
@@ -54,8 +54,8 @@
 
 .submitButton {
     margin-top: 12px;
-    background-color: #111827; 
-    color: #ffffff;
+    background-color: #AAD1DA; 
+    color: #006E8C;
     padding: 12px 14px;
     border: none;
     border-radius: 10px;
@@ -79,7 +79,7 @@
 .cancelButton {
     margin-top: 8px;
     background-color: transparent;
-    color: #374151;
+    color: #006E8C;
     padding: 12px 14px;
     border: 1px solid transparent;
     border-radius: 10px;
