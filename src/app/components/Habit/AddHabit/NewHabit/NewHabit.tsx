@@ -1,7 +1,9 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import HabitForm from "../HabitForm/HabitForm";
+import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
+import { useHabitStore } from "@/app/store/useHobbyStore";
+import { useCategoriesStore } from "@/app/store/useCategoriesStore";
+
 export interface ICategoryFront {
   _id: string;
   name: string;
@@ -10,42 +12,42 @@ export interface ICategoryFront {
 }
 
 export default function NewHabit() {
-  const [categories, setCategories] = useState<ICategoryFront[]>([]);
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
+  const { categories, fetchCategories } = useCategoriesStore();
+  const addHabit = useHabitStore((state) => state.addHabit);
 
   useEffect(() => {
-    // ================================
-    // MOCK לטסטים – אפשר למחוק אחר כך
-    const mockCategories: ICategoryFront[] = [
-      { _id: "1", name: "Health", image: "", colorTheme: "#bcdbdf" },
-      { _id: "2", name: "Study", image: "", colorTheme: "#183c5c" },
-      { _id: "3", name: "Hobby", image: "", colorTheme: "#99c8ce" },
-    ];
+    if (categories.length === 0) {
+      // ================================
+      // MOCK לטסטים – אפשר למחוק אחר כך
+      const mockCategories: ICategoryFront[] = [
+        { _id: "1", name: "Health", image: "", colorTheme: "#bcdbdf" },
+        { _id: "2", name: "Study", image: "", colorTheme: "#183c5c" },
+        { _id: "3", name: "Hobby", image: "", colorTheme: "#99c8ce" },
+      ];
 
-    const fetchCategoriesMock = () => {
-      return new Promise<ICategoryFront[]>((resolve) => {
-        setTimeout(() => resolve(mockCategories), 500);
-      });
-    };
+      const fetchCategoriesMock = () => {
+        return new Promise<ICategoryFront[]>((resolve) => {
+          setTimeout(() => resolve(mockCategories), 500);
+        });
+      };
 
-    fetchCategoriesMock().then((data) => setCategories(data));
-    // ================================
+      fetchCategoriesMock().then((data) => fetchCategories());
+      // ================================
+    } else {
+      fetchCategories();
+    }
+  }, [categories, fetchCategories]);
 
-    // כאן יהיה ה-fetch האמיתי בעתיד
-    // fetch("/api/categories")
-    //   .then(res => res.json())
-    //   .then(data => setCategories(data));
-
-  }, []);
-
-  const handleAddHabit = (data: any) => {
+  const handleAddHabit = async (data: any) => {
     console.log("Adding habit:", data);
-    alert("Habit added! Check console for details."); 
-    setIsOpen(false); 
+    await addHabit(data);
+    alert("Habit added! Check console for details.");
+    setIsOpen(false);
   };
 
   const handleCancel = () => {
-    setIsOpen(false); 
+    setIsOpen(false);
   };
 
   return (
