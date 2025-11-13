@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+import confetti from "canvas-confetti";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { HabitFormData, habitSchema } from "@/lib/validation/habitValidation";
@@ -7,6 +9,7 @@ import TargetDays from "../TargetDays/TargetDays";
 import styles from '@/app/components/Habit/AddHabit/HabitForm/HabitForm.module.css'
 import CategorySelect from "../CategorySelect/CategorySelect";
 import ReminderTime from "../ReminderTime/ReminderTime";
+
 interface HabitFormProps {
     categories: ICategory[];
     onSubmit: (data: HabitFormData) => void;
@@ -24,10 +27,25 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
             days: [false, false, false, false, false, false, false]
         },
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const handleFormSubmit = async (data: HabitFormData) => {
+        setIsSubmitting(true);
+      
+        confetti({
+          particleCount: 150,
+          spread: 90,
+          origin: { y: 0.6 },
+          colors: ["#AAD1DA", "#006E8C", "#ffffff"],
+        });
+      
+        onSubmit(data);
+        setIsSubmitting(false);
+      };
+      
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div className={styles.formGroup}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>       
+         <div className={styles.formGroup}>
                 <label className={styles.label}>Habit name</label>
                 <input
                     {...register("name")}
@@ -77,10 +95,16 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
 
             </div>
             <TargetDays control={control} name="days" error={formState.errors.days} />
-            <button type="submit" className={styles.submitButton}>Add Habit</button>
+            <button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={isSubmitting} 
+            > Add Habit
+            </button>
             <button type="button" onClick={onCancel} className={styles.cancelButton}>
                 Cancel
             </button>
         </form>
+        // </div>
     )
 }

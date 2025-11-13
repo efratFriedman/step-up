@@ -1,3 +1,33 @@
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1); 
+    }
+    50% {
+        transform: scale(1.05); 
+    }
+}
+.input:focus + .label,
+.textarea:focus + .label {
+    text-shadow: 0 0 5px rgba(0, 110, 140, 0.5); 
+    transition: text-shadow 0.2s ease;
+}
+
+
+@keyframes placeholderJump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-2px); } 
+    100% { transform: translateY(0); }
+}
+
+.input::placeholder {
+    transition: transform 0.2s ease;
+}
+
+.input:focus::placeholder {
+    animation: placeholderJump 0.4s ease-out;
+}
+
+
 .form {
     display: flex;
     flex-direction: column;
@@ -52,6 +82,21 @@
     font-size: 12px;
 }
 
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.dayButton:active {
+    animation: pop 0.2s ease-out;
+}
+
+.dayButtonSelected {
+    animation: pop 0.3s ease-in-out; 
+}
+
 .submitButton {
     margin-top: 12px;
     background-color: #AAD1DA; 
@@ -73,7 +118,8 @@
 }
 
 .submitButton:active {
-    transform: translateY(0);
+    transform: translateY(0); 
+    animation: bounce 0.15s ease-out; 
 }
 
 .cancelButton {
