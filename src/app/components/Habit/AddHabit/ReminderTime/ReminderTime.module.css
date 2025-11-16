@@ -46,3 +46,40 @@
   font-size: 12px;
   margin-top: 4px;
 }
+    color: #006E8C;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
+  
+  .timeDisplay {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .clockIcon {
+    font-size: 1.3rem;
+  }
+  
+  .timePicker {
+    background-color:rgb(224, 244, 244); 
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 307px;
+  }
+  
+  .timePicker:focus {
+    border-color: #0070f3;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.9rem;
+  }
+  

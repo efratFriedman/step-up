@@ -1,0 +1,87 @@
+/* --- הגדרת Navbar קבוע בתחתית ---
+   הגדרות אלו מבטיחות שהסרגל יישאר צמוד לתחתית המסך 
+*/
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* מרווח קטן מהצדדים כדי לשמור על קצוות המסך אם רוצים, אבל אפשר להסיר אותו */
+  padding: 0; 
+  z-index: 1000;
+  /* נותן רקע מלא ל-nav כדי שייראה כמו מלבן אחיד */
+  background-color: #c7e0e7; 
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* צל כלפי מעלה */
+}
+
+
+.navContainer {
+  /* הסרת max-width כדי שיתפרס על כל רוחב המסך */
+  margin: 0 auto;
+  width: 100%; 
+  /* הסרת border-radius כדי ליצור מלבן מלא */
+  border-radius: 0;
+  background-color: #c7e0e7; 
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 15px;
+  /* הסרת צל מהקונטיינר עצמו והעברה ל-.nav */
+  box-shadow: none; 
+  position: relative;
+}
+
+.addButton {
+cursor: pointer;
+    background-color: #8ac0cc;
+    border: none;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 4px 12px #0003;
+    z-index: 1;
+}
+
+
+.plusSign {
+  color: #2c3e50; 
+  font-size: 30px; 
+  font-weight: 500;
+}
+
+
+.navContainer a {
+  padding: 5px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-decoration: none; 
+}
+
+/* אפשר להשתמש בזה כדי לשלוט בסגנון של הקישור הפעיל אם נרצה */
+.activeLink {
+    /* לדוגמה: להקטין את השקיפות של הקישור עצמו */
+}
+
+.iconBackground {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  /* צבע שקוף יותר כדי להתאים למראה בתמונה */
+  background-color: rgba(128, 128, 128, 0.2); 
+  border-radius: 8px;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}

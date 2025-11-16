@@ -3,13 +3,15 @@ import { useState, useEffect } from "react";
 import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import { IHabitClient, useHabitStore } from "@/app/store/useHobbyStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
+import { useModalStore } from "@/app/store/useModalStore";
 import { useRouter } from "next/navigation";
 import styles from './NewHabit.module.css';
 
 export default function NewHabit() {
-  const [isOpen, setIsOpen] = useState(false);
+  const isHabitModalOpen=useModalStore((state)=>state.isHabitModalOpen);
   const { categories, fetchCategories } = useCategoriesStore();
   const addHabit = useHabitStore((state) => state.addHabit);
+  const closeHabitModal=useModalStore((state)=>state.closeHabitModal)
   const router = useRouter();
 
   useEffect(() => {
@@ -42,25 +44,25 @@ export default function NewHabit() {
   };
 
   const handleCancel = () => {
-    setIsOpen(false);
+    closeHabitModal()
   };
 
   return (
     <div>
-      <button
+<!--       <button
         className={styles.addButton}
         onClick={() => setIsOpen(true)}
       >
         + Add Habit
-      </button>
-
-      {isOpen && (
-        <div className={styles.overlay}>
+      </button>  -->
+      
+      {isHabitModalOpen && (
+         <div className={styles.overlay}>
           <div className={styles.modalContainer}>
             <HabitForm
               categories={categories}
               onSubmit={handleAddHabit}
-              onCancel={handleCancel}
+              onCancel={()=>closeHabitModal()}
             />
           </div>
         </div>
