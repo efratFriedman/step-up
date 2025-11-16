@@ -1,0 +1,75 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 20px;
+  z-index: 1000;
+  background-color: transparent;
+}
+
+
+.navContainer {
+  margin: 0 auto;
+  max-width: 500px;
+  background-color: #c7e0e7; 
+  border-radius: 40px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.addButton {
+  position: absolute;
+  top: -25px; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #8ac0cc;  
+  border-radius: 50%;
+  width: 55px; 
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: none;
+  cursor: pointer;
+}
+
+
+.plusSign {
+  color: #2c3e50; 
+  font-size: 30px; 
+  font-weight: 500;
+}
+
+
+.navContainer a {
+  padding: 5px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-decoration: none; 
+}
+
+.navContainer a:global(.activeLink) {
+}
+
+.iconBackground {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background-color: rgba(128, 128, 128, 0.2);
+  border-radius: 8px;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
