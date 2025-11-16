@@ -49,13 +49,6 @@ export default function NewHabit() {
 
   return (
     <div>
-{/* <!--       <button
-        className={styles.addButton}
-        onClick={() => setIsOpen(true)}
-      >
-        + Add Habit
-      </button>  --> */}
-      
       {isHabitModalOpen && (
          <div className={styles.overlay}>
           <div className={styles.modalContainer}>
