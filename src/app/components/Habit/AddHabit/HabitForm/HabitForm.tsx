@@ -9,6 +9,7 @@ import TargetDays from "../TargetDays/TargetDays";
 import styles from '@/app/components/Habit/AddHabit/HabitForm/HabitForm.module.css'
 import CategorySelect from "../CategorySelect/CategorySelect";
 import ReminderTime from "../ReminderTime/ReminderTime";
+import { useRouter } from "next/navigation";
 
 interface HabitFormProps {
     categories: ICategory[];
@@ -17,6 +18,7 @@ interface HabitFormProps {
 }
 
 export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormProps) {
+    const router = useRouter();
     const { register, handleSubmit, control, formState } = useForm<HabitFormData>({
         resolver: zodResolver(habitSchema),
         defaultValues: {
@@ -30,6 +32,14 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleFormSubmit = async (data: HabitFormData) => {
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in localStorage");
+          router.push("/login");
+          return;
+        }
+        
         setIsSubmitting(true);
       
         confetti({

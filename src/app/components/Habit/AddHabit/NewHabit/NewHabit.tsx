@@ -3,17 +3,27 @@ import { useState, useEffect } from "react";
 import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import { IHabitClient, useHabitStore } from "@/app/store/useHobbyStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
+import { useRouter } from "next/navigation";
 
 export default function NewHabit() {
   const [isOpen, setIsOpen] = useState(false);
   const { categories, fetchCategories } = useCategoriesStore();
   const addHabit = useHabitStore((state) => state.addHabit);
+  const router = useRouter();
 
   useEffect(() => {
     fetchCategories();
   }, [categories, fetchCategories]);
 
   const handleAddHabit = async (data: any) => {
+
+    const token = localStorage.getItem("token");
+    console.log("Retrieved token from localStorage:", token);
+    if (!token) {
+      console.error("No token found in localStorage");
+      router.push("/login");
+      return;
+    }
     const userId = localStorage.getItem("userId") || "123456734442242890abcdef";
 
     const habitToSend: IHabitClient = {
