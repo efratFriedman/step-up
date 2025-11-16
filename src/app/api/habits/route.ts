@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import "@/models/User"; 
 import "@/models/Category"; 
 import { habitSchema } from "@/lib/validation/habitValidation";
+import jwt from "jsonwebtoken";
+
 
 export async function GET() {
   try {
@@ -23,6 +25,21 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     await dbConnect();
+
+    const cookieHeader = request.headers.get("cookie");
+    const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
+    if (!token) {
+      return NextResponse.json({ message: "Missing token" }, { status: 401 });
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    }catch(err) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 403 });
+    }
+
+
     const body = await request.json();
 
      const parsed = habitSchema.safeParse(body);
@@ -39,7 +56,6 @@ export async function POST(request: Request) {
     }
 
     const { userId, name, description, categoryId, reminderTime, days } = body;
-
     if (!userId || !name) {
       return NextResponse.json(
         { message: "userId and name are required" },

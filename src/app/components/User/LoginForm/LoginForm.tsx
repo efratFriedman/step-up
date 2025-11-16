@@ -30,6 +30,7 @@ export default function LoginForm() {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem("token", data.token);
         console.log("Login successful:", data);
         setUser(data.user);
 
@@ -63,10 +64,10 @@ export default function LoginForm() {
       });
 
       const data = await response.json();
-      setUser(data.user);
 
-
-      if (response.status === 200) {
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
         alert(data.message);
         router.push("/");
       } else if (response.status === 404) {
@@ -74,6 +75,9 @@ export default function LoginForm() {
       } else {
         setError(data.message || "Something went wrong");
       }
+
+      setUser(data.user);
+
 
     } catch (error: any) {
       console.error("Google sign-in error:", error.code || error);
