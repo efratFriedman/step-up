@@ -30,6 +30,15 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
         },
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+
+    const handleCancelClick = () => {
+    setIsClosing(true); 
+    setTimeout(() => {
+        onCancel?.();
+    }, 300);
+    };
+
 
     const handleFormSubmit = async (data: HabitFormData) => {
 
@@ -39,7 +48,6 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
           router.push("/login");
           return;
         }
-        
         setIsSubmitting(true);
       
         confetti({
@@ -55,18 +63,20 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
       
 
     return (
-    <div className={styles.formContainer}>
-
-        {onCancel && (
-          <button
-            type="button"
-            className={styles.closeButton}
-            onClick={onCancel}
-          >
-            ×
-          </button>
-        )}
-        <form onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>       
+        <div className={styles.overlay}>
+        <div
+            className={`${styles.formContainer} ${isClosing ? styles.closing : ""}`}
+        >
+            {onCancel && (
+            <button
+                type="button"
+                className={styles.closeButton}
+                onClick={handleCancelClick}
+            >
+                ×
+            </button>
+            )}
+          <form onSubmit={handleSubmit(handleFormSubmit)} className={styles.form}>       
          <div className={styles.formGroup}>
                 <label className={styles.label}>Habit name</label>
                 <input
@@ -126,7 +136,8 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
             <button type="button" onClick={onCancel} className={styles.cancelButton}>
                 Cancel
             </button>
-        </form>
-    </div>
+            </form>
+         </div>
+     </div>
     )
 }

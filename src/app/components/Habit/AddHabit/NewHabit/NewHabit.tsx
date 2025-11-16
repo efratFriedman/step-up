@@ -5,6 +5,7 @@ import { IHabitClient, useHabitStore } from "@/app/store/useHobbyStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import { useModalStore } from "@/app/store/useModalStore";
 import { useRouter } from "next/navigation";
+import styles from './NewHabit.module.css';
 
 export default function NewHabit() {
   const isHabitModalOpen=useModalStore((state)=>state.isHabitModalOpen);
@@ -20,7 +21,6 @@ export default function NewHabit() {
   const handleAddHabit = async (data: any) => {
 
     const token = localStorage.getItem("token");
-    console.log("Retrieved token from localStorage:", token);
     if (!token) {
       console.error("No token found in localStorage");
       router.push("/login");
@@ -49,16 +49,16 @@ export default function NewHabit() {
 
   return (
     <div>
-      {/* <button
-        style={{ backgroundColor: "#AAD1DA", color: "#006E8C" }}
+<!--       <button
+        className={styles.addButton}
         onClick={() => setIsOpen(true)}
       >
         + Add Habit
-      </button> */}
-
+      </button>  -->
+      
       {isHabitModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-md w-full max-w-md relative">
+         <div className={styles.overlay}>
+          <div className={styles.modalContainer}>
             <HabitForm
               categories={categories}
               onSubmit={handleAddHabit}

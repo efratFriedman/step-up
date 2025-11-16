@@ -1,193 +1,17 @@
-@keyframes bounce {
-    0%, 100% {
-        transform: scale(1); 
-    }
-    50% {
-        transform: scale(1.05); 
-    }
-}
-.input:focus + .label,
-.textarea:focus + .label {
-    text-shadow: 0 0 5px rgba(0, 110, 140, 0.5); 
-    transition: text-shadow 0.2s ease;
-}
-
-
-@keyframes placeholderJump {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-2px); } 
-    100% { transform: translateY(0); }
-}
-
-.input::placeholder {
-    transition: transform 0.2s ease;
-}
-
-.input:focus::placeholder {
-    animation: placeholderJump 0.4s ease-out;
-}
-
-
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 16px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    color: #111827;
-}
-
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.label {
-    font-weight: 600;
-    color: #006E8C;
-    font-size: 14px;
-}
-
-.input,
-.textarea {
-    background-color:rgb(224, 244, 244); 
-    border: 1px solid transparent;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 16px;
-    outline: none;
-    transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
-    width: 100%;
-    box-sizing: border-box;
-    color: #006E8C;
-}
-
-.textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.input:focus,
-.textarea:focus {
-    border-color: #111827;
-    box-shadow: 0 6px 18px rgba(17,24,39,0.06), 0 0 0 3px rgba(17,24,39,0.06);
-}
-
-.error {
-    color: #e53e3e;
-    margin-top: 4px;
-    font-size: 12px;
-}
-
-
-@keyframes pop {
-    0% { transform: scale(1); }
-    70% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.dayButton:active {
-    animation: pop 0.2s ease-out;
-}
-
-.dayButtonSelected {
-    animation: pop 0.3s ease-in-out; 
-}
-
-.submitButton {
-    margin-top: 12px;
-    background-color: #AAD1DA; 
-    color: #006E8C;
-    padding: 12px 14px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    transition: transform 0.08s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-    box-shadow: 0 6px 18px rgba(17,24,39,0.06);
-}
-
-.submitButton:hover {
-    opacity: 0.97;
-    transform: translateY(-1px);
-}
-
-.submitButton:active {
-    transform: translateY(0); 
-    animation: bounce 0.15s ease-out; 
-}
-
-.cancelButton {
-    margin-top: 8px;
-    background-color: transparent;
-    color: #006E8C;
-    padding: 12px 14px;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.12s ease, border-color 0.12s ease;
-}
-
-.cancelButton:hover {
-    background-color: #f3f4f6;
-    border-color: #e5e7eb;
-}
-
-@media (min-width: 640px) {
-    .form {
-        gap: 16px;
-        padding: 20px;
-        max-width: 560px;
-        margin: 0 auto;
-    }
-
-    .formGroup {
-        gap: 8px;
-    }
-
-    .row {
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-    }
-
-    .row > .formGroup {
-        flex: 1 1 0;
-    }
-
-    .buttonRow {
-        display: flex;
-        gap: 12px;
-    }
-
-    .buttonRow > .submitButton,
-    .buttonRow > .cancelButton {
-        width: auto;
-        flex: 1 1 0;
-    }
-}
-
-.submitButton:focus,
-.cancelButton:focus,
-.input:focus,
-.textarea:focus {
-    outline: 3px solid rgba(17,24,39,0.12);
-    outline-offset: 2px;
-}
-
 .formContainer {
-    position: relative;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
     background-color: white;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 24px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeInScale 0.4s forwards;
   }
   
   .closeButton {
@@ -206,5 +30,129 @@
   .closeButton:hover {
     transform: scale(1.2);
     color: #004c60;
+  }
+  
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 900;
+    opacity: 0;
+    animation: fadeOverlay 0.4s forwards;
+  }
+  
+  @keyframes fadeInScale {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  }
+  
+  @keyframes fadeOverlay {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    color: #111827;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .label {
+    font-weight: 600;
+    color: #006E8C;
+    font-size: 14px;
+  }
+  
+  .input,
+  .textarea {
+    background-color: rgb(224, 244, 244);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    color: #006E8C;
+    transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+  }
+  
+  .textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .input:focus,
+  .textarea:focus {
+    border-color: #111827;
+    box-shadow: 0 6px 18px rgba(17,24,39,0.06), 0 0 0 3px rgba(17,24,39,0.06);
+  }
+  
+  .submitButton,
+  .cancelButton {
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .submitButton {
+    background-color: #AAD1DA;
+    color: #006E8C;
+    border: none;
+    font-size: 16px;
+    margin-top: 12px;
+  }
+  
+  .cancelButton {
+    background-color: transparent;
+    color: #006E8C;
+    border: 1px solid transparent;
+    margin-top: 8px;
+  }
+  
+  .cancelButton:hover {
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+  }
+
+  @media (min-width: 640px) {
+    .formContainer {
+      max-width: 500px;
+      padding: 32px;
+    }
+  }
+  
+  @keyframes fadeOutScale {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  }
+  
+  .formContainer.closing {
+    animation: fadeOutScale 0.3s forwards;
+  }
+  
+  @keyframes fadeOverlayOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  .overlay.closing {
+    animation: fadeOverlayOut 0.3s forwards;
   }
   
