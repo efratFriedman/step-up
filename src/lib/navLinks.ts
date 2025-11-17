@@ -1,6 +1,5 @@
 import { Home, Settings, Lightbulb, Newspaper, BarChart3, User } from "lucide-react";
 
-
 export const navLinks = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/insight", icon: Lightbulb, label: "Insight" },

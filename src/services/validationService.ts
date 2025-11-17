@@ -16,8 +16,6 @@ export function isValidPassword(password: string): boolean {
   return schema.safeParse(password).success;
 }
 
-
-
 export function isValidPhone(phone: string): boolean {
   const cleanedPhone = phone.trim().replace(/[-\s]/g, ""); 
   const schema = z
