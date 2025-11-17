@@ -4,7 +4,7 @@ import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/services/firebaseService";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/app/store/useUserStore";
 
 export default function SignupForm() {
   const [name, setName] = useState("");

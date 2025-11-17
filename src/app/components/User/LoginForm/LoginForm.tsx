@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
 import { FaEnvelope, FaEye } from 'react-icons/fa';
 import { signInWithGoogle } from "@/services/firebaseService";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/app/store/useUserStore";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
