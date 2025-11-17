@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import DaysSlider from "../DaysSlider/DaysSlider";
-import styles from './Page.module.css'; // ניצור קובץ CSS Module
+import styles from './Page.module.css'; 
+import TodayHabits from "../TodayHabits/TodayHabits";
 
 export default function HomePage() {
   const [habits, setHabits] = useState([]);
@@ -20,7 +21,6 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Wrapper עם רוחב מוגדר */}
       <div className={styles.sliderWrapper}>
         <DaysSlider onDaySelect={fetchHabits} />
       </div>
@@ -31,6 +31,7 @@ export default function HomePage() {
           <div key={h._id}>{h.name}</div>
         ))}
       </div> */}
+      <TodayHabits />
     </div>
   );
 }
