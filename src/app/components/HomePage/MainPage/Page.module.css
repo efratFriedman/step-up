@@ -1,0 +1,5 @@
+.sliderWrapper {
+    max-width: 600px; /* אפשר לשנות את זה לפי הצורך */
+    margin: 0 auto;   /* ממרכז את הסליידר */
+  }
+  

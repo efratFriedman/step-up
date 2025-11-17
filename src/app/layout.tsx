@@ -4,6 +4,7 @@ import "./globals.css";
 import ProfileSidebarWrapper from "./components/ProfileSidebarWrapper/ProfileSidebarWrapper";
 import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NewHabit from "./components/Habit/AddHabit/NewHabit/NewHabit";
+import HomePage from "./components/HomePage/MainPage/Page";
 
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <ProfileSidebarWrapper/>
          {children}
         <NewHabit />
+        <HomePage/>
       <footer>
         <BottomNavbar />
       </footer>
