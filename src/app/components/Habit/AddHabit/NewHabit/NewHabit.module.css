@@ -14,7 +14,6 @@
     transform: translateY(-1px);
   }
   
-  /* Overlay */
   .overlay {
     position: fixed;
     inset: 0;
