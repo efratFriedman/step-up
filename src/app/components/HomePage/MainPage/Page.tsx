@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import DaysSlider from "../DaysSlider/DaysSlider";
-import styles from './Page.module.css'; 
+import styles from './Page.module.css';
 import TodayHabits from "../TodayHabits/TodayHabits";
 
 export default function HomePage() {
@@ -10,13 +10,10 @@ export default function HomePage() {
 
   const fetchHabits = async (selectedDate: Date) => {
     const weekday = selectedDate.getDay();
-    // const res = await fetch(`/api/habits?day=${weekday}`);
-    // const data = await res.json();
-    // setHabits(data);
   };
 
   useEffect(() => {
-    fetchHabits(new Date()); 
+    fetchHabits(new Date());
   }, []);
 
   return (

@@ -4,6 +4,7 @@ import styles from "./ProfileInfo.module.css";
 import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/validationService";
 import { FaCamera } from "react-icons/fa";
 import { uploadImageToCloudinary } from "@/services/cloudinaryService";
+import { updateUserService } from "@/services/userService";
 
 interface IUserFront {
     id: string;
@@ -71,10 +72,10 @@ export default function ProfileInfo() {
 
         if (!user.phone) {
             newErrors.phone = "Phone number is required";
-          } else if (!isValidPhone(user.phone)) {
+        } else if (!isValidPhone(user.phone)) {
             newErrors.phone = "Invalid Israeli phone number";
-          }
-          
+        }
+
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
@@ -101,16 +102,7 @@ Do you want to save these changes?`
                 profileImg: user.profileImg,
                 password: user.password,
             };
-
-            const res = await fetch(`/api/users/${user.id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updateData),
-            });
-
-            if (!res.ok) throw new Error("Failed to update user");
-
-            const updatedUser = await res.json();
+            const updatedUser = await updateUserService(user.id, updateData);
 
             const stored = localStorage.getItem("user-storage");
             if (stored) {

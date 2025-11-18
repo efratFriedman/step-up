@@ -5,6 +5,7 @@ import styles from "./LoginForm.module.css";
 import { FaEnvelope, FaEye } from 'react-icons/fa';
 import { signInWithGoogle } from "@/services/firebaseService";
 import { useUserStore } from "@/app/store/userStore";
+import { loginService, googleLoginService } from "@/services/authService";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -18,36 +19,23 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setError("");
-
+  
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        console.log("Login successful:", data);
-        setUser(data.user);
-
-        router.push("/");
-      } else {
-        setError("Invalid email or password");
-      }
-    } catch (err) {
-      setError("Something went wrong. Please try again later.");
+      const data = await loginService(email, password);
+      localStorage.setItem("token", data.token);
+      setUser(data.user);
+      router.push("/");
+    } catch {
+      setError("Invalid email or password");
     }
   };
-
+  
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setLoading(true);
     setError("");
-
+  
     try {
       const user = await signInWithGoogle();
       const userData = {
@@ -56,38 +44,28 @@ export default function LoginForm() {
         name: user.displayName,
         profileImg: user.photoURL
       };
-
-      const response = await fetch("/api/googleLogin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
+  
+      const { ok, status, data } = await googleLoginService(userData);
+  
+      if (ok) {
         localStorage.setItem("token", data.token);
         setUser(data.user);
         alert(data.message);
         router.push("/");
-      } else if (response.status === 404) {
+      } else if (status === 404) {
         router.push("/signup");
       } else {
         setError(data.message || "Something went wrong");
       }
-
-      setUser(data.user);
-
-
+  
     } catch (error: any) {
       console.error("Google sign-in error:", error.code || error);
       setError("Something went wrong during Google sign-in");
+  
     } finally {
       setLoading(false);
-    }
+    }  
   };
-
-
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
