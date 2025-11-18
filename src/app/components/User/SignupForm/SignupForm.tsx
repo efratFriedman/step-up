@@ -4,7 +4,8 @@ import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { signInWithGoogle } from "@/services/firebaseService";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/app/store/useUserStore";
+import { mapUserToClient } from "@/utils/mapUser";
 import { signupService, googleSignupService } from "@/services/authService";
 
 export default function SignupForm() {
@@ -37,9 +38,17 @@ export default function SignupForm() {
       email
     });
 
-    if (!ok) {
-      setMessage(data.message || "Something went wrong.");
-      return;
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Something went wrong.");
+        return;
+      }
+      setUser(mapUserToClient(data.user));
+      router.push("/");
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setMessage("Network error. Please try again later.");
     }
 
     setUser(data.user);
@@ -67,8 +76,7 @@ export default function SignupForm() {
         setMessage(data.message || "Something went wrong");
         return;
       }
-
-      setUser(data.user);
+      setUser(mapUserToClient(savedUser.user));
       router.push("/");
     } catch (error: any) {
       console.error("Google sign-up error:", error.code || error);

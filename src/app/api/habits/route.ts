@@ -26,18 +26,18 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
 
-    const cookieHeader = request.headers.get("cookie");
-    const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
-    if (!token) {
-      return NextResponse.json({ message: "Missing token" }, { status: 401 });
-    }
+    // const cookieHeader = request.headers.get("cookie");
+    // const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
+    // if (!token) {
+    //   return NextResponse.json({ message: "Missing token" }, { status: 401 });
+    // }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    }catch(err) {
-      return NextResponse.json({ message: "Invalid token" }, { status: 403 });
-    }
+    // let decoded;
+    // try {
+    //   decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    // }catch(err) {
+    //   return NextResponse.json({ message: "Invalid token" }, { status: 403 });
+    // }
 
 
     const body = await request.json();
