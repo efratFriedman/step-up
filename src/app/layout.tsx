@@ -7,6 +7,7 @@ import NewHabit from "./components/Habit/AddHabit/NewHabit/NewHabit";
 import HomePage from "./components/HomePage/MainPage/Page";
 
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,23 +26,25 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+ 
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ProfileSidebarWrapper/>
-         {children}
+        <ProfileSidebarWrapper />
+        {children}
         <NewHabit />
-        <HomePage/>
-      <footer>
-        <BottomNavbar />
-      </footer>
+        {/* <HomePage/> */}
+        <footer>
+          <BottomNavbar />
+        </footer>
       </body>
     </html>
   );

@@ -142,4 +142,27 @@
     font-size: 12px;
     margin-top: 4px;
   }
+  .inputGroup {
+    margin-bottom: 16px;
+  }
+  
+  .inputWrapper {
+    position: relative;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 10px 40px 10px 10px; 
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  
+  .icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #555;
+  }
   

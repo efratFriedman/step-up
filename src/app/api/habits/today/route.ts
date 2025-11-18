@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
-import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { authenticate } from "@/lib/server/authMiddleware";
 
 export async function GET(request: Request) {
     try{

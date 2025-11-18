@@ -5,8 +5,6 @@ import styles from "./TodayHabits.module.css";
 import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
 
-
-
 export default function TodayHabits() {
   const [habits, setHabits] = useState<ITodayHabit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

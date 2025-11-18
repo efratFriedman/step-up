@@ -5,6 +5,7 @@ import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/vali
 import { FaCamera } from "react-icons/fa";
 import { uploadImageToCloudinary } from "@/services/cloudinaryService";
 import { updateUserService } from "@/services/userService";
+import { FaEye } from "react-icons/fa";
 
 interface IUserFront {
     id: string;
@@ -20,6 +21,7 @@ export default function ProfileInfo() {
     const [user, setUser] = useState<IUserFront | null>(null);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ phone?: string; birthDate?: string; password?: string }>({});
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const stored = localStorage.getItem("user-storage");
@@ -152,9 +154,27 @@ Do you want to save these changes?`
             <input className={styles.input} type="date" name="birthDate" value={user.birthDate ?? ""} onChange={handleChange} disabled={loading} />
             {errors.birthDate && <p className={styles.error}>{errors.birthDate}</p>}
 
-            <label>Password</label>
-            <input className={styles.input} type="password" name="password" value={user.password ?? ""} onChange={handleChange} disabled={loading} />
-            {errors.password && <p className={styles.error}>{errors.password}</p>}
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Password</label>
+                <div className={styles.inputWrapper}>
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={user.password ?? ""}
+                        onChange={handleChange}
+                        disabled={loading}
+                        className={styles.inputField}
+                        placeholder="Your password"
+                        required
+                    />
+                    <FaEye
+                        className={styles.icon}
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ cursor: 'pointer' }}
+                    />
+                </div>
+                {errors.password && <p className={styles.error}>{errors.password}</p>}
+            </div>
 
             <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
                 {loading ? "Saving..." : "Save Changes"}
