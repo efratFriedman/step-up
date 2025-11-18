@@ -26,18 +26,25 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
 
-    // const cookieHeader = request.headers.get("cookie");
-    // const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
-    // if (!token) {
-    //   return NextResponse.json({ message: "Missing token" }, { status: 401 });
-    // }
+    const cookieHeader = request.headers.get("cookie");
+    const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
+    
+    if (!token) {
+      return NextResponse.json({ message: "Missing token" }, { status: 401 });
+    }
 
-    // let decoded;
-    // try {
-    //   decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    // }catch(err) {
-    //   return NextResponse.json({ message: "Invalid token" }, { status: 403 });
-    // }
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    } catch (err) {
+      return NextResponse.json({ message: "Invalid token" }, { status: 403 });
+    }
+
+    const userId = (decoded as any).id; 
+    
+    if (!userId) {
+      return NextResponse.json({ message: "UserId missing in token" }, { status: 400 });
+    }
 
 
     const body = await request.json();
@@ -55,8 +62,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { userId, name, description, categoryId, reminderTime, days } = body;
-    if (!userId || !name) {
+    const { name, description, categoryId, reminderTime, days } = body;    if (!userId || !name) {
       return NextResponse.json(
         { message: "userId and name are required" },
         { status: 400 }
@@ -73,14 +79,13 @@ export async function POST(request: Request) {
 
 
     const newHabit = await Habit.create({
-      userId: new mongoose.Types.ObjectId(userId),  
+      userId: new mongoose.Types.ObjectId(userId), 
       name,
       description,
       categoryId: categoryId ? new mongoose.Types.ObjectId(categoryId) : undefined,
       reminderTime,
       days,
     });
-
 
     return NextResponse.json(newHabit, { status: 201 });
   } catch (error) {

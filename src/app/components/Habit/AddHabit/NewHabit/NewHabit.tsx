@@ -16,20 +16,13 @@ export default function NewHabit() {
 
   useEffect(() => {
     fetchCategories();
-  }, [categories, fetchCategories]);
+  }, [fetchCategories]);
 
   const handleAddHabit = async (data: any) => {
+    const userId = localStorage.getItem("userId");
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in localStorage");
-      router.push("/login");
-      return;
-    }
-    const userId = localStorage.getItem("userId") || "123456734442242890abcdef";
-
-    const habitToSend: IHabitClient = {
-      userId,
+    const habitToSend = {
+      userId: userId || "",
       name: data.name,
       description: data.description,
       categoryId: data.categoryId,
@@ -37,11 +30,11 @@ export default function NewHabit() {
       days: data.days
     };
 
-
     console.log("Sending habit to store:", habitToSend);
 
     await addHabit(habitToSend);
   };
+
 
   const handleCancel = () => {
     closeHabitModal()

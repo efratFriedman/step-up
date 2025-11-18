@@ -52,11 +52,14 @@ export const useHabitStore = create<HabitStore>((set) => ({
   addHabit: async (habit: IHabitClient) => {  
     set({ loading: true, error: null });
     try {
-        const res = await fetch("/api/habits", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(habit),
-        });
+      const res = await fetch('/api/habits', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(habit),
+      });
         if (!res.ok) throw new Error("error add the habit");
 
         const newHabit: IHabit = await res.json();  

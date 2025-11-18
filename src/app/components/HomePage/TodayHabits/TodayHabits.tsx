@@ -3,27 +3,27 @@
 import { useEffect, useState } from "react";
 import styles from "./TodayHabits.module.css";
 import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
-import { IHabit } from "@/interfaces/IHabit";
+import { ITodayHabit } from "@/interfaces/ITodayHabit";
 
 
 
 export default function TodayHabits() {
-  const [habits, setHabits] = useState<IHabit[]>([]);
+  const [habits, setHabits] = useState<ITodayHabit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchTodayHabits = async () => {
-      try {
-        const data = await getTodayHabits();
-        setHabits(data || []);
-      } catch (error) {
-        console.error("Error", error);
-      } finally {
-        setLoading(false);
-      }
+        try {
+            const data = await getTodayHabits();
+            setHabits(data || []);
+        } catch (error) {
+            console.error("Error fetching habits:", error);
+        } finally {
+            setLoading(false);
+        }
     }
     fetchTodayHabits();
-  }, []);
+}, []);
 
   const toggleHabitStatus = async (habitId: string) => {
     try {

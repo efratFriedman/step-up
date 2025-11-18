@@ -8,6 +8,8 @@ import mongoose from "mongoose";
 export async function GET(request: Request) {
     try{
     await dbConnect();
+    console.log("check sos", );
+
 
     const cookieHeader = request.headers.get("cookie");
     const token = cookieHeader?.split(";").find((c) => c.trim().startsWith("token="))?.split("=")[1];
@@ -22,38 +24,63 @@ export async function GET(request: Request) {
     }catch(err){
         return NextResponse.json({message:"Invalid token"},{status:403});
     }
+
     
-    const userId = (decoded as any).userId;
-    if(!mongoose.Types.ObjectId.isValid(userId)){
-        return NextResponse.json({message:"Invalid user ID format"},{status:400});
+    let userId = (decoded as any).id;
+    if (!userId) {
+      return NextResponse.json({ message: "UserId missing in token" }, { status: 400 });
     }
+    if (typeof userId !== "string") userId = userId.toString();
+    console.log("🔍 User ID from token:", userId);
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return NextResponse.json({ message: "Invalid user ID format" }, { status: 400 });
+    }
+
+    const objectUserId = new mongoose.Types.ObjectId(userId);
+
+    // const userId = (decoded as any).userId;
+    // if(!mongoose.Types.ObjectId.isValid(userId)){
+    //     return NextResponse.json({message:"Invalid user ID format"},{status:400});
+    // }
 
     const today = new Date();   
     const todayIndex = today.getDay();
 
-    const habitsToday = await Habit.find({
-        userId: new mongoose.Types.ObjectId(userId),
-        [`days.${todayIndex}`]: true,
-    }).populate("categoryId");
+    console.log("📅 Today is:", today.toLocaleString('he-IL')); // ← הוסיפי את זה
+    console.log("📅 Day index:", todayIndex);
 
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+    const habitsToday = await Habit.find({
+        userId: objectUserId,
+        [`days.${todayIndex}`]: true,
+      }).populate("categoryId");
+  
+      console.log("✅ Found habits:", habitsToday.length); // ← הוסיפי את זה
+      console.log("📋 Habits details:", JSON.stringify(habitsToday, null, 2)); // ← הוסיפי את זה
+
+
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
 
     const logsToday = await HabitLog.find({
-        userId: userId,
+        userId: objectUserId,
         date: { $gte: startOfDay, $lte: endOfDay },
     });
+
+    console.log("📝 Logs found:", logsToday.length); // ← הוסיפי את זה
 
     const habitsWithStatus = habitsToday.map(habit => {
         const log = logsToday.find(l => l.habitId.toString() === habit._id.toString());
         return {
-            _id: habit._id,
+            _id: habit._id.toString(),
             name: habit.name,
             description: habit.description,
             category: habit.categoryId,
             isDone: log ? log.isDone : false,
         };
     });
+    console.log("🎯 Final habits with status:", habitsWithStatus); // ← הוסיפי את זה
+
 
     return NextResponse.json({habits: habitsWithStatus });
     }catch(error){
