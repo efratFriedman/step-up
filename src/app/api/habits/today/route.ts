@@ -2,13 +2,11 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
-import mongoose from "mongoose";
 import { authenticate } from "@/lib/server/authMiddleware";
 
 export async function GET(request: Request) {
   try {
     await dbConnect();
-
 
     const user = await authenticate(request);
     const userId = user._id; 
@@ -49,3 +47,4 @@ export async function GET(request: Request) {
     );
   }
 }
+
