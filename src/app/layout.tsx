@@ -31,7 +31,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- 
+
 
   return (
     <html lang="en">
@@ -41,10 +41,8 @@ export default async function RootLayout({
         <ProfileSidebarWrapper />
         {children}
         <NewHabit />
-        <HomePage/>
-        <footer>
-          <BottomNavbar />
-        </footer>
+        <HomePage />
+        <BottomNavbar />
       </body>
     </html>
   );
