@@ -10,7 +10,7 @@ const HabitSchema = new mongoose.Schema({
     hour: { type: Number, min: 0, max: 23 },
     minute: { type: Number, min: 0, max: 59 }
   },
-  days: [String],
+  days: [Boolean],
 });
 
 export default mongoose.models.Habit||mongoose.model<IHabit>("Habit",HabitSchema);

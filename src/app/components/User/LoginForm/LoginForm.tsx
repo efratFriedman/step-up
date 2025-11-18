@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
 import { FaEnvelope, FaEye } from 'react-icons/fa';
 import { signInWithGoogle } from "@/services/firebaseService";
-import { useUserStore } from "@/app/store/userStore";
+import { useUserStore } from "@/app/store/useUserStore";
+import { mapUserToClient } from "@/utils/mapUser";
 import { loginService, googleLoginService } from "@/services/authService";
 
 export default function LoginForm() {
@@ -49,7 +50,7 @@ export default function LoginForm() {
   
       if (ok) {
         localStorage.setItem("token", data.token);
-        setUser(data.user);
+        setUser(mapUserToClient(data.user));
         alert(data.message);
         router.push("/");
       } else if (status === 404) {
@@ -57,7 +58,8 @@ export default function LoginForm() {
       } else {
         setError(data.message || "Something went wrong");
       }
-  
+      // setUser(data.user);
+      
     } catch (error: any) {
       console.error("Google sign-in error:", error.code || error);
       setError("Something went wrong during Google sign-in");
