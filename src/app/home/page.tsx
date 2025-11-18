@@ -1,9 +1,10 @@
 "use client";
-import { startOfDay } from "@/utils/date";
-import useProgress from "./hooks/useProgress";
+
 import { useState } from "react";
-import styles from "./HomePage.module.css";
 import { useUserStore } from "../store/useUserStore";
+import useProgress from "./hooks/useProgress";
+import { startOfDay } from "@/utils/date";
+import styles from "./HomePage.module.css";
 
 export default function HomePage() {
     const { user } = useUserStore();

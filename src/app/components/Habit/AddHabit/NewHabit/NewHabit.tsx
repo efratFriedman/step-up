@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 import styles from './NewHabit.module.css';
 
 export default function NewHabit() {
-  const isHabitModalOpen=useModalStore((state)=>state.isHabitModalOpen);
+  const isHabitModalOpen = useModalStore((state) => state.isHabitModalOpen);
   const { categories, fetchCategories } = useCategoriesStore();
   const addHabit = useHabitStore((state) => state.addHabit);
-  const closeHabitModal=useModalStore((state)=>state.closeHabitModal)
+  const closeHabitModal = useModalStore((state) => state.closeHabitModal)
   const router = useRouter();
 
   useEffect(() => {
@@ -35,24 +35,17 @@ export default function NewHabit() {
     await addHabit(habitToSend);
   };
 
-
-  const handleCancel = () => {
-    closeHabitModal()
-  };
+  if (!isHabitModalOpen) { return null }
 
   return (
-    <div>
-      {isHabitModalOpen && (
-         <div className={styles.overlay}>
-          <div className={styles.modalContainer}>
-            <HabitForm
-              categories={categories}
-              onSubmit={handleAddHabit}
-              onCancel={()=>closeHabitModal()}
-            />
-          </div>
-        </div>
-      )}
+    <div className={styles.overlay}>
+      <div className={styles.modalContainer}>
+        <HabitForm
+          categories={categories}
+          onSubmit={handleAddHabit}
+          onCancel={() => closeHabitModal()}
+        />
+      </div>
     </div>
   );
 }
