@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 export async function GET(request: Request) {
     try{
     await dbConnect();
-    console.log("check sos", );
+    // console.log("check sos", );
 
 
     const cookieHeader = request.headers.get("cookie");
@@ -39,24 +39,19 @@ export async function GET(request: Request) {
 
     const objectUserId = new mongoose.Types.ObjectId(userId);
 
-    // const userId = (decoded as any).userId;
-    // if(!mongoose.Types.ObjectId.isValid(userId)){
-    //     return NextResponse.json({message:"Invalid user ID format"},{status:400});
-    // }
-
     const today = new Date();   
     const todayIndex = today.getDay();
 
-    console.log("📅 Today is:", today.toLocaleString('he-IL')); // ← הוסיפי את זה
-    console.log("📅 Day index:", todayIndex);
+    // console.log("📅 Today is:", today.toLocaleString('he-IL')); // ← הוסיפי את זה
+    // console.log("📅 Day index:", todayIndex);
 
     const habitsToday = await Habit.find({
         userId: objectUserId,
         [`days.${todayIndex}`]: true,
       }).populate("categoryId");
   
-      console.log("✅ Found habits:", habitsToday.length); // ← הוסיפי את זה
-      console.log("📋 Habits details:", JSON.stringify(habitsToday, null, 2)); // ← הוסיפי את זה
+    //   console.log("✅ Found habits:", habitsToday.length); // ← הוסיפי את זה
+    //   console.log("📋 Habits details:", JSON.stringify(habitsToday, null, 2)); // ← הוסיפי את זה
 
 
       const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
@@ -67,7 +62,7 @@ export async function GET(request: Request) {
         date: { $gte: startOfDay, $lte: endOfDay },
     });
 
-    console.log("📝 Logs found:", logsToday.length); // ← הוסיפי את זה
+    // console.log("📝 Logs found:", logsToday.length); // ← הוסיפי את זה
 
     const habitsWithStatus = habitsToday.map(habit => {
         const log = logsToday.find(l => l.habitId.toString() === habit._id.toString());
@@ -79,7 +74,7 @@ export async function GET(request: Request) {
             isDone: log ? log.isDone : false,
         };
     });
-    console.log("🎯 Final habits with status:", habitsWithStatus); // ← הוסיפי את זה
+    // console.log("🎯 Final habits with status:", habitsWithStatus); // ← הוסיפי את זה
 
 
     return NextResponse.json({habits: habitsWithStatus });
