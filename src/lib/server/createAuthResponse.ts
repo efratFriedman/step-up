@@ -10,7 +10,6 @@ interface TokenUser {
 
 export function createAuthResponse(user: TokenUser, message?: string) {
 
-    //create the token
   const token = jwt.sign(
     { id: user._id, email: user.email },
     process.env.JWT_SECRET!,

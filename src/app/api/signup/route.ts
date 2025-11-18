@@ -8,58 +8,45 @@ import {
   isValidPassword,
   isValidPhone
 } from "@/services/validationService";
-import { createAuthResponse } from "@/lib/server/createAuthResponse";   // ⭐ שימוש בפונקציה המשותפת
+import { createAuthResponse } from "@/lib/server/createAuthResponse";
 
 export async function POST(request: Request) {
   try {
-    console.log("sgdvabxhznjKL");
-    
     await dbConnect();
     const { name, password, birthDate, phone, email } = await request.json();
-    console.log("RAW BODY VALUES:");
-    console.log("name:", JSON.stringify(name));
-    console.log("email:", JSON.stringify(email));
-    console.log("phone:", JSON.stringify(phone));
-    console.log("birthDate:", JSON.stringify(birthDate));
-    console.log("password:", JSON.stringify(password));
 
-    console.log("New user:", { name, email, birthDate, phone });
+    const errors: any = {};
 
-    if (!name || !password || !birthDate || !phone || !email) {
-      return NextResponse.json(
-        { message: "Please fill in all required fields" },
-        { status: 400 }
-      );
+    if (!name) errors.name = "Name is required";
+    if (!email) errors.email = "Email is required";
+    if (!phone) errors.phone = "Phone is required";
+    if (!birthDate) errors.birthDate = "Birth date is required";
+    if (!password) errors.password = "Password is required";
+
+    if (birthDate && !isValidBirthDate(birthDate)) {
+      errors.birthDate = "The date is not valid";
     }
 
-    if (!isValidBirthDate(birthDate)) {
-      return NextResponse.json({ message: "The date is not valid" }, { status: 400 });
+    if (email && !isValidEmail(email)) {
+      errors.email = "The email is not valid";
     }
 
-    if (!isValidEmail(email)) {
-      return NextResponse.json({ message: "The email is not valid" }, { status: 400 });
+    if (phone && !isValidPhone(phone)) {
+      errors.phone = "The phone number is not valid";
     }
 
-    if (!isValidPhone(phone)) {
-      return NextResponse.json({ message: "The phone number is not valid" }, { status: 400 });
-    }
-
-    if (!isValidPassword(password)) {
-      return NextResponse.json(
-        {
-          message:
-            "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character.",
-        },
-        { status: 400 }
-      );
+    if (password && !isValidPassword(password)) {
+      errors.password =
+        "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character.";
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return NextResponse.json(
-        { message: "This email already exists!" },
-        { status: 400 }
-      );
+      errors.email = "This email already exists!";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      return NextResponse.json({ errors }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -85,3 +72,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

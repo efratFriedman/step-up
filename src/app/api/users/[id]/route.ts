@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import User from "@/models/User";
 import mongoose from "mongoose";
-import { authenticate } from "@/lib/server/authMiddleware"; 
+import { authenticate } from "@/lib/server/authMiddleware";
 
 export async function GET(
   req: NextRequest,
@@ -40,7 +40,6 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-
   const authUser = await authenticate(req);
   const authUserId = authUser._id.toString();
 

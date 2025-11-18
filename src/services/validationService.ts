@@ -10,7 +10,7 @@ export function isValidPassword(password: string): boolean {
     .string()
     .min(8)
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/,
       "Password must contain at least one uppercase, lowercase, number and special character"
     );
   return schema.safeParse(password).success;
