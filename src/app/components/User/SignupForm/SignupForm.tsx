@@ -24,6 +24,8 @@ export default function SignupForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("SENDING:", { name, email, phone, birthDate, password });
+
     setMessage("");
     if (!name || !password || !birthDate || !phone || !email) {
       setMessage("Please fill in all required fields");
@@ -127,8 +129,8 @@ export default function SignupForm() {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBirthDate(e.target.value)}
             required
             className={styles.inputField}
-            onFocus={handleDateFocus}
-            onBlur={handleDateBlur}
+          // onFocus={handleDateFocus}
+          // onBlur={handleDateBlur}
           />
           <FaCalendarAlt className={styles.icon} />
         </div>

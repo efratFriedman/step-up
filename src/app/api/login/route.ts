@@ -2,9 +2,8 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { isValidEmail, isValidPassword } from "@/services/validationService";
-
+import { createAuthResponse } from "@/lib/server/createAuthResponse";   // ⭐ שימוש בפונקציה אחידה
 
 export async function POST(request: Request) {
   try {
@@ -21,58 +20,36 @@ export async function POST(request: Request) {
     }
 
     if (!isValidEmail(email)) {
-      console.log("email")
       return NextResponse.json(
-        { message: "the email is not valid" },
+        { message: "The email is not valid" },
         { status: 400 }
       );
     }
 
     if (!isValidPassword(password)) {
-      console.log("password")
       return NextResponse.json(
-        { message: "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character." },
+        {
+          message:
+            "The password must be at least 8 characters long, with an uppercase letter, lowercase letter, number, and special character.",
+        },
         { status: 400 }
       );
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return NextResponse.json(
-        { message: "Invalid password" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Invalid password" }, { status: 401 });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET!,
-      { expiresIn: "7d" }
-    );
-
-    const response = NextResponse.json({
-      message: `Welcome back ${user.name}!`,
-    });
-
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7, 
-    });
-
-    return response;
+    return createAuthResponse(user, `Welcome back ${user.name}!`);
+    
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json({ message: "Server error" }
-                           , { status: 500 });
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

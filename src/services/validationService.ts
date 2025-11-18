@@ -17,12 +17,13 @@ export function isValidPassword(password: string): boolean {
 }
 
 export function isValidPhone(phone: string): boolean {
-  const cleanedPhone = phone.trim().replace(/[-\s]/g, ""); 
+  const cleanedPhone = phone.trim().replace(/[-\s]/g, "");
   const schema = z
     .string()
-    .regex(/^(\+972|0)([234589]|5[0-9])\d{7}$/, "Invalid Israeli phone number");
+    .regex(/^(\+972|0)5\d{8}$/, "Invalid Israeli phone number");
   return schema.safeParse(cleanedPhone).success;
 }
+
 
 export function isValidBirthDate(birthDate: string): boolean {
   const schema = z

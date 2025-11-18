@@ -1,23 +1,19 @@
 import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import { NextResponse } from "next/server";
+import { authenticate } from "@/lib/server/authMiddleware"; 
 
 export async function GET(req: Request) {
     try {
         await dbConnect();
 
-        const { searchParams } = new URL(req.url);
-        const userId = searchParams.get("userId");
+        const user = await authenticate(req);
+        const userId = user._id;
 
-        if (!userId) {
-            return NextResponse.json(
-                { message: "userId is required" },
-                { status: 400 }
-            );
-        }
         const habits = await Habit.find({
-            userId,
+            userId: userId,
         });
+
         return NextResponse.json(habits);
     }
     catch (error) {

@@ -38,7 +38,7 @@ export default function RootLayout({
         <ProfileSidebarWrapper/>
          {children}
         <NewHabit />
-        <HomePage/>
+        {/* <HomePage/> */}
       <footer>
         <BottomNavbar />
       </footer>
