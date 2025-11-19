@@ -11,30 +11,38 @@ export async function GET(request: Request) {
     const user = await authenticate(request);
     const userId = user._id; 
 
-    const today = new Date();
-    const todayIndex = today.getDay();
+    const { searchParams } = new URL(request.url);
+    const dateParam = searchParams.get("date");
+    const targetDate = dateParam ? new Date(dateParam) : new Date();
+    
+    const startOfDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 0, 0, 0, 0);
+    const endOfDay = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 23, 59, 59, 999);
 
+
+    const todayIndex = targetDate.getDay(); 
     const habitsToday = await Habit.find({
-      userId: userId,
+      userId,
       [`days.${todayIndex}`]: true,
     }).populate("categoryId");
 
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
-
     const logsToday = await HabitLog.find({
-      userId: userId,
-      date: { $gte: startOfDay, $lte: endOfDay },
-    });
+        userId,
+        date: { $gte: startOfDay, $lte: endOfDay },
+      });
+
+    
 
     const habitsWithStatus = habitsToday.map((habit) => {
-      const log = logsToday.find((l) => l.habitId.toString() === habit._id.toString());
+      const h = habit as any;
+      const log = logsToday.find((l) => l.habitId.toString() === h._id.toString());
       return {
-        _id: habit._id.toString(),
+        _id: h._id.toString(),
         name: habit.name,
         description: habit.description,
         category: habit.categoryId,
-        isDone: log ? log.isDone : false,      };
+        isDone: log ? log.isDone : false,    
+    };  
+        
     });
 
     return NextResponse.json({ habits: habitsWithStatus });

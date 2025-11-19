@@ -1,34 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DaysSlider from "../DaysSlider/DaysSlider";
-import styles from './Page.module.css';
 import TodayHabits from "../TodayHabits/TodayHabits";
+import styles from './Page.module.css';
 
 export default function HomePage() {
-  const [habits, setHabits] = useState([]);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  const fetchHabits = async (selectedDate: Date) => {
-    const weekday = selectedDate.getDay();
+  const handleDaySelect = (day: Date) => {
+    setSelectedDate(day);
   };
-
-  useEffect(() => {
-    fetchHabits(new Date());
-  }, []);
 
   return (
     <div>
       <div className={styles.sliderWrapper}>
-        <DaysSlider onDaySelect={fetchHabits} />
+        <DaysSlider onDaySelect={handleDaySelect} />
       </div>
 
       <h2>Habits for selected day:</h2>
-      {/* <div style={{ marginTop: "20px" }}>
-        {habits.map((h: any) => (
-          <div key={h._id}>{h.name}</div>
-        ))}
-      </div> */}
-      <TodayHabits />
+      
+      <TodayHabits selectedDate={selectedDate} />
     </div>
   );
 }

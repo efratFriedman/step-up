@@ -14,7 +14,7 @@ function getNext7Days() {
     days.push({
       date: d.getDate(),
       day: d.toLocaleString("en-US", { weekday: "short" }),
-      full: d,
+      full: new Date(d.getFullYear(), d.getMonth(), d.getDate()), 
       isToday: i === 0,
     });
   }
