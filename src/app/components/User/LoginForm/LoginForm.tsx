@@ -7,6 +7,7 @@ import { signInWithGoogle } from "@/services/firebaseService";
 import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
 import { loginService, googleLoginService } from "@/services/authService";
+import { ROUTES } from "@/config/routes";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -24,9 +25,8 @@ export default function LoginForm() {
 
     try {
       const data = await loginService(email, password);
-      localStorage.setItem("token", data.token);
       setUser(data.user);
-      router.push("/");
+      router.push(ROUTES.HOME);
     } catch {
       setError("Invalid email or password");
     }
@@ -49,12 +49,11 @@ export default function LoginForm() {
       const { ok, status, data } = await googleLoginService(userData);
 
       if (ok) {
-        localStorage.setItem("token", data.token);
         setUser(mapUserToClient(data.user));
         alert(data.message);
-        router.push("/");
+        router.push(ROUTES.HOME);
       } else if (status === 404) {
-        router.push("/signup");
+        router.push(ROUTES.SIGNUP);
       } else {
         setError(data.message || "Something went wrong");
       }

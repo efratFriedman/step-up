@@ -1,31 +1,37 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./TodayHabits.module.css";
 import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
+import styles from "./TodayHabits.module.css";
 
-export default function TodayHabits() {
+interface TodayHabitsProps {
+  selectedDate: Date;
+}
+
+export default function TodayHabits({ selectedDate }: TodayHabitsProps) {
   const [habits, setHabits] = useState<ITodayHabit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchTodayHabits = async () => {
-        try {
-            const data = await getTodayHabits();
-            setHabits(data || []);
-        } catch (error) {
-            console.error("Error fetching habits:", error);
-        } finally {
-            setLoading(false);
-        }
-    }
-    fetchTodayHabits();
-}, []);
+    const fetchHabitsForDate = async () => {
+      setLoading(true);
+      try {
+        const data = await getTodayHabits(selectedDate);
+        setHabits(data || []);
+      } catch (error) {
+        console.error("Error fetching habits:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchHabitsForDate();
+  }, [selectedDate]);
 
   const toggleHabitStatus = async (habitId: string) => {
     try {
-      const updatedHabit = await updateHabitStatus(habitId);
+      const updatedHabit = await updateHabitStatus(habitId, selectedDate);
 
       setHabits((prev) =>
         prev.map((habit) =>
@@ -43,7 +49,6 @@ export default function TodayHabits() {
 
   return (
     <div>
-      <h2>habits for today</h2>
       <ul>
         {habits.map(habit => (
           <li

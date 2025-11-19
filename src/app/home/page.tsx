@@ -1,18 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { useUserStore } from "../store/useUserStore";
-import useProgress from "./hooks/useProgress";
-import { startOfDay } from "@/utils/date";
-import styles from "./HomePage.module.css";
-
+import { useState, useEffect } from "react";
+import styles from './HomePage.module.css';
 import ProgressBar from "../components/HomePage/ProgressBar/ProgressBar";
+import DaysSlider from "../components/HomePage/DaysSlider/DaysSlider";
+import TodayHabits from "../components/HomePage/TodayHabits/TodayHabits";
 
 export default function HomePage() {
-   return(
-    <>
-    <ProgressBar/>
-    </>
-   );
-    
+  const [habits, setHabits] = useState([]);
+
+  const fetchHabits = async (selectedDate: Date) => {
+    const weekday = selectedDate.getDay();
+  };
+
+  useEffect(() => {
+    fetchHabits(new Date());
+  }, []);
+
+  return (
+    <div>
+        <ProgressBar/>
+      <div className={styles.sliderWrapper}>
+        <DaysSlider onDaySelect={fetchHabits} />
+      </div>
+
+      <h2>Habits for selected day:</h2>
+      {/* <div style={{ marginTop: "20px" }}>
+        {habits.map((h: any) => (
+          <div key={h._id}>{h.name}</div>
+        ))}
+      </div> */}
+      <TodayHabits />
+    </div>
+  );
 }

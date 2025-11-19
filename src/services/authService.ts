@@ -103,3 +103,7 @@ export async function forgotPasswordService(email: string) {
     return response.json();
   }
   
+
+export async function logout(){
+await fetch("/api/logout",{method:"POST"});
+}

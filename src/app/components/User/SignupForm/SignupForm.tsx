@@ -8,6 +8,7 @@ import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
 import { signupService, googleSignupService } from "@/services/authService";
 import { signInWithGoogle } from "@/services/firebaseService";
+import { ROUTES } from "@/config/routes";
 
 export default function SignupForm() {
 
@@ -81,9 +82,8 @@ export default function SignupForm() {
       return;
     }
 
-    // SUCCESS
     setUser(mapUserToClient(data.user));
-    router.push("/");
+    router.push(ROUTES.HOME);
   };
 
   // GOOGLE SIGNUP
@@ -110,7 +110,7 @@ export default function SignupForm() {
       }
 
       setUser(mapUserToClient(data.user));
-      router.push("/");
+      router.push(ROUTES.HOME);
     } catch (error: any) {
       setErrors((prev) => ({ ...prev, general: "Google signup failed" }));
     } finally {
@@ -123,7 +123,6 @@ export default function SignupForm() {
 
       <h1 className={styles.title}>Sign Up</h1>
 
-      {/* NAME */}
       <div className={styles.inputGroup}>
         <label className={styles.label}>Username</label>
         <div className={styles.inputWrapper}>
@@ -139,7 +138,6 @@ export default function SignupForm() {
         {errors.name && <p className={styles.error}>{errors.name}</p>}
       </div>
 
-      {/* BIRTHDATE */}
       <div className={styles.inputGroup}>
         <label className={styles.label}>Birth Date</label>
         <div className={styles.inputWrapper}>
@@ -154,7 +152,6 @@ export default function SignupForm() {
         {errors.birthDate && <p className={styles.error}>{errors.birthDate}</p>}
       </div>
 
-      {/* EMAIL */}
       <div className={styles.inputGroup}>
         <label className={styles.label}>Email</label>
         <div className={styles.inputWrapper}>
@@ -170,7 +167,6 @@ export default function SignupForm() {
         {errors.email && <p className={styles.error}>{errors.email}</p>}
       </div>
 
-      {/* PHONE */}
       <div className={styles.inputGroup}>
         <label className={styles.label}>Phone</label>
         <div className={styles.inputWrapper}>
@@ -186,7 +182,6 @@ export default function SignupForm() {
         {errors.phone && <p className={styles.error}>{errors.phone}</p>}
       </div>
 
-      {/* PASSWORD */}
       <div className={styles.inputGroup}>
         <label className={styles.label}>Password</label>
         <div className={styles.inputWrapper}>
@@ -206,7 +201,6 @@ export default function SignupForm() {
         {errors.password && <p className={styles.error}>{errors.password}</p>}
       </div>
 
-      {/* GENERAL ERROR */}
       {errors.general && <p className={styles.error}>{errors.general}</p>}
 
       <button type="submit" className={styles.continueButton}>
