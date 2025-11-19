@@ -11,6 +11,7 @@ import styles from '@/app/components/Habit/AddHabit/HabitForm/HabitForm.module.c
 import CategorySelect from "../CategorySelect/CategorySelect";
 import ReminderTime from "../ReminderTime/ReminderTime";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/config/routes";
 
 interface HabitFormProps {
     categories: ICategory[];
@@ -46,7 +47,7 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
         const token = localStorage.getItem("token");
         if (!token) {
           console.error("No token found in localStorage");
-          router.push("/login");
+          router.push(ROUTES.LOGIN);
           return;
         }
         setIsSubmitting(true);

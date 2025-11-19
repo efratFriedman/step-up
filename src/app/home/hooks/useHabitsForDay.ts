@@ -11,7 +11,7 @@ export default function useHabitsForDay(userId: string, date: Date) {
 
     async function load() {
       try {
-        const habits = await getUserHabits(userId);
+        const habits = await getUserHabits();
         const dayIndex = getDayIndex(date);
         const filtered = habits.filter(
           (h) => Array.isArray(h.days) && h.days[dayIndex]

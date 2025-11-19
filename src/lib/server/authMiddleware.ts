@@ -40,16 +40,16 @@ export async function validateUserExists(userId: string) {
     return user;
 }
 
-export async function authenticate(req:Request){
-    try{
-        const token=extractToken(req);
+export async function authenticate(req: Request) {
+    try {
+        const token = extractToken(req);
 
-        const payload=validateToken(token);
+        const payload = validateToken(token);
 
-        const user=await validateUserExists(payload.id);
+        const user = await validateUserExists(payload.id);
 
         return user;
-    }catch(err:any){
-    return NextResponse.json({ error: err.message }, { status: 401 });
+    } catch (err: any) {
+        throw new Error(err.message);
     }
 }

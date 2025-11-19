@@ -3,6 +3,8 @@ import useHabitLogForDay from "./useHabitLogForDay";
 
 export default function useProgress(userId: string, date: Date) {
     const habits = useHabitsForDay(userId, date);
+    console.log("user habits",habits);
+    
     const logs = useHabitLogForDay(userId, date);
 
     const total = habits.length;

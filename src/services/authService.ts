@@ -74,3 +74,7 @@ export async function googleSignupService(userData: any) {
     return { ok: false, data: { message: "Network error" } };
   }
 }
+
+export async function logout(){
+await fetch("/api/logout",{method:"POST"});
+}

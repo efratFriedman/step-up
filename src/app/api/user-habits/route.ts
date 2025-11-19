@@ -11,7 +11,12 @@ export async function GET(req: Request) {
         const userId = user._id;
 
         const habits = await Habit.find({
-            userId: userId,
+            userId: {
+                $eq:userId,
+                $ne:null,
+                $exists:true,
+            },
+            
         });
 
         return NextResponse.json(habits);
