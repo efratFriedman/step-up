@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./ProfileInfo.module.css";
 import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/validationService";
 import { FaCamera } from "react-icons/fa";
 import { uploadImageToCloudinary } from "@/services/cloudinaryService";
 import { updateUserService } from "@/services/userService";
 import { FaEye } from "react-icons/fa";
+import { useUserStore } from "@/app/store/useUserStore";
 
 interface IUserFront {
     id: string;
@@ -14,30 +15,13 @@ interface IUserFront {
     phone?: string;
     birthDate?: string;
     profileImg?: string;
-    password?: string;
 }
 
 export default function ProfileInfo() {
-    const [user, setUser] = useState<IUserFront | null>(null);
+    const user = useUserStore((state) => state.user);
+    const setUser = useUserStore((state) => state.setUser);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ phone?: string; birthDate?: string; password?: string }>({});
-    const [showPassword, setShowPassword] = useState(false);
-
-    useEffect(() => {
-        const stored = localStorage.getItem("user-storage");
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored);
-                if (parsed?.state?.user) {
-                    setUser(parsed.state.user);
-                } else {
-                    console.log("No user found in localStorage");
-                }
-            } catch {
-                console.log("Failed to parse user-storage");
-            }
-        }
-    }, []);
 
 
     if (!user) return <p>Loading...</p>;
@@ -69,9 +53,6 @@ export default function ProfileInfo() {
         if (!user.birthDate) newErrors.birthDate = "Birthdate is required";
         else if (!isValidBirthDate(user.birthDate)) newErrors.birthDate = "Invalid birthdate or user under 8 years old";
 
-        if (!user.password) newErrors.password = "Password is required";
-        else if (!isValidPassword(user.password)) newErrors.password = "Password must be at least 8 chars with upper, lower, number & special char";
-
         if (!user.phone) {
             newErrors.phone = "Phone number is required";
         } else if (!isValidPhone(user.phone)) {
@@ -89,7 +70,6 @@ Name: ${user.name}\n
 Email: ${user.email}\n
 Phone: ${user.phone ?? "(empty)"}\n
 Birthdate: ${user.birthDate}\n
-Password: ${"*".repeat(user.password?.length ?? 0)}\n
 Do you want to save these changes?`
         );
 
@@ -102,16 +82,13 @@ Do you want to save these changes?`
                 phone: user.phone,
                 birthDate: user.birthDate,
                 profileImg: user.profileImg,
-                password: user.password,
             };
             const updatedUser = await updateUserService(user.id, updateData);
 
-            const stored = localStorage.getItem("user-storage");
-            if (stored) {
-                const parsed = JSON.parse(stored);
-                parsed.state.user = { ...parsed.state.user, ...updatedUser, email: parsed.state.user.email };
-                localStorage.setItem("user-storage", JSON.stringify(parsed));
-            }
+            setUser({
+                ...user,
+                ...updatedUser,
+            });
 
             alert("Profile updated!");
         } catch (err) {
@@ -154,27 +131,6 @@ Do you want to save these changes?`
             <input className={styles.input} type="date" name="birthDate" value={user.birthDate ?? ""} onChange={handleChange} disabled={loading} />
             {errors.birthDate && <p className={styles.error}>{errors.birthDate}</p>}
 
-            <div className={styles.inputGroup}>
-                <label className={styles.label}>Password</label>
-                <div className={styles.inputWrapper}>
-                    <input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        value={user.password ?? ""}
-                        onChange={handleChange}
-                        disabled={loading}
-                        className={styles.inputField}
-                        placeholder="Your password"
-                        required
-                    />
-                    <FaEye
-                        className={styles.icon}
-                        onClick={() => setShowPassword(!showPassword)}
-                        style={{ cursor: 'pointer' }}
-                    />
-                </div>
-                {errors.password && <p className={styles.error}>{errors.password}</p>}
-            </div>
 
             <button className={styles.saveBtn} onClick={handleSave} disabled={loading}>
                 {loading ? "Saving..." : "Save Changes"}

@@ -3,12 +3,10 @@ import { useState, useEffect } from "react";
 import ProfileSidebar from "../Sidebar/Sidebar";
 import styles from "./ProfileSidebarWrapper.module.css";
 import { logout } from "@/services/authService";
-// import { useRouter } from "next/router";
 
 export default function ProfileSidebarWrapper() {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<{ name: string; email: string; profileImg?: string } | null>(null);
-  // const router = useRouter();
   useEffect(() => {
     const stored = localStorage.getItem("user-storage");
     if (stored) {
@@ -26,7 +24,6 @@ export default function ProfileSidebarWrapper() {
     localStorage.removeItem("user-storage");
     setUser(null);
     setIsOpen(false);
-    // router.push("/")
   };
 
   if (!user) return null;
