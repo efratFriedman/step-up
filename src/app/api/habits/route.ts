@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import "@/models/User";
 import "@/models/Category";
 import { habitSchema } from "@/lib/validation/habitValidation";
-import jwt from "jsonwebtoken";
 import { authenticate } from "@/lib/server/authMiddleware";
 
 

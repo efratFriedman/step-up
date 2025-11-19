@@ -25,7 +25,6 @@ export default function LoginForm() {
   
     try {
       const data = await loginService(email, password);
-      localStorage.setItem("token", data.token);
       setUser(data.user);
       router.push(ROUTES.HOME);
     } catch {
@@ -50,7 +49,6 @@ export default function LoginForm() {
       const { ok, status, data } = await googleLoginService(userData);
   
       if (ok) {
-        localStorage.setItem("token", data.token);
         setUser(mapUserToClient(data.user));
         alert(data.message);
         router.push(ROUTES.HOME);
