@@ -3,9 +3,9 @@
 import { useModalStore } from "@/app/store/useModalStore";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import styles from "./BottomNavbar.module.css";
 import { useUserStore } from "@/app/store/useUserStore";
 import { NAV_LINKS } from "@/config/navLinks";
+import styles from "./BottomNavbar.module.css";
 
 export default function BottomNavbar() {
     const user = useUserStore((state) => state.user);

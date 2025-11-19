@@ -31,7 +31,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
- 
+
 
   return (
     <html lang="en">
@@ -45,6 +45,7 @@ export default async function RootLayout({
         <footer>
           <BottomNavbar />
         </footer>
+        
       </body>
     </html>
   );
