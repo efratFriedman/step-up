@@ -1,10 +1,7 @@
 "use client";
-import { navLinks } from "@/lib/navLinks";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useModalStore } from "@/app/store/useModalStore";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { useUserStore } from "@/app/store/useUserStore";
 import { NAV_LINKS } from "@/config/navLinks";
 import styles from "./BottomNavbar.module.css";
