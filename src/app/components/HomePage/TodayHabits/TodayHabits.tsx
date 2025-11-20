@@ -5,71 +5,42 @@ import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
 import styles from "./TodayHabits.module.css";
 
-interface TodayHabitsProps {
-  selectedDate: Date;
-}
-
-export default function TodayHabits({ selectedDate }: TodayHabitsProps) {
+export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   const [habits, setHabits] = useState<ITodayHabit[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchHabitsForDate = async () => {
       setLoading(true);
-      try {
-        const data = await getTodayHabits(selectedDate);
-        setHabits(data || []);
-      } catch (error) {
-        console.error("Error fetching habits:", error);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getTodayHabits(selectedDate);
+      setHabits(data || []);
+      setLoading(false);
     };
-    
+
     fetchHabitsForDate();
   }, [selectedDate]);
 
   const toggleHabitStatus = async (habitId: string) => {
-    try {
-      const updatedHabit = await updateHabitStatus(habitId, selectedDate);
+    const updatedHabit = await updateHabitStatus(habitId, selectedDate);
 
-      setHabits((prev) =>
-        prev.map((habit) =>
-          habit._id === habitId ? updatedHabit : habit
-        )
-      );
-    } catch (error) {
-      console.error("Error", error);
-    }
+    setHabits((prev) =>
+      prev.map((h) => (h._id === habitId ? updatedHabit : h))
+    );
   };
-  if (loading) {
-    return <div>Loading today's habits...</div>;
-  }
-  if (!habits || habits.length === 0) return <p>there are no habits for today</p>;
+
+  if (loading) return <p>Loading...</p>;
+  if (!habits?.length) return <p>No habits for this day</p>;
 
   return (
-    <div>
-      <ul>
-        {habits.map(habit => (
-          <li
-            key={habit._id}
-            style={{
-              textDecoration: habit.isDone ? "line-through" : "none",
-              opacity: habit.isDone ? 0.5 : 1,
-              marginBottom: "10px",
-            }}
-          >
-            <div>
-              <strong>{habit.name}</strong>
-              {habit.description && <p>{habit.description}</p>}
-            </div>
-            <button onClick={() => toggleHabitStatus(habit._id)}>
-              {habit.isDone ? "not done" : "done"}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {habits.map((habit) => (
+        <li key={habit._id}>
+          <strong>{habit.name}</strong>
+          <button onClick={() => toggleHabitStatus(habit._id)}>
+            {habit.isDone ? "Undo" : "Done"}
+          </button>
+        </li>
+      ))}
+    </ul>
   );
-
 }
