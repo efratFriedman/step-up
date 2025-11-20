@@ -57,8 +57,6 @@ export default function LoginForm() {
       } else {
         setError(data.message || "Something went wrong");
       }
-      // setUser(data.user);
-
     } catch (error: any) {
       console.error("Google sign-in error:", error.code || error);
       setError("Something went wrong during Google sign-in");
