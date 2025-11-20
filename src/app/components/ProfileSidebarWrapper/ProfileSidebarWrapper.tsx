@@ -1,29 +1,24 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProfileSidebar from "../Sidebar/Sidebar";
 import styles from "./ProfileSidebarWrapper.module.css";
 import { logout } from "@/services/authService";
+import { useUserStore } from "@/app/store/useUserStore";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/config/routes";
 
 export default function ProfileSidebarWrapper() {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<{ name: string; email: string; profileImg?: string } | null>(null);
-  useEffect(() => {
-    const stored = localStorage.getItem("user-storage");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        setUser(parsed.state.user);
-      } catch (err) {
-        console.error("Failed to parse user-storage", err);
-      }
-    }
-  }, []);
+  const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const clearUser = useUserStore((state) => state.clearUser);
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("user-storage");
-    setUser(null);
+    clearUser();
     setIsOpen(false);
+
+    router.push(ROUTES.LOGIN);
   };
 
   if (!user) return null;

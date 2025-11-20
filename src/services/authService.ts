@@ -74,6 +74,35 @@ export async function googleSignupService(userData: any) {
     return { ok: false, data: { message: "Network error" } };
   }
 }
+export async function forgotPasswordService(email: string) {
+    const res = await fetch("/api/forgot-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+  
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      data = { message: "Server did not return JSON" };
+    }
+  
+    return { ok: res.ok, status: res.status, message: data.message };
+  }  
+  
+  export async function resetPasswordService(newPassword: string) {
+    const response = await fetch("/api/auth/reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ newPassword }),
+    });
+  
+    if (!response.ok) throw new Error("Could not reset password");
+  
+    return response.json();
+  }
+  
 
 export async function logout(){
 await fetch("/api/logout",{method:"POST"});

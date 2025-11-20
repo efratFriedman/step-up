@@ -40,3 +40,16 @@ export function isValidBirthDate(birthDate: string): boolean {
   return schema.safeParse(birthDate).success;
 }
 
+export function generateTemporaryPassword(): string {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@$!%*?&#";
+  let password = "";
+
+  do {
+    password = "";
+    for (let i = 0; i < 12; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+  } while (!isValidPassword(password));
+
+  return password;
+}
