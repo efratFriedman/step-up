@@ -9,3 +9,18 @@ export async function updateUserService(userId: string, updateData: any) {
 
     return res.json();
 }
+export async function resetUserPassword(email: string, newPassword: string) {
+    const res = await fetch("/api/users/reset-password", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, newPassword }),
+    });
+  
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message || "Failed to reset password");
+    }
+  
+    return res.json();
+  }
+  

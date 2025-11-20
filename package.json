@@ -10,6 +10,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "firebase": "^12.5.0",
     "jsonwebtoken": "^9.0.2",
