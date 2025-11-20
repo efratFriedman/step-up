@@ -1,5 +1,5 @@
-import { IHabit } from '@/interfaces/IHabit';
-import mongoose, { Schema} from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
+import { IHabit } from "@/interfaces/IHabit";
 
 const HabitSchema = new mongoose.Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -13,5 +13,8 @@ const HabitSchema = new mongoose.Schema({
   days: [Boolean],
 });
 
-export default mongoose.models.Habit||mongoose.model<IHabit>("Habit",HabitSchema);
+const Habit =
+  (models.Habit as mongoose.Model<IHabit>) ||
+  model<IHabit>("Habit", HabitSchema);
 
+export default Habit;

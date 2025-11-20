@@ -1,99 +1,120 @@
 "use client";
-import { useState, ChangeEvent, FocusEvent } from "react";
+
+import { useState, ChangeEvent } from "react";
 import styles from "./SignupForm.module.css";
 import { FaUser, FaCalendarAlt, FaEnvelope, FaPhone, FaEye } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/app/store/useUserStore";
+import { mapUserToClient } from "@/utils/mapUser";
+import { signupService, googleSignupService } from "@/services/authService";
 import { signInWithGoogle } from "@/services/firebaseService";
 import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
+import { ROUTES } from "@/config/routes";
 
 export default function SignupForm() {
+
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    birthDate: "",
+    password: "",
+    general: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
 
+  // RESET ERRORS
+  const resetErrors = () => {
+    setErrors({
+      name: "",
+      email: "",
+      phone: "",
+      birthDate: "",
+      password: "",
+      general: "",
+    });
+  };
 
+  // HANDLE SUBMIT
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage("");
-    if (!name || !password || !birthDate || !phone || !email) {
-      setMessage("Please fill in all required fields");
+    resetErrors();
+
+    // CLIENT-SIDE REQUIRED VALIDATION
+    const newErrors: any = {};
+    if (!name) newErrors.name = "Name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!phone) newErrors.phone = "Phone is required";
+    if (!birthDate) newErrors.birthDate = "Birth date is required";
+    if (!password) newErrors.password = "Password is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors((prev) => ({ ...prev, ...newErrors }));
       return;
     }
 
-    try {
+    // SEND TO SERVER
+    const { ok, data } = await signupService({
+      name,
+      password,
+      birthDate,
+      phone,
+      email,
+    });
 
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, password, birthDate, phone, email }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.message || "Something went wrong.");
-        return;
+    if (!ok) {
+      // SERVER VALIDATION — ALL FIELDS TOGETHER
+      if (data.errors) {
+        setErrors((prev) => ({ ...prev, ...data.errors }));
+      } else {
+        setErrors((prev) => ({ ...prev, general: data.message }));
       }
-      setUser(mapUserToClient(data.user));
-      router.push("/");
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setMessage("Network error. Please try again later.");
+      return;
     }
+
+    setUser(mapUserToClient(data.user));
+    router.push(ROUTES.HOME);
   };
 
-
-  const handleDateFocus = (e: FocusEvent<HTMLInputElement>) => {
-    e.currentTarget.type = 'date';
-  }
-
-  const handleDateBlur = (e: FocusEvent<HTMLInputElement>) => {
-    if (!birthDate) {
-      e.currentTarget.type = 'text';
-    }
-  }
-
+  // GOOGLE SIGNUP
   const handleGoogleSignIn = async () => {
     if (loading) return;
     setLoading(true);
+    resetErrors();
 
     try {
-      const timeout = setTimeout(() => setLoading(false), 6000);
-
       const user = await signInWithGoogle();
+
       const userData = {
         name: user.displayName,
         email: user.email,
         googleId: user.uid,
         profileImg: user.photoURL,
       };
-      const response = await fetch("/api/googleSignup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
-      const savedUser = await response.json();
-      if (!response.ok) {
-        setMessage(savedUser.message || "Something went wrong");
+
+      const { ok, data } = await googleSignupService(userData);
+
+      if (!ok) {
+        setErrors((prev) => ({ ...prev, general: data.message }));
         return;
       }
-      setUser(mapUserToClient(savedUser.user));
-      router.push("/");
 
-
-      clearTimeout(timeout);
+      setUser(mapUserToClient(data.user));
+      router.push(ROUTES.HOME);
     } catch (error: any) {
-      console.error(" Sign-in error:", error.code || error);
+      setErrors((prev) => ({ ...prev, general: "Google signup failed" }));
     } finally {
       setLoading(false);
     }
@@ -101,37 +122,36 @@ export default function SignupForm() {
 
   return (
     <form onSubmit={handleSubmit} className={styles.formContainer} noValidate>
+
       <h1 className={styles.title}>Sign Up</h1>
+
       <div className={styles.inputGroup}>
         <label className={styles.label}>Username</label>
         <div className={styles.inputWrapper}>
           <input
             type="text"
-            placeholder="Enter your name"
             value={name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-            required
+            placeholder="Enter your name"
+            onChange={(e) => setName(e.target.value)}
             className={styles.inputField}
           />
           <FaUser className={styles.icon} />
         </div>
+        {errors.name && <p className={styles.error}>{errors.name}</p>}
       </div>
 
       <div className={styles.inputGroup}>
-        <label className={styles.label}>BirthDate</label>
+        <label className={styles.label}>Birth Date</label>
         <div className={styles.inputWrapper}>
           <input
             type="date"
-            placeholder="Enter a date"
             value={birthDate}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setBirthDate(e.target.value)}
-            required
+            onChange={(e) => setBirthDate(e.target.value)}
             className={styles.inputField}
-            onFocus={handleDateFocus}
-            onBlur={handleDateBlur}
           />
           <FaCalendarAlt className={styles.icon} />
         </div>
+        {errors.birthDate && <p className={styles.error}>{errors.birthDate}</p>}
       </div>
 
       <div className={styles.inputGroup}>
@@ -139,14 +159,14 @@ export default function SignupForm() {
         <div className={styles.inputWrapper}>
           <input
             type="email"
-            placeholder="Enter email address"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-            required
+            placeholder="Enter email"
+            onChange={(e) => setEmail(e.target.value)}
             className={styles.inputField}
           />
           <FaEnvelope className={styles.icon} />
         </div>
+        {errors.email && <p className={styles.error}>{errors.email}</p>}
       </div>
 
       <div className={styles.inputGroup}>
@@ -154,14 +174,14 @@ export default function SignupForm() {
         <div className={styles.inputWrapper}>
           <input
             type="tel"
-            placeholder="Enter phone number"
             value={phone}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-            required
+            placeholder="Enter phone number"
+            onChange={(e) => setPhone(e.target.value)}
             className={styles.inputField}
           />
           <FaPhone className={styles.icon} />
         </div>
+        {errors.phone && <p className={styles.error}>{errors.phone}</p>}
       </div>
 
       <div className={styles.inputGroup}>
@@ -169,26 +189,21 @@ export default function SignupForm() {
         <div className={styles.inputWrapper}>
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Your password"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-            required
+            placeholder="Enter password"
+            onChange={(e) => setPassword(e.target.value)}
             className={styles.inputField}
           />
           <FaEye
             className={styles.icon}
             onClick={() => setShowPassword(!showPassword)}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: "pointer" }}
           />
         </div>
+        {errors.password && <p className={styles.error}>{errors.password}</p>}
       </div>
 
-      <div className={styles.terms}>
-        <input type="checkbox" id="terms-checkbox" required />
-        <label htmlFor="terms-checkbox">
-          I agree to the <span className={styles.termsLink}>Terms of Services</span> and <span className={styles.termsLink}>Privacy Policy.</span>
-        </label>
-      </div>
+      {errors.general && <p className={styles.error}>{errors.general}</p>}
 
       <button type="submit" className={styles.continueButton}>
         Continue
@@ -198,23 +213,12 @@ export default function SignupForm() {
 
       <button
         type="button"
-        className={styles.googleButton}
         onClick={handleGoogleSignIn}
         disabled={loading}
+        className={styles.googleButton}
       >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
-          alt="Google logo"
-          className={styles.googleIcon}
-        />
-        {loading ? "Signing up..." : "Sign up with Google"}
+        Sign up with Google
       </button>
-
-      <p className={styles.signInLink}>
-        Have an Account? <a href="/login" className={styles.signInText}>Sign In</a>
-      </p>
-
-      {message && <p className={styles.message}>{message}</p>}
     </form>
   );
 }

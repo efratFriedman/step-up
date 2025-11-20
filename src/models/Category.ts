@@ -1,11 +1,14 @@
-import { ICategory } from '@/interfaces/ICategory';
-import mongoose from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
+import { ICategory } from "@/interfaces/ICategory"; 
 
-
-const CategorySchema=new mongoose.Schema({
-   name: { type: String, required: true },
-   image: String,
-  colorTheme: String
+const CategorySchema = new Schema<ICategory>({
+  name: { type: String, required: true },
+  image: { type: String },
+  colorTheme: { type: String },
 });
 
-export default mongoose.models.Category||mongoose.model<ICategory>("Category",CategorySchema);
+
+const Category = models.Category || model<ICategory>("Category", CategorySchema);
+
+
+export default Category;

@@ -4,7 +4,9 @@ import "./globals.css";
 import ProfileSidebarWrapper from "./components/ProfileSidebarWrapper/ProfileSidebarWrapper";
 import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NewHabit from "./components/Habit/AddHabit/NewHabit/NewHabit";
-import HomePage from "./components/HomePage/MainPage/Page";
+import LoginForm from "./components/User/LoginForm/LoginForm";
+
+
 
 
 const geistSans = Geist({
@@ -25,23 +27,26 @@ export const metadata: Metadata = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ProfileSidebarWrapper/>
-         {children}
-        <NewHabit />
-        <HomePage/>
-      <footer>
-        <BottomNavbar />
-      </footer>
+        <ProfileSidebarWrapper />
+        {children}
+        <NewHabit/>
+
+        <footer>
+          <BottomNavbar />
+        </footer>
+        
       </body>
     </html>
   );
