@@ -40,8 +40,7 @@ export default async function RootLayout({
       >
         <ProfileSidebarWrapper />
         {children}
-        <NewHabit />
-
+        <NewHabit/>
         <footer>
           <BottomNavbar />
         </footer>

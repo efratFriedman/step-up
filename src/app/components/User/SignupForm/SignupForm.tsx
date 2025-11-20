@@ -8,6 +8,8 @@ import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
 import { signupService, googleSignupService } from "@/services/authService";
 import { signInWithGoogle } from "@/services/firebaseService";
+import { useUserStore } from "@/app/store/useUserStore";
+import { mapUserToClient } from "@/utils/mapUser";
 import { ROUTES } from "@/config/routes";
 
 export default function SignupForm() {
