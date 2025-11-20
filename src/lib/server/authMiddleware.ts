@@ -1,7 +1,5 @@
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
-
 import { JwtPayload } from "jsonwebtoken";
 
 interface TokenPayload extends JwtPayload {
