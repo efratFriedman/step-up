@@ -9,7 +9,7 @@ interface TargetDaysProps {
     error?: any;
 }
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const days = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ,"Sun"];
 
 export default function TargetDays({ control, name = "days", error }: TargetDaysProps) {
     return (

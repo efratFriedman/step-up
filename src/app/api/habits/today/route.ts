@@ -22,6 +22,7 @@ export async function GET(request: Request) {
     endOfDay.setHours(23,59,59,999);
     
     const todayIndex = targetDate.getDay(); 
+    console.log("Fetching habits for date:", todayIndex);
 
     const habitsToday = await Habit.find({
       userId,

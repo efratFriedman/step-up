@@ -1,7 +1,11 @@
 export interface ITodayHabit {
-    _id: string;
+  _id: string;
+  name: string;
+  isDone: boolean;
+  size?: 'small' | 'medium' | 'large';
+  category: {
     name: string;
-    description?: string;
-    category: any;
-    isDone: boolean;
-  }  
+    colorTheme?: string; 
+    image?: string;     
+  };
+}

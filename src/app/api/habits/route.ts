@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     }
 
     const { name, description, categoryId, reminderTime, days } = parsed.data;
-
+    console.log(days);
     const newHabit = await Habit.create({
       userId,
       name,
