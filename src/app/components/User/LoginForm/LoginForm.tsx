@@ -52,9 +52,8 @@ export default function LoginForm() {
         setUser(mapUserToClient(data.user));
         alert(data.message);
         router.push(ROUTES.HOME);
-      } else if (status === 404) {
-        router.push(ROUTES.SIGNUP);
-      } else {
+      }
+      else {
         setError(data.message || "Something went wrong");
       }
     } catch (error: any) {
