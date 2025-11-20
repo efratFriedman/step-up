@@ -36,12 +36,14 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
-    const handleCancelClick = () => {
+    const closeWithAnimation = () => {
         setIsClosing(true);
         setTimeout(() => {
             onCancel?.();
-        }, 300);
+        }, 400);
     };
+    const handleCancelClick = () => closeWithAnimation();
+    
 
 
     const handleFormSubmit = async (data: HabitFormData) => {
@@ -59,8 +61,9 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
             colors: ["#AAD1DA", "#006E8C", "#ffffff"],
         });
 
-        onSubmit(data);
+        await onSubmit(data);
         setIsSubmitting(false);
+        closeWithAnimation();
     };
 
     return (
@@ -134,9 +137,9 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
                         disabled={isSubmitting}
                     > Add Habit
                     </button>
-                    <button type="button" onClick={onCancel} className={styles.cancelButton}>
+                    {/* <button type="button" onClick={onCancel} className={styles.cancelButton}>
                         Cancel
-                    </button>
+                    </button> */}
                 </form>
             </div>
         </div>

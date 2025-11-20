@@ -2,16 +2,21 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.8);
+    transform: translate(-50%, -50%) scale(1);
     background-color: white;
     border-radius: 12px;
     padding: 24px;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
     z-index: 1000;
+    opacity: 1;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.formContainer.closing {
     opacity: 0;
-    animation: fadeInScale 0.4s forwards;
+    transform: translate(-50%, -50%) scale(0.92);
 }
 
 .error {
@@ -22,12 +27,12 @@
 
 .closeButton {
     position: absolute;
-    top: 8px;
-    right: 12px;
+    top: 10px;
+    right: 16px;
     background: none;
     border: none;
     font-size: 22px;
-    font-weight: bold;
+    font-weight: 700;
     color: #006E8C;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -41,37 +46,20 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 900;
+    opacity: 1;
+    transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+.overlay.closing {
     opacity: 0;
-    animation: fadeOverlay 0.4s forwards;
+    backdrop-filter: blur(0);
 }
-
-@keyframes fadeInScale {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
-
-@keyframes fadeOverlay {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
 
 .form {
     display: flex;
@@ -154,34 +142,4 @@
         max-width: 500px;
         padding: 32px;
     }
-}
-
-@keyframes fadeOutScale {
-    0% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-}
-
-.formContainer.closing {
-    animation: fadeOutScale 0.3s forwards;
-}
-
-@keyframes fadeOverlayOut {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-.overlay.closing {
-    animation: fadeOverlayOut 0.3s forwards;
 }

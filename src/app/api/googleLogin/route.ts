@@ -6,22 +6,29 @@ import { createAuthResponse } from "@/lib/server/createAuthResponse";
 export async function POST(request: Request) {
   try {
     await dbConnect();
-    const { email, googleId } = await request.json();
+    const { email, googleId, name, profileImg } = await request.json();
 
-    if (!email || !googleId) {
+    if (!email || !googleId || !name) {
       return NextResponse.json(
         { message: "Missing Google user data" },
         { status: 400 }
       );
     }
 
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json(
-        { message: "User not found", redirectTo: "/signup" },
-        { status: 404 }
-      );
+     user=await User.create({
+      email,
+      googleId,
+      name,
+      profileImg,
+      password: null,
+    });
+    } else if (!user.googleId) {
+     user.googleId = googleId;
+     user.profileImg ??= profileImg;
+     await user.save();
     }
 
     return createAuthResponse(
