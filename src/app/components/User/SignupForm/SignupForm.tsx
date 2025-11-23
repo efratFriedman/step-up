@@ -230,7 +230,7 @@ export default function SignupForm() {
       </button>
       <p className={styles.loginUpLink}>
         Already have an account?{" "}
-        <a href="/" className={styles.loginText}>Login</a>
+        <a href="/login" className={styles.loginText}>Login</a>
       </p>
 
     </form>

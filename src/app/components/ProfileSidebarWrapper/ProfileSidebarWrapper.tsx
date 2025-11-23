@@ -13,12 +13,12 @@ export default function ProfileSidebarWrapper() {
   const user = useUserStore((state) => state.user);
   const clearUser = useUserStore((state) => state.clearUser);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
+    router.replace(ROUTES.LOGIN);
     clearUser();
     setIsOpen(false);
 
-    router.push(ROUTES.LOGIN);
   };
 
   if (!user) return null;

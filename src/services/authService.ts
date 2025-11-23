@@ -104,6 +104,10 @@ export async function forgotPasswordService(email: string) {
   }
   
 
-export async function logout(){
-await fetch("/api/logout",{method:"POST"});
+export async function logout() {
+  return await fetch("/api/logout", {
+    method: "POST",
+    credentials: "include",
+  });
 }
+
