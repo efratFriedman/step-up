@@ -39,12 +39,12 @@ export async function dbConnect() {
     return cached.conn;
   }
 
-  // אם אין promise קיים, צור אחד חדש
+
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      maxPoolSize: 10, // Connection pooling
-      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 10000, 
       socketTimeoutMS: 45000,
     };
 
