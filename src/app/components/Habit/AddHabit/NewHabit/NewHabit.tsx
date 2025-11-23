@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
-import { useHabitStore } from "@/app/store/useHobbyStore";
+import { useHabitStore } from "@/app/store/useHabitStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import { useModalStore } from "@/app/store/useModalStore";
 import { useUserStore } from "@/app/store/useUserStore";

@@ -1,29 +1,25 @@
 import { IHabit } from "@/interfaces/IHabit";
-import { getUserHabits } from "@/services/habitsService";
+import { useHabitStore } from "@/app/store/useHabitStore";
 import { getDayIndex } from "@/utils/date";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function useHabitsForDay(userId: string, date: Date) {
-  const [habitsForDay, setHabitsForDay] = useState<IHabit[]>([]);
+  const { habits, fetchHabits } = useHabitStore();
 
   useEffect(() => {
     if (!userId || !date) return;
-
-    async function load() {
-      try {
-        const habits = await getUserHabits();
-        const dayIndex = getDayIndex(date);
-        const filtered = habits.filter(
-          (h) => Array.isArray(h.days) && h.days[dayIndex]
-        );
-        setHabitsForDay(filtered);
-      } catch (err) {
-        console.error("useHabitsForDay error:", err);
-      }
-    }
-
-    load();
+    fetchHabits();
   }, [userId, date]);
+
+  const habitsForDay = useMemo(() => {
+    if (!date || !Array.isArray(habits)) return [];
+
+    const dayIndex = getDayIndex(date);
+    return habits.filter(
+      (h) => Array.isArray(h.days) && h.days[dayIndex]
+    );
+  }, [habits, date]);
+
 
   return habitsForDay;
 }
