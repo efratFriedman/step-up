@@ -1,19 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
+import { getTodayHabits} from "@/services/habitsService";
 import { ITodayHabit } from "@/interfaces/ITodayHabit"; 
 import styles from "./TodayHabits.module.css";
+import { updateHabitStatus } from "@/services/habitLogService";
+
+function cleanDate(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
 
 export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   const [habits, setHabits] = useState<ITodayHabit[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const clean = cleanDate(selectedDate);
     const fetchHabitsForDate = async () => {
       setLoading(true);
       try {
-        const todaysHabits = await getTodayHabits(selectedDate);
+        const todaysHabits = await getTodayHabits(clean);
+        console.log(todaysHabits);
+        
         setHabits(todaysHabits);
       } catch (err) {
         console.error("Error loading today habits:", err);
@@ -27,7 +35,9 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   
   const toggleHabitStatus = async (habitId: string) => {
     try {
-      const updatedHabit = await updateHabitStatus(habitId, selectedDate);
+      const clean = cleanDate(selectedDate);
+
+      const updatedHabit = await updateHabitStatus(habitId, clean);
 
       setHabits((prev) =>
         prev.map((h) => (h._id === habitId ? updatedHabit : h))
@@ -41,8 +51,8 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     if (habit.category?.image) {
       return <img src={habit.category.image} alt={habit.category.name} className={styles.iconImage} />;
     }
-
   };
+
   const hexToRgba = (hex: string, alpha: number): string => {
     const color = hex.replace('#', ''); 
     const r = parseInt(color.substring(0, 2), 16);

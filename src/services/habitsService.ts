@@ -1,15 +1,6 @@
 import { IHabit } from "@/interfaces/IHabit";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
 
-export interface IHabitClient {
-  userId: string;
-  name: string;
-  description?: string;
-  categoryId?: string;
-  reminderTime?: { hour: number; minute: number };
-  days?: boolean[];
-}
-
 export async function getUserHabits(): Promise<IHabit[]> {
   const res = await fetch(`/api/user-habits`, {
     method: "GET",
@@ -18,41 +9,9 @@ export async function getUserHabits(): Promise<IHabit[]> {
   if (!res.ok) {
     throw new Error("Failed to fetch user habits");
   }
-  
+
   return res.json();
 }
-export async function addHabit(habit: IHabitClient): Promise<IHabit> {
-  const response = await fetch('/api/habits', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify(habit),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to add habit");
-  }
-
-  return response.json();
-}
-
-export async function updateHabit(habitId: string, updatedData: Partial<IHabit>): Promise<IHabit> {
-  const response = await fetch(`/api/habits/${habitId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(updatedData),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to update habit");
-  }
-
-  return response.json();
-}
-
 export async function getTodayHabits(date?: Date, retries = 3) {
   const targetDate = date || new Date();
   const dateString = targetDate.toISOString().split("T")[0];
@@ -71,7 +30,7 @@ export async function getTodayHabits(date?: Date, retries = 3) {
       if (!response.ok) {
         if (i < retries - 1 && response.status === 500) {
           console.log(`Retry ${i + 1}/${retries} for getTodayHabits`);
-          await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1))); 
+          await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
           continue;
         }
         throw new Error("Failed to fetch habits for today");
@@ -79,7 +38,7 @@ export async function getTodayHabits(date?: Date, retries = 3) {
 
       const data = await response.json();
       return data;
-      
+
     } catch (error) {
       console.error(`Attempt ${i + 1} failed:`, error);
       if (i === retries - 1) {
@@ -121,3 +80,36 @@ export async function deleteHabit(habitId: string): Promise<{ success: boolean }
 
   return response.json();
 }
+export async function addHabit(habit: any) {
+  const res = await fetch("/api/habits", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(habit),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to create habit");
+  }
+
+  return res.json();
+}
+export async function updateHabit(habitId: string, updatedData: any) {
+  const res = await fetch(`/api/habits/${habitId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify(updatedData),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update habit");
+  }
+
+  return res.json(); 
+}
+

@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import styles from "./DaysSlider.module.css";
+function cleanDate(date:Date){
+  return new Date(date.getFullYear(),date.getMonth(),date.getDate());
+}
 
 function getNext7Days() {
   const days = [];
@@ -14,7 +17,7 @@ function getNext7Days() {
     days.push({
       date: d.getDate(),
       day: d.toLocaleString("en-US", { weekday: "short" }),
-      full: new Date(d.getFullYear(), d.getMonth(), d.getDate()), 
+      full: cleanDate(d), 
       isToday: i === 0,
     });
   }
@@ -25,11 +28,6 @@ function getNext7Days() {
 export default function DaysSlider({ onDaySelect }: { onDaySelect: (day: Date) => void }) {
   const days = getNext7Days();
   const [selected, setSelected] = useState(days[0].full);
-
-  console.log("🔍 Today's date:", new Date());
-  console.log("🔍 Day of week (getDay):", new Date().getDay()); // 0-6
-  console.log("🔍 days[0]:", days[0]);
-  console.log("🔍 days[0].full:", days[0].full);
 
   useEffect(() => {
     onDaySelect(days[0].full);
