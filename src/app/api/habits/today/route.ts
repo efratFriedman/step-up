@@ -39,14 +39,8 @@ export async function GET(request: Request) {
     const localDate = new Date(year, month - 1, day, 12, 0, 0); 
     const todayIndex = localDate.getDay();
 
-    console.log("📅 Date param:", dateParam);
-    console.log("📅 Local date:", localDate);
-    console.log("📅 Day of week:", todayIndex, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][todayIndex]);
-
     const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
     const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999);
-
-    console.log("📆 Date range:", startOfDay, "to", endOfDay);
 
     const habitsToday = await Habit.find({
       userId: user._id,
