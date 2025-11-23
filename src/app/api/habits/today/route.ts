@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
+import Category from "@/models/Category";
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
 import { authenticate } from "@/lib/server/authMiddleware";
