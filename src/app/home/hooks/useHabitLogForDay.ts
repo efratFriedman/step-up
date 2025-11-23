@@ -1,17 +1,18 @@
-import { IHabitLog } from "@/interfaces/IHabitLog";
-import { getHabitLogsForDate } from "@/services/habitLogService";
-import { useEffect, useState } from "react";
+import { useHabitLogStore } from "@/app/store/useHabitLogStore";
+import { useEffect, useMemo } from "react";
 
-export default function useHabitLogForDay(userId:string,date:Date){
-    const [logs,setLogs]=useState<IHabitLog[]>([]);
+export default function useHabitLogForDay(userId: string, date: Date) {
+  const { logs, fetchLogs } = useHabitLogStore();
 
-    useEffect(()=>{
-        async function load() {
-            const iso=date.toISOString();
-            const result=await getHabitLogsForDate(userId,iso);
-            setLogs(result);
-        }
-        load();
-    },[userId,date]);
+  useEffect(() => {
+    if (!userId || !date) return;
+    fetchLogs(userId, date.toISOString());
+  }, [userId, date]);
+
+  const logsForDay = useMemo(() => {
+    if (!Array.isArray(logs)) return [];
     return logs;
+  }, [logs]);
+
+  return logsForDay;
 }
