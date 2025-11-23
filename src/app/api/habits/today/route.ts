@@ -15,7 +15,9 @@ export async function GET(request: Request) {
     const dateParam = searchParams.get("date");
     console.log("Incoming date:", dateParam);
 
-    const targetDate = dateParam ? new Date(dateParam) : new Date();
+    const targetDate = dateParam 
+      ? new Date(dateParam + "T00:00:00")
+      : new Date();
     console.log("Parsed date:", targetDate);
 
     if (isNaN(targetDate.getTime())) {
@@ -32,9 +34,9 @@ export async function GET(request: Request) {
     console.log("Fetching habits for date:", todayIndex);
 
     const habitsToday = await Habit.find({
-        userId: user._id,
-        [`days.${todayIndex}`]: true,
-      }).populate("categoryId");
+      userId: user._id,
+      [`days.${todayIndex}`]: true,
+    }).populate("categoryId");
     
 
     const logsToday = await HabitLog.find({
