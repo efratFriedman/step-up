@@ -7,7 +7,7 @@ import TodayHabits from "../components/HomePage/TodayHabits/TodayHabits";
 import NewHabit from "../components/Habit/AddHabit/NewHabit/NewHabit";
 
 export default function HomePage() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
 
   return (
     <div>

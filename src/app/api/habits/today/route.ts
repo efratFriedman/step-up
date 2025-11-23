@@ -19,30 +19,34 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const dateParam = searchParams.get("date");
-    console.log("Incoming date:", dateParam);
 
-    const targetDate = dateParam 
-      ? new Date(dateParam + "T12:00:00.000Z") 
-      : new Date();
-    console.log("Parsed date:", targetDate);
-
-    if (isNaN(targetDate.getTime())) {
+    if (!dateParam) {
       return NextResponse.json(
-        { message: "Invalid date format" },
+        { message: "Date parameter is required" },
         { status: 400 }
       );
     }
     
-    const [year, month, day] = dateParam?.split('-').map(Number) || [];
-    const localDate = new Date(year, month - 1, day);
-    const todayIndex = localDate.getDay();
+    const [year, month, day] = dateParam.split('-').map(Number);
     
-    console.log("Fetching habits for day:", todayIndex, `(${['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todayIndex]})`);
+    if (!year || !month || !day) {
+      return NextResponse.json(
+        { message: "Invalid date format. Use YYYY-MM-DD" },
+        { status: 400 }
+      );
+    }
 
-    const startOfDay = new Date(dateParam + "T00:00:00.000Z");
-    const endOfDay = new Date(dateParam + "T23:59:59.999Z");
-    
-    console.log("Date range:", startOfDay, "to", endOfDay);
+    const localDate = new Date(year, month - 1, day, 12, 0, 0); 
+    const todayIndex = localDate.getDay();
+
+    console.log("📅 Date param:", dateParam);
+    console.log("📅 Local date:", localDate);
+    console.log("📅 Day of week:", todayIndex, ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][todayIndex]);
+
+    const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0);
+    const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999);
+
+    console.log("📆 Date range:", startOfDay, "to", endOfDay);
 
     const habitsToday = await Habit.find({
       userId: user._id,

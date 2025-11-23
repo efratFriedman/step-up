@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./DaysSlider.module.css";
 
 function getNext7Days() {
@@ -25,6 +25,15 @@ function getNext7Days() {
 export default function DaysSlider({ onDaySelect }: { onDaySelect: (day: Date) => void }) {
   const days = getNext7Days();
   const [selected, setSelected] = useState(days[0].full);
+
+  console.log("🔍 Today's date:", new Date());
+  console.log("🔍 Day of week (getDay):", new Date().getDay()); // 0-6
+  console.log("🔍 days[0]:", days[0]);
+  console.log("🔍 days[0].full:", days[0].full);
+
+  useEffect(() => {
+    onDaySelect(days[0].full);
+  }, []);
 
   const handleSelect = (day: any) => {
     setSelected(day.full);
