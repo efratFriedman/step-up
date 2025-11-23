@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { getTodayHabits, updateHabitStatus } from "@/services/habitsService";
 import { ITodayHabit } from "@/interfaces/ITodayHabit"; 
+import { useHabitStore } from "@/app/store/useHabitStore";
 import styles from "./TodayHabits.module.css";
 
 export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
+  const storeHabits = useHabitStore((state) => state.habits); 
   const [habits, setHabits] = useState<ITodayHabit[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +25,7 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     };
 
     fetchHabitsForDate();
-  }, [selectedDate]);
+  }, [selectedDate,storeHabits]);
   
   const toggleHabitStatus = async (habitId: string) => {
     try {
