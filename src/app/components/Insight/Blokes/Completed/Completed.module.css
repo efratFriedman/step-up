@@ -1,0 +1,47 @@
+.card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 140px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    background-color: #79BAF8; /* צבע כחול ספציפי לקומפוננטה הזו */
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* עיצוב ייחודי לאייקון עם העיגול השחור */
+  .iconCircle {
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    padding: 6px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px auto; /* Centering with margin bottom */
+  }
+  
+  .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .label {
+    font-size: 0.9rem;
+    color: #333;
+    margin-top: 4px;
+    font-weight: 500;
+  }

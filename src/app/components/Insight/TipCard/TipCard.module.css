@@ -1,0 +1,24 @@
+.card {
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%; 
+  border-left: 4px solid #9BEBE2;
+}
+
+.content {
+  font-style: italic;
+  font-size: 16px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.author {
+  text-align: right;
+  font-weight: bold;
+  color: #333;
+  font-size: 0.9rem;
+}
