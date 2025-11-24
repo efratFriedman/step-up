@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 import styles from "./ProfileInfo.module.css";
-import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/validationService";
+import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/server/validationService";
 import { FaCamera } from "react-icons/fa";
-import { uploadImageToCloudinary } from "@/services/cloudinaryService";
-import { updateUserService } from "@/services/userService";
+import { uploadImageToCloudinary } from "@/services/server/cloudinaryService";
+import { updateUserService } from "@/services/client/userService";
 import { FaEye } from "react-icons/fa";
 import { useUserStore } from "@/app/store/useUserStore";
 

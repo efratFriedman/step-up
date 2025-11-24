@@ -3,10 +3,10 @@ import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./LoginForm.module.css";
 import { FaEnvelope, FaEye } from 'react-icons/fa';
-import { signInWithGoogle } from "@/services/firebaseService";
+import { signInWithGoogle } from "@/services/server/firebaseService";
 import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
-import { loginService, googleLoginService } from "@/services/authService";
+import { loginService, googleLoginService } from "@/services/client/authService";
 import { ROUTES } from "@/config/routes";
 
 export default function LoginForm() {

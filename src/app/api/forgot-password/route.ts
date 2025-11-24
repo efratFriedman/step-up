@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { generateTemporaryPassword } from "@/services/validationService";
+import { generateTemporaryPassword } from "@/services/server/validationService";
 
 export async function POST(req: NextRequest) {
   try {

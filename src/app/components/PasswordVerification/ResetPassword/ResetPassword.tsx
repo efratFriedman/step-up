@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
-import { resetUserPassword } from "@/services/userService";
+import { resetUserPassword } from "@/services/client/userService";
 
 export default function ResetPassword() {
   const [tempInput, setTempInput] = useState(""); // הסיסמה שהמשתמש מקיש

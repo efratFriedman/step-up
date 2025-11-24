@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
-import { sendTemporaryPassword } from "@/services/userService";
+import { sendTemporaryPassword } from "@/services/client/userService";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

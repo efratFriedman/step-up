@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { IHabitLog } from "@/interfaces/IHabitLog";
-import { getHabitLogsForDate, createHabitLog } from "@/services/habitLogService";
+import { getHabitLogsForDate, createHabitLog } from "@/services/client/habitLogService";
 
 interface HabitLogStore {
   logs: IHabitLog[];

@@ -33,23 +33,15 @@ export async function createHabitLog(habitId: string, date: Date): Promise<IHabi
     return response.json()
 }
 
-export async function updateHabitStatus(habitId: string, date?: Date) {
-    const targetDate = date || new Date();
-
-    const response = await fetch(`/api/habit-log/toggle`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+export async function updateHabitStatus(logId: string) {
+    const res = await fetch(`/api/habit-log/${logId}`, {
+        method: "PATCH",
         credentials: "include",
-        body: JSON.stringify({
-            habitId,
-            date: targetDate.toISOString()
-        }),
     });
 
-    if (!response.ok) {
+    if (!res.ok) {
         throw new Error("Failed to update habit status");
     }
 
-    const data = await response.json();
-    return data.habit;
+    return res.json();
 }

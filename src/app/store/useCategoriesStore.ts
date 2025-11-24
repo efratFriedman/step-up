@@ -15,10 +15,9 @@ export const useCategoriesStore = create<CategoriesStore>((set, get) => ({
   error: null,
 
   fetchCategories: async (force = false) => {
-    const user = useUserStore.getState().user;   // ⬅️ בדיקה אם יש יוזר
+    const user = useUserStore.getState().user;   
 
     if (!user) {
-      // אין משתמש → אין FETCH
       return;
     }
 

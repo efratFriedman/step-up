@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ProfileSidebar from "../Sidebar/Sidebar";
 import styles from "./ProfileSidebarWrapper.module.css";
-import { logout } from "@/services/authService";
+import { logout } from "@/services/client/authService";
 import { useUserStore } from "@/app/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/config/routes";

@@ -7,7 +7,7 @@ import {
   isValidEmail,
   isValidPassword,
   isValidPhone
-} from "@/services/validationService";
+} from "@/services/server/validationService";
 import { createAuthResponse } from "@/lib/server/createAuthResponse";
 
 export async function POST(request: Request) {

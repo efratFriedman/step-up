@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
-import { resetUserPassword } from "@/services/userService";
-import { isValidPassword } from "@/services/validationService"; 
+import { resetUserPassword } from "@/services/client/userService";
+import { isValidPassword } from "@/services/server/validationService"; 
 
 export default function NewPasswordComponent() {
   const router = useRouter();

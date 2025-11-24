@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { IHabit } from "@/interfaces/IHabit";
-import { addHabit, deleteHabit, getUserHabits, updateHabit } from "@/services/habitsService";
+import { addHabit, deleteHabit, getUserHabits, updateHabit } from "@/services/client/habitsService";
 
 interface HabitStore {
   habits: IHabit[];

@@ -3,32 +3,32 @@
     column-gap: 1rem;
     padding: 0.5rem 1rem;
     padding-bottom: 120px;
-    
+
     width: 100%;
     box-sizing: border-box;
 }
 
 .habitCard {
     position: relative;
-    min-height: 130px; 
+    min-height: 130px;
     border-radius: 1.5rem;
-    padding: 1rem; 
-    break-inside: avoid; 
-    margin-bottom: 1rem; 
+    padding: 1rem;
+    break-inside: avoid;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     color: #333;
     overflow: hidden;
-    transform: translateZ(0); 
+    transform: translateZ(0);
 }
 
 .habitCard:hover {
-    transform: translateY(-5px); 
+    transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -38,7 +38,7 @@
 }
 
 .iconWrapper {
-    flex: 1; 
+    flex: 1;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -47,12 +47,12 @@
 }
 
 .iconImage {
-    max-width: 65%; 
+    max-width: 65%;
     max-height: 65%;
     width: auto;
     height: auto;
-    object-fit: contain; 
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); 
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .habitName {
@@ -64,7 +64,7 @@
     z-index: 2;
 }
 
-.checkmark {
+/* .checkmark {
     position: absolute;
     top: 0.8rem;
     right: 0.8rem;
@@ -80,16 +80,62 @@
     font-size: 0.8rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     z-index: 2;
+} */
+.statusCircle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+    border: 2px solid #555;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    transition: all 0.2s ease;
 }
 
-.height-small { height: 120px; } 
-.height-medium { height: 160px; }
-.height-large { height: 200px; }
+.isDone .statusCircle {
+    background-color: #333433;
+    
+    border-color: #3a3b3a;
+}
 
-.habitCard:nth-child(3n+1) { height: 140px; }
-.habitCard:nth-child(3n+2) { height: 180px; }
-.habitCard:nth-child(3n) { height: 130px; }
+.checkmark {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.height-small {
+    height: 120px;
+}
+
+.height-medium {
+    height: 160px;
+}
+
+.height-large {
+    height: 200px;
+}
+
+.habitCard:nth-child(3n+1) {
+    height: 140px;
+}
+
+.habitCard:nth-child(3n+2) {
+    height: 180px;
+}
+
+.habitCard:nth-child(3n) {
+    height: 130px;
+}
 
 .span-two-rows {
-    height: 280px; 
+    height: 280px;
 }

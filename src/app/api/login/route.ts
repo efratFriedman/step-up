@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
-import { isValidEmail, isValidPassword } from "@/services/validationService";
+import { isValidEmail, isValidPassword } from "@/services/server/validationService";
 import { createAuthResponse } from "@/lib/server/createAuthResponse";   // ⭐ שימוש בפונקציה אחידה
 
 export async function POST(request: Request) {

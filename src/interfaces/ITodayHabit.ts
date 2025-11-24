@@ -1,11 +1,19 @@
 export interface ITodayHabit {
-  _id: string;
+  habitId: string;
+  logId: string;
+
   name: string;
+  description?: string;
+  reminderTime?: { hour: number; minute: number };
+
   isDone: boolean;
-  size?: 'small' | 'medium' | 'large';
+  date: string;
+
+  size?: "small" | "medium" | "large";
+
   category: {
     name: string;
-    colorTheme?: string; 
-    image?: string;     
+    colorTheme?: string;
+    image?: string;
   };
 }
