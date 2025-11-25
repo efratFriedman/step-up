@@ -31,7 +31,6 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     fetchTodayHabits(clean);
   }, [selectedDate]);
 
-
   const getHabitIcon = (habit: ITodayHabit) => {
     if (habit.category?.image) {
       return (

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PUBLIC_ROUTES, PROTECTED_ROUTES, BLOCK_WHEN_LOGGED_IN, ROUTES } from "./config/routes";
+import { PROTECTED_ROUTES, BLOCK_WHEN_LOGGED_IN, ROUTES } from "./config/routes";
+
 
 export function middleware(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
@@ -14,7 +15,7 @@ export function middleware(req: NextRequest) {
     }
 
     if (!token && PROTECTED_ROUTES.includes(pathname)) {
-        return NextResponse.redirect(new URL(ROUTES.LOGIN, req.url));
+        return NextResponse.redirect(new URL(ROUTES.UNAUTHORIZED, req.url));
     }
 
     return NextResponse.next();

@@ -9,6 +9,7 @@ export const ROUTES = {
     LOGIN: "/login",
     SIGNUP: "/signup",
     FORGOT_PASSWORD: "/forgot-password",
+    UNAUTHORIZED: '/unauthorized',
 } as const;
 
 export const PUBLIC_ROUTES: string[] = [
@@ -32,4 +33,5 @@ export const BLOCK_WHEN_LOGGED_IN: string[] = [
     ROUTES.SIGNUP,
     ROUTES.FORGOT_PASSWORD,
     ROUTES.LANDING,
+    ROUTES.UNAUTHORIZED
 ];
