@@ -11,7 +11,7 @@ import { startOfDayUTC } from "@/utils/date";
 export default function ProgressBar() {
     const { user } = useUserStore();
     const userId = user?.id!;
-    
+
     const [today] = useState(() => startOfDayUTC(new Date()));
     const { total, done, percent } = useProgress(userId, today);
 
@@ -56,12 +56,12 @@ export default function ProgressBar() {
                             stroke={progressColor}
                             strokeWidth="10"
                             fill="transparent"
-                            r="52"
+                            r="45"
                             cx="60"
                             cy="60"
                             style={{
-                                strokeDasharray: `${2 * Math.PI * 52}`,
-                                strokeDashoffset: `${2 * Math.PI * 52 * (1 - percent / 100)}`
+                                strokeDasharray: `${2 * Math.PI * 45}`,
+                                strokeDashoffset: `${2 * Math.PI * 45 * (1 - percent / 100)}`
                             }}
                         />
                     </svg>
