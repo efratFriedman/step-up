@@ -15,7 +15,7 @@ export default function ProfileSidebarWrapper() {
 
   const handleLogout = async () => {
     await logout();
-    router.replace(ROUTES.LOGIN);
+    router.replace(ROUTES.LANDING);
     clearUser();
     setIsOpen(false);
 
