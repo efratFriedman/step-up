@@ -64,23 +64,6 @@
     z-index: 2;
 }
 
-/* .checkmark {
-    position: absolute;
-    top: 0.8rem;
-    right: 0.8rem;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9); 
-    color: #5c6bc0; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 0.8rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    z-index: 2;
-} */
 .statusCircle {
     position: absolute;
     top: 10px;
