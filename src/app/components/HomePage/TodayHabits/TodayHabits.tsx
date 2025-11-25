@@ -37,7 +37,7 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     };
 
     fetchHabitsForDate();
-  }, [selectedDate]);
+  }, [selectedDate,storeHabits]);
 
   const toggleHabitStatus = async (logId: string) => {
     if (!isToday) return;

@@ -1,5 +1,5 @@
 export async function getInsights() {
-    const res = await fetch("/api/insights", {
+    const res = await fetch("/api/insight", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

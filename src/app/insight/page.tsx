@@ -7,8 +7,10 @@ import AchievementsCard from "../components/Insight/Blokes/Achievements/Achievem
 import CompletedCard from "../components/Insight/Blokes/Completed/Completed";
 import TipCard from "../components/Insight/TipCard/TipCard";
 import { IQuote } from "@/interfaces/IQuote";
-import { fetchRandomQuote } from "@/services/quoteServise";
+import { fetchRandomQuote } from "@/services/client/quoteServise";
 import styles from "./page.module.css";
+import InsightMessage from "../components/Insight/InsightCard/InsightMessage";
+import Ticker from "../components/Insight/Ticker/Ticker";
 
 export default function InsightsPage() {
   const { dayStreak, achievements, completed, fetchInsights } = useInsightStore();
@@ -34,6 +36,7 @@ export default function InsightsPage() {
 
   return (
     <div className={styles.container}>
+      <InsightMessage/>
     <div className={styles.grid}>
       <DayStreakCard value={dayStreak} />
       <AchievementsCard value={achievements} />
@@ -45,6 +48,7 @@ export default function InsightsPage() {
       {quoteError && <p>{quoteError}</p>}
       {quote && <TipCard quote={quote} />}
     </div>
+    <Ticker/>
   </div>
   );
 }

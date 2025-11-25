@@ -52,6 +52,10 @@ export async function GET(request: Request){
               currentStreakDate = prev.toISOString().split("T")[0];
             }
           }
+            console.log("HABITS:", habits);
+            console.log("LOGS:", logs);
+            console.log("USER:", userId);
+
 
           return NextResponse.json({
             dayStreak: streak,

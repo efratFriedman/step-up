@@ -1,0 +1,35 @@
+.tickerWrapper {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    background: #e3f4ff;
+    padding: 14px 0;
+    border-radius: 14px;
+    margin-top: 25px;
+    border: 2px solid #b8e3ff;
+    box-shadow: 0 2px 8px rgba(0, 140, 200, 0.15);
+  }
+  
+  .tickerContent {
+    display: inline-block;
+    animation: scroll 12s linear infinite;
+  }
+  
+  .item {
+    display: inline-block;
+    padding: 0 60px;
+    font-size: 20px;
+    color: #005b85;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  

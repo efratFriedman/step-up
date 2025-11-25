@@ -9,6 +9,7 @@ interface TipCardProps {
   export default function TipCard({ quote }: TipCardProps) {
     return (
         <div className={styles.card}>
+        <p className={styles.tipHeader}>Daily inspiration point💡:</p>
         <p className={styles.content}>"{quote.content}"</p>
         <p className={styles.author}>— {quote.author}</p>
       </div>

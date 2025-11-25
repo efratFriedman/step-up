@@ -5,7 +5,19 @@
   margin: 8px 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%; 
-  border-left: 4px solid #9BEBE2;
+  border-left: 4px solid #8ac0cc;
+}
+
+.tipHeader {
+  color: #8ac0cc; 
+  font-size: 1.1em;
+  font-weight: bold;
+  border-bottom: 2px solid #8ac0cc; 
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .content {

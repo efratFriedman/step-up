@@ -1,5 +1,5 @@
 import { IHabitLog } from '@/interfaces/IHabitLog';
-import mongoose, { Schema, Model, model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const HabitLogSchema = new mongoose.Schema({
   habitId: { type: Schema.Types.ObjectId, ref: 'Habit', required: true },

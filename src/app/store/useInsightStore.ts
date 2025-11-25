@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getInsights } from "@/services/insightService";
+import { getInsights } from "@/services/client/insightService";
 
 interface InsightsState {
     dayStreak: number;

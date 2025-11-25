@@ -1,0 +1,29 @@
+.card {
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 8px 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    border-left: 4px solid #8ac0cc;
+  }
+
+  .header {
+    color: #8ac0cc; 
+    font-size: 1em;
+    font-weight: bold;
+    border-bottom: 1px solid #8ac0cc; 
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .text {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.4;
+  }
+  
