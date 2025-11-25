@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
 import { resetUserPassword } from "@/services/client/userService";
 import { isValidPassword } from "@/services/server/validationService"; 
+import styles from "./NewPassword.module.css";
 
 export default function NewPasswordComponent() {
   const router = useRouter();
@@ -26,7 +27,6 @@ export default function NewPasswordComponent() {
       return;
     }
 
-    // בדיקה שהסיסמה עומדת בכללי האבטחה
     if (!isValidPassword(password)) {
       setError(
         "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
@@ -43,26 +43,39 @@ export default function NewPasswordComponent() {
   };
 
   return (
-    <div>
-      <h2>Create New Password</h2>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div>
+          <h2 className={styles.title}>New Password</h2>
+          <p className={styles.subtitle}>
+            Create a new, strong password for your account.
+          </p>
+        </div>
 
-      <input
-        type="password"
-        placeholder="New Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <div className={styles.inputGroup}>
+          <input
+            type="password"
+            placeholder="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+          />
 
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirm}
-        onChange={(e) => setConfirm(e.target.value)}
-      />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            className={styles.input}
+          />
+        </div>
 
-      <button onClick={handleSave}>Save Password</button>
+        <button onClick={handleSave} className={styles.button}>
+          Save Password
+        </button>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <div className={styles.error}>{error}</div>}
+      </div>
     </div>
   );
 }

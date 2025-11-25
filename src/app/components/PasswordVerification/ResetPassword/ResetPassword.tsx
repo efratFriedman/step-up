@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
-import { resetUserPassword } from "@/services/client/userService";
+import styles from "./ResetPassword.module.css";
 
 export default function ResetPassword() {
   const [tempInput, setTempInput] = useState(""); // הסיסמה שהמשתמש מקיש
@@ -20,7 +20,6 @@ export default function ResetPassword() {
     }
 
     try {
-      // כאן אפשר כבר לעבור לדף הסיסמה החדשה או לפתוח קומפוננטה אחרת
       router.push("/new-password"); 
     } catch (err: any) {
       setError(err.message);
@@ -28,16 +27,31 @@ export default function ResetPassword() {
   };
 
   return (
-    <div>
-      <h2>Enter Temporary Password</h2>
-      <input
-        type="password"
-        placeholder="Enter password from email"
-        value={tempInput}
-        onChange={(e) => setTempInput(e.target.value)}
-      />
-      <button onClick={handleVerify}>Verify</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div>
+          <h2 className={styles.title}>Verify Code</h2>
+          <p className={styles.subtitle}>
+            Please enter the temporary password sent to {tempEmail || "your email"}.
+          </p>
+        </div>
+
+        <div className={styles.inputGroup}>
+          <input
+            type="password"
+            placeholder="Enter password from email"
+            value={tempInput}
+            onChange={(e) => setTempInput(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+
+        <button onClick={handleVerify} className={styles.button}>
+          Verify Code
+        </button>
+
+        {error && <div className={styles.error}>{error}</div>}
+      </div>
     </div>
   );
 }

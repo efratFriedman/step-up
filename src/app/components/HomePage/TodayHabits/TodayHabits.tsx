@@ -6,6 +6,7 @@ import { ITodayHabit } from "@/interfaces/ITodayHabit";
 import styles from "./TodayHabits.module.css";
 import { toUTCDate } from "@/utils/date";
 import { updateHabitStatus } from "@/services/client/habitLogService";
+import { useHabitStore } from "@/app/store/useHabitStore";
 
 export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   const storeHabits = useHabitStore((state) => state.habits); 
@@ -36,7 +37,7 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     };
 
     fetchHabitsForDate();
-  }, [selectedDate]);
+  }, [selectedDate, storeHabits]);
 
   const toggleHabitStatus = async (logId: string) => {
     if (!isToday) return; // ❗ לא מעדכן סטטוס אם זה לא היום

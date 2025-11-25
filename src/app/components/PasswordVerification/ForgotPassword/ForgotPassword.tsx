@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
 import { sendTemporaryPassword } from "@/services/client/userService";
+import styles from "./ForgotPassword.module.css";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -35,7 +36,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setMessage("");
 
-    if (cooldown > 0) return; 
+    if (cooldown > 0) return;
 
     try {
       setLoading(true);
@@ -44,7 +45,7 @@ export default function ForgotPasswordPage() {
       setTempEmail(email);
       setTempPassword(data.tempPassword);
 
-      setCooldown(30); 
+      setCooldown(30);
 
       router.push("/reset-password");
     } catch (err: any) {
@@ -55,22 +56,36 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Forgot Password</h2>
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div>
+          <h2 className={styles.title}>Forgot Password?</h2>
+          <p className={styles.subtitle}>
+            Enter your email address to receive a temporary password.
+          </p>
+        </div>
 
-      <input
-        type="email"
-        placeholder="Enter your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
+        <div className={styles.inputGroup}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={styles.input}
+          />
+        </div>
 
-      <button type="submit" disabled={loading || cooldown > 0}>
-        {cooldown > 0 ? `Wait ${cooldown}s` : "Send Temporary Password"}
-      </button>
+        <button 
+          type="submit" 
+          disabled={loading || cooldown > 0}
+          className={styles.button}
+        >
+          {loading ? "Sending..." : cooldown > 0 ? `Wait ${cooldown}s` : "Send Temporary Password"}
+        </button>
 
-      {message && <p style={{ color: "red" }}>{message}</p>}
-    </form>
+        {message && <div className={styles.error}>{message}</div>}
+      </form>
+    </div>
   );
 }
