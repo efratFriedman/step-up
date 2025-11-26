@@ -30,5 +30,11 @@ export function endOfDayUTC(date: Date) {
 
 export function getDayIndexUTC(date: Date) {
     const utc = toUTCDate(date);
-    return utc.getUTCDay(); 
+    return utc.getUTCDay();
+}
+
+export function SendingValidDate(date: string) {
+    const [y, m, d] = date.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d));
+
 }

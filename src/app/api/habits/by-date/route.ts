@@ -1,7 +1,9 @@
 import { dbConnect } from "@/lib/DB";
 import { authenticate } from "@/lib/server/authMiddleware";
 import { getHabitsByDateService } from "@/services/server/habitService";
+import { SendingValidDate } from "@/utils/date";
 import { NextResponse } from "next/server";
+import { number } from "zod";
 
 import "@/models/Category";
 import "@/models/Habit";
@@ -21,8 +23,7 @@ export async function GET(req: Request) {
                 { status: 400 }
             );
         }
-
-        const date = new Date(dateParam);
+        const date = SendingValidDate(dateParam);
 
 
         const dailyHabits = await getHabitsByDateService(userId, date);

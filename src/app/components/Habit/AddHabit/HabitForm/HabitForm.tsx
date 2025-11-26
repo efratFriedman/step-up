@@ -44,8 +44,6 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
     };
     const handleCancelClick = () => closeWithAnimation();
     
-
-
     const handleFormSubmit = async (data: HabitFormData) => {
         if (!user) {
             router.push(ROUTES.LOGIN);
@@ -137,9 +135,6 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
                         disabled={isSubmitting}
                     > Add Habit
                     </button>
-                    {/* <button type="button" onClick={onCancel} className={styles.cancelButton}>
-                        Cancel
-                    </button> */}
                 </form>
             </div>
         </div>

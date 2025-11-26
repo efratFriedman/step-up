@@ -17,9 +17,6 @@ export default function ErrorPageLayout({
     icon,
     onButtonClick,
 }: ErrorPageProps) {
-
-
-
     return (
         <div className={styles.container}>
 

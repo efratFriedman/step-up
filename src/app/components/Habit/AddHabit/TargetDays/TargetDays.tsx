@@ -39,5 +39,4 @@ export default function TargetDays({ control, name = "days", error }: TargetDays
             />
             {error && <p className={styles.error}>{error.message}</p>}
         </div>
-    );
-}
+    );}
