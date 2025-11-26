@@ -8,6 +8,7 @@ import { getCategoryStyle } from "@/utils/todayHabitsHelper";
 import { toUTCDate } from "@/utils/date";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
 import styles from "./TodayHabits.module.css";
+import Loader from "../../Loader/Loader";
 
 export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   const {
@@ -44,7 +45,7 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
   if (!habits?.length) return <p>No habits for this day</p>;
 
   return (
