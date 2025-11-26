@@ -92,7 +92,7 @@ Do you want to save these changes?`
             });
 
             alert("Profile updated!");
-            router.push("/landing");
+            router.push("/home");
 
         } catch (err) {
             console.error(err);
