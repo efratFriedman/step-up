@@ -7,7 +7,6 @@ export async function POST(request: Request) {
   try {
     await dbConnect();
     const { email, googleId, name, profileImg } = await request.json();
-    console.log("gcsbhnjds");
 
     if (!email || !googleId || !name) {
       return NextResponse.json(
