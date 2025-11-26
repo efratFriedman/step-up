@@ -22,6 +22,9 @@ export const useHabitLogStore = create<HabitLogStore>()(
       error: null,
 
       fetchLogs: async (userId, date) => {
+        if (typeof window === 'undefined') {
+          return;
+        }
         set({ loading: true, error: null });
         try {
           const data = await getHabitLogsForDate(userId, date);

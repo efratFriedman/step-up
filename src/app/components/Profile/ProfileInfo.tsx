@@ -5,7 +5,7 @@ import { isValidPhone, isValidBirthDate, isValidPassword } from "@/services/serv
 import { FaCamera } from "react-icons/fa";
 import { uploadImageToCloudinary } from "@/services/server/cloudinaryService";
 import { updateUserService } from "@/services/client/userService";
-import { FaEye } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
 
 interface IUserFront {
@@ -22,6 +22,7 @@ export default function ProfileInfo() {
     const setUser = useUserStore((state) => state.setUser);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ phone?: string; birthDate?: string; password?: string }>({});
+    const router = useRouter();
 
 
     if (!user) return <p>Loading...</p>;
@@ -91,6 +92,8 @@ Do you want to save these changes?`
             });
 
             alert("Profile updated!");
+            router.push("/landing");
+
         } catch (err) {
             console.error(err);
             alert("Update failed");

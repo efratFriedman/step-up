@@ -5,6 +5,8 @@ import { SendingValidDate } from "@/utils/date";
 import { NextResponse } from "next/server";
 import { number } from "zod";
 
+import "@/models/Category";
+import "@/models/Habit";
 
 export async function GET(req: Request) {
     try {
