@@ -1,20 +1,18 @@
 "use client";
 import { useEffect } from "react";
-import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
-import { useHabitStore } from "@/app/store/useHabitStore";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
+import { useHabitStore } from "@/app/store/useHabitStore";
 import { useModalStore } from "@/app/store/useModalStore";
 import { useUserStore } from "@/app/store/useUserStore";
 import { useTodayHabitStore } from "@/app/store/useTodayHabitStore";
+import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 
 export default function NewHabit() {
   const isHabitModalOpen = useModalStore((state) => state.isHabitModalOpen);
   const closeHabitModal = useModalStore((state) => state.closeHabitModal);
   const addHabit = useHabitStore((state) => state.addHabit);
-
   const { categories, fetchCategories } = useCategoriesStore();
   const user = useUserStore((state) => state.user);
-
   const fetchTodayHabits = useTodayHabitStore((state) => state.fetchTodayHabits);
 
   useEffect(() => {
@@ -33,7 +31,7 @@ export default function NewHabit() {
       days: data.days,
     });
 
-    await fetchTodayHabits(new Date());
+    await fetchTodayHabits(new Date().toISOString().split("T")[0]);
 
     closeHabitModal();
   };

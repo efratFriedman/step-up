@@ -7,7 +7,6 @@ import { getEncouragingMessage } from "@/utils/progressHabit";
 import styles from "./ProgressBar.module.css";
 import { startOfDayUTC } from "@/utils/date";
 
-
 export default function ProgressBar() {
     const { user } = useUserStore();
     const userId = user?.id!;

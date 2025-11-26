@@ -1,27 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { getNext7Days } from "@/utils/todayHabitsHelper";
 import styles from "./DaysSlider.module.css";
-import { toUTCDate } from "@/utils/date";
-
-function getNext7Days() {
-  const days = [];
-  const today = new Date();
-
-  for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(today.getDate() + i);
-
-    days.push({
-      date: d.getDate(),
-      day: d.toLocaleString("en-US", { weekday: "short" }),
-      full: toUTCDate(d), 
-      isToday: i === 0,
-    });
-  }
-
-  return days;
-}
 
 export default function DaysSlider({ onDaySelect }: { onDaySelect: (day: Date) => void }) {
   const days = getNext7Days();
@@ -51,7 +32,7 @@ export default function DaysSlider({ onDaySelect }: { onDaySelect: (day: Date) =
         <div className={styles.day}>{day.day}</div>
     </div>
     ))}
-    </div>
+      </div>
     </div>
   );
 }

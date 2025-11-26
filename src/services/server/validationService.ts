@@ -1,3 +1,4 @@
+import { SendingValidDate } from "@/utils/date";
 import { z } from "zod";
 
 export function isValidEmail(email: string): boolean {
@@ -29,7 +30,7 @@ export function isValidBirthDate(birthDate: string): boolean {
   const schema = z
     .string()
     .refine((dateStr) => {
-      const date = new Date(dateStr);
+      const date = SendingValidDate(dateStr);
       const now = new Date();
       if (isNaN(date.getTime()) || date > now) return false;
 
