@@ -1,5 +1,6 @@
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
+import Category from "@/models/Category";
 import { endOfDayUTC, startOfDayUTC } from "@/utils/date";
 
 type PopulatedCategory = {

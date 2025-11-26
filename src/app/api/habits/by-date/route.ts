@@ -3,6 +3,8 @@ import { authenticate } from "@/lib/server/authMiddleware";
 import { getHabitsByDateService } from "@/services/server/habitService";
 import { NextResponse } from "next/server";
 
+import "@/models/Category";
+import "@/models/Habit";
 
 export async function GET(req: Request) {
     try {

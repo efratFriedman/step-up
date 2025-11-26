@@ -19,6 +19,12 @@ export const useTodayHabitStore = create<TodayHabitsStore>((set, get) => ({
   error: null,
 
   fetchTodayHabits: async (date: Date) => {
+        // ✅ בדיקה קריטית - רק ב-client!
+        if (typeof window === 'undefined') {
+          console.log('Skipping fetch on server');
+          return;
+        }
+    
     set({ loading: true, error: null });
 
     try {
