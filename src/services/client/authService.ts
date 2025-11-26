@@ -16,7 +16,6 @@ export async function googleLoginService(userData: any) {
 
   const response = await fetch("/api/googleLogin", {
     method: "POST",
-    credentials: "include",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(userData),
   });
