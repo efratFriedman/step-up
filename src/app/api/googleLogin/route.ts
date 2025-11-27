@@ -18,17 +18,17 @@ export async function POST(request: Request) {
     let user = await User.findOne({ email });
 
     if (!user) {
-     user=await User.create({
-      email,
-      googleId,
-      name,
-      profileImg,
-      password: null,
-    });
+      user = await User.create({
+        email,
+        googleId,
+        name,
+        profileImg,
+        password: null,
+      });
     } else if (!user.googleId) {
-     user.googleId = googleId;
-     user.profileImg ??= profileImg;
-     await user.save();
+      user.googleId = googleId;
+      user.profileImg ??= profileImg;
+      await user.save();
     }
 
     return createAuthResponse(

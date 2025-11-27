@@ -49,25 +49,6 @@ export async function getTodayHabits(date?: Date, retries = 3) {
   }
 }
 
-// export async function updateHabitStatus(habitId: string, date?: Date) {
-//   const targetDate = date || new Date();
-
-//   const dateString = targetDate.toISOString().split("T")[0];
-
-//   const response = await fetch(`/api/habits/${habitId}/toggle`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     credentials: "include",
-//     body: JSON.stringify({ date: dateString }),
-//   });
-
-//   if (!response.ok) {
-//     throw new Error("Failed to update habit status");
-//   }
-
-//   const data = await response.json();
-//   return data.habit;
-// }
 export async function deleteHabit(habitId: string): Promise<{ success: boolean }> {
   const response = await fetch(`/api/habits/${habitId}`, {
     method: "DELETE",
@@ -113,7 +94,19 @@ export async function updateHabit(habitId: string, updatedData: any) {
   return res.json(); 
 }
 
-export async function getHabitsByDate(date: string) {
+// export async function getHabitsByDate(date: Date) {
+//   const dateString = date.toISOString().split("T")[0];
+
+//   const res = await fetch(`/api/habits/by-date?date=${dateString}`, {
+//     method: "GET",
+//     credentials: "include",
+//   });
+
+//   if (!res.ok) throw new Error("Failed to load habits");
+
+//   return res.json(); 
+// }
+export async function  getHabitsByDate(date: string) {
 
   const res = await fetch(`/api/habits/by-date?date=${date}`, {
     method: "GET",

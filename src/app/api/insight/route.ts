@@ -3,6 +3,7 @@ import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
 import { authenticate } from "@/lib/server/authMiddleware";
+import { startOfDayUTC, endOfDayUTC, toUTCDate } from "@/utils/date";
 
 export async function GET(request: Request){
     try {
@@ -21,47 +22,71 @@ export async function GET(request: Request){
         .lean();
     
         const completed = logs.filter(l => l.isDone).length;
+        const todayUTC = toUTCDate(new Date());
+        const todayKey = todayUTC.toISOString().split("T")[0];
+    
+        const completedToday = logs.filter(log => {
+          const logDateKey = toUTCDate(new Date(log.date)).toISOString().split("T")[0];
+          return logDateKey === todayKey && log.isDone;
+        }).length;
 
+        console.log("Today Key:", todayKey, "Completed Today:", completedToday);
+        
         const logsByDate: Record<string, any[]> = {};
+
         logs.forEach(log => {
-            const dateKey = log.date.toISOString().split('T')[0];
-            if (!logsByDate[dateKey]) {
-                logsByDate[dateKey] = [];
-            }
-            logsByDate[dateKey].push(log);
+          const dateKey = toUTCDate(new Date(log.date)).toISOString().split("T")[0];
+          if (!logsByDate[dateKey]) logsByDate[dateKey] = [];
+          logsByDate[dateKey].push(log);
         });
 
         let achievements = 0;
         let streak = 0;
-
-        const today = new Date().toISOString().split("T")[0];
-        let currentStreakDate = today;
         const habitCount = habits.length;
 
-        for (const dateKey of Object.keys(logsByDate).sort().reverse()) {
-            const logsForDay = logsByDate[dateKey];
-            const doneCount = logsForDay.filter(l => l.isDone).length;
-            const isPerfectDay = doneCount === habitCount;
-      
-            if (isPerfectDay) 
-                achievements++;
-            if (dateKey === currentStreakDate && isPerfectDay) {
-              streak++;
-              const prev = new Date(dateKey);
-              prev.setDate(prev.getDate() - 1);
-              currentStreakDate = prev.toISOString().split("T")[0];
-            }
-          }
-            console.log("HABITS:", habits);
-            console.log("LOGS:", logs);
-            console.log("USER:", userId);
-
-
+        if (habitCount === 0) {
           return NextResponse.json({
-            dayStreak: streak,
-            achievements,
+            dayStreak: 0,
+            achievements: 0,
             completed,
+            completedToday,
           });
+        }
+
+        const today = new Date();
+        let currentStreakDate = todayKey;
+
+        const sortedDates = Object.keys(logsByDate)
+          .sort((a, b) => b.localeCompare(a));
+
+        for (const dateKey of sortedDates) {
+          const logsForDay = logsByDate[dateKey];
+          const doneCount = logsForDay.filter(l => l.isDone).length;
+          const isPerfectDay = doneCount === habitCount;
+
+          if (isPerfectDay) {
+            achievements++;
+          }
+
+          if (dateKey === currentStreakDate && isPerfectDay) {
+            streak++;
+
+            const prevDay = new Date(dateKey);
+            prevDay.setUTCDate(prevDay.getUTCDate() - 1);
+            currentStreakDate = prevDay.toISOString().split("T")[0];
+          } else if (dateKey === currentStreakDate && !isPerfectDay) {
+            break;
+          }
+        }
+
+        console.log("dayStreak:", streak, "achievements:", achievements);
+
+        return NextResponse.json({
+          dayStreak: streak,
+          achievements,
+          completed,
+          completedToday,
+        });
 
     
     } catch (error) {

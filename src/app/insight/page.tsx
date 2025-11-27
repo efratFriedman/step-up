@@ -35,6 +35,7 @@ export default function InsightsPage() {
 
 
   return (
+    <div className={styles.pageContainer}>
     <div className={styles.container}>
       <InsightMessage/>
     <div className={styles.grid}>
@@ -49,6 +50,7 @@ export default function InsightsPage() {
       {quote && <TipCard quote={quote} />}
     </div>
     <Ticker/>
+  </div>
   </div>
   );
 }

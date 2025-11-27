@@ -24,3 +24,11 @@
   margin-bottom: 8px;
   color: #333;
 }
+
+.pageContainer {
+  height: 100vh; 
+  overflow-y: auto; 
+  padding-bottom: 80px; 
+  box-sizing: border-box; 
+  background-color: #f8fbff;
+}

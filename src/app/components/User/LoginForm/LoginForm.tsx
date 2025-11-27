@@ -46,7 +46,7 @@ export default function LoginForm() {
         profileImg: user.photoURL
       };
 
-      const { ok, status, data } = await googleLoginService(userData);
+      const { ok, data } = await googleLoginService(userData);
 
       if (ok) {
         setUser(mapUserToClient(data.user));

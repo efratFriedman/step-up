@@ -5,8 +5,8 @@ import { getInsightMessage } from "@/utils/insightMessage";
 import styles from "./InsightMessage.module.css";
 
 export default function InsightMessage() {
-    const { dayStreak, achievements, completed } = useInsightStore();
-    const message = getInsightMessage(dayStreak, achievements, completed);
+    const { dayStreak, completedToday  } = useInsightStore();
+    const message = getInsightMessage(dayStreak, completedToday );
 
     return (
         <div className={styles.card}>
