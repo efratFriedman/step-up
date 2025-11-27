@@ -4,6 +4,7 @@ import { useState } from "react";
 import { uploadImageToCloudinary } from "@/services/server/cloudinaryService";
 import PostMedia from "../PostMedia/PostMedia";
 import { useUserStore } from "@/app/store/useUserStore";
+import { addPost } from "@/services/client/postService";
 
 export default function AddPost() {
   const [content, setContent] = useState("");
@@ -30,18 +31,12 @@ export default function AddPost() {
         })
       );
       
-    const res = await fetch("/api/posts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      const data = await addPost({
         userId: user.id,
         content,
         media: mediaUrls,
-      }),
-      
-    });
+      });
 
-    const data = await res.json();
     console.log("Post added:", data.post);
 
     setContent("");
