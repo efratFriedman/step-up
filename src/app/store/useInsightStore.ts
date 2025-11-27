@@ -1,11 +1,19 @@
 import { create } from "zustand";
 import { getInsights } from "@/services/client/insightService";
 
+interface StrongestHabit {
+  name: string;
+  daysCount: number;
+  totalCompletions: number;
+}
+
 interface InsightsState {
     dayStreak: number;
     achievements: number;
     completed: number;
     completedToday: number;
+    completedThisWeek: number;
+    strongestHabit: StrongestHabit | null;
     loading: boolean;
   
     fetchInsights: () => Promise<void>;
@@ -16,6 +24,8 @@ export const useInsightStore = create<InsightsState>((set) => ({
     achievements: 0,
     completed: 0,
     completedToday: 0,
+    completedThisWeek: 0,
+    strongestHabit: null,
     loading: false,
   
     fetchInsights: async () => {
@@ -27,6 +37,7 @@ export const useInsightStore = create<InsightsState>((set) => ({
           achievements: data.achievements,
           completed: data.completed,
           completedToday: data.completedToday,
+          completedThisWeek: data.completedThisWeek,
           loading: false,
         });
       } catch (err) {

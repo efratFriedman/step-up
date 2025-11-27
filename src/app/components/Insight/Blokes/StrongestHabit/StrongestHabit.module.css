@@ -1,0 +1,119 @@
+.card {
+    flex: 1;
+    border-radius: 12px;
+    padding: 10px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    background-color: #A2DFF7; 
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .header {
+    width: 100%;
+    margin-bottom: 8px; 
+  }
+  
+  .title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4f57f3;
+    margin: 0;
+  }
+  
+  .habitName {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4f57f3;
+    margin: 6px 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .statValue {
+    font-size: 1.1rem; 
+    font-weight: 700;
+    color: #4f57f3;
+  }
+  
+  .statLabel {
+    font-size: 0.7rem; 
+    color: #4f57f3;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .divider {
+    font-size: 1.1rem;
+    color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .badge {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #4f57f3;
+    margin-top: 6px; 
+  }
+  
+  .emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px; 
+  }
+  
+  .emptyIcon {
+    font-size: 40px; 
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  
+  .emptyTitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4f57f3;
+    margin: 0 0 6px 0;
+  }
+  
+  .emptyText {
+    font-size: 0.8rem;
+    color: #4f57f3;
+    margin: 0;
+  }
+  
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }

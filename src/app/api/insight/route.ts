@@ -30,12 +30,72 @@ export async function GET(request: Request){
           return logDateKey === todayKey && log.isDone;
         }).length;
 
-        console.log("Today Key:", todayKey, "Completed Today:", completedToday);
-        
-        const logsByDate: Record<string, any[]> = {};
 
-        logs.forEach(log => {
-          const dateKey = toUTCDate(new Date(log.date)).toISOString().split("T")[0];
+        console.log("Today Key:", todayKey, "Completed Today:", completedToday);
+       
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - dayOfWeek);
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        const startOfWeekUTC = toUTCDate(startOfWeek);
+
+        const completedThisWeek = logs.filter((log) => {
+          const logDate = toUTCDate(new Date(log.date));
+          return logDate >= startOfWeekUTC && log.isDone;
+        }).length;
+        console.log("Completed this week:", completedThisWeek);
+
+        let strongestHabit = null;
+        if (habits.length > 0) {
+          const habitStats = habits.map(habit => {
+            const habitLogsThisWeek = logs.filter(log => {
+              const logDate = toUTCDate(new Date(log.date));
+              return logDate >= startOfWeekUTC && 
+                     log.habitId.toString() === habit.id.toString() && 
+                     log.isDone;
+            });
+
+            const uniqueDays = new Set(
+              habitLogsThisWeek.map(log => 
+                toUTCDate(new Date(log.date)).toISOString().split("T")[0]
+              )
+            );
+
+            return {
+              habitId: habit._id,
+              name: habit.name,
+              daysCount: uniqueDays.size,
+              totalCompletions: habitLogsThisWeek.length,
+            };
+          });
+
+          habitStats.sort((a, b) => {
+            if (b.daysCount !== a.daysCount) {
+              return b.daysCount - a.daysCount;
+            }
+            if (b.totalCompletions !== a.totalCompletions) {
+              return b.totalCompletions - a.totalCompletions;
+            }
+            return 0;
+          });
+
+          if (habitStats.length > 0 && habitStats[0].daysCount > 0) {
+            strongestHabit = {
+              name: habitStats[0].name,
+              daysCount: habitStats[0].daysCount,
+              totalCompletions: habitStats[0].totalCompletions,
+            };
+          }
+        }
+
+
+        const logsByDate: Record<string, any[]> = {};
+        logs.forEach((log) => {
+          const dateKey = toUTCDate(new Date(log.date))
+            .toISOString()
+            .split("T")[0];
           if (!logsByDate[dateKey]) logsByDate[dateKey] = [];
           logsByDate[dateKey].push(log);
         });
@@ -50,43 +110,44 @@ export async function GET(request: Request){
             achievements: 0,
             completed,
             completedToday,
+            completedThisWeek: 0,
+            strongestHabit: null,
           });
         }
 
-        const today = new Date();
-        let currentStreakDate = todayKey;
+        const currentStreakDate = todayKey;
 
         const sortedDates = Object.keys(logsByDate)
           .sort((a, b) => b.localeCompare(a));
 
-        for (const dateKey of sortedDates) {
-          const logsForDay = logsByDate[dateKey];
-          const doneCount = logsForDay.filter(l => l.isDone).length;
-          const isPerfectDay = doneCount === habitCount;
+      for (const dateKey of sortedDates) {
+        const logsForDay = logsByDate[dateKey];
+        const doneCount = logsForDay.filter(l => l.isDone).length;
+        const isPerfectDay = doneCount === habitCount;
 
-          if (isPerfectDay) {
-            achievements++;
-          }
-
-          if (dateKey === currentStreakDate && isPerfectDay) {
-            streak++;
-
-            const prevDay = new Date(dateKey);
-            prevDay.setUTCDate(prevDay.getUTCDate() - 1);
-            currentStreakDate = prevDay.toISOString().split("T")[0];
-          } else if (dateKey === currentStreakDate && !isPerfectDay) {
-            break;
-          }
+        if (isPerfectDay) {
+          achievements++;
         }
 
-        console.log("dayStreak:", streak, "achievements:", achievements);
+        if (dateKey === currentStreakDate && isPerfectDay) {
+          streak++;
+          const prevDay = new Date(dateKey);
+          prevDay.setUTCDate(prevDay.getUTCDate() - 1);
+        } else if (dateKey === currentStreakDate && !isPerfectDay) {
+            break;
+        }
+    }
 
-        return NextResponse.json({
-          dayStreak: streak,
-          achievements,
-          completed,
-          completedToday,
-        });
+    console.log("dayStreak:", streak, "achievements:", achievements);
+
+    return NextResponse.json({
+      dayStreak: streak,
+      achievements,
+      completed,
+      completedToday,
+      completedThisWeek,
+      strongestHabit,
+    });
 
     
     } catch (error) {
