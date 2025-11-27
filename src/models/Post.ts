@@ -4,7 +4,7 @@ import mongoose, { Schema, Model, model } from 'mongoose';
 const PostSchema = new mongoose.Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   content: String,
-  media: [String], 
+  media: [{ url: String, type: { type: String, enum: ['image','video'] } }],
   likesCount: { type: Number, default: 0 }
 });
 

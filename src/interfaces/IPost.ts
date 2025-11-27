@@ -1,8 +1,12 @@
-import { Document, Types } from 'mongoose';
+import { Document, Types } from "mongoose";
 
 export interface IPost extends Document {
   userId: Types.ObjectId;
   content: string;
-  media?: string[];    
+  media: {
+    url: string;
+    type: "image" | "video";
+  }[];
   likesCount: number;
+  createdAt?: string;
 }
