@@ -1,0 +1,102 @@
+.addPostForm {
+    background-color: var(--color-background-card, #ffffff);
+    border: 1px solid var(--color-border, #e0e0e0);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 600px; 
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .contentTextArea {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px;
+    border: 1px solid var(--color-input-border, #ccc);
+    border-radius: 8px;
+    font-size: 16px;
+    resize: vertical; 
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: inherit; 
+  }
+  
+  .contentTextArea:focus {
+    border-color: var(--color-primary, #007bff);
+    box-shadow: 0 0 0 3px var(--color-primary-light, rgba(0, 123, 255, 0.2));
+  }
+  
+  .contentTextArea::placeholder {
+    color: var(--color-placeholder, #999);
+  }
+  
+  .fileInput {
+    display: none; 
+  }
+  
+  .fileInputLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background-color: var(--color-secondary-button, #f0f0f0);
+    color: var(--color-secondary-text, #333);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none; 
+  }
+  
+  .fileInputLabel:hover {
+    background-color: var(--color-secondary-button-hover, #e0e0e0);
+  }
+  
+  .fileInputIcon {
+    font-size: 18px;
+    line-height: 1; 
+  }
+  
+  .submitButton {
+    background-color: var(--color-primary, #007bff);
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+  }
+  
+  .submitButton:hover {
+    background-color: var(--color-primary-dark, #0056b3);
+  }
+  
+  .submitButton:disabled {
+    background-color: var(--color-disabled, #a0c9f1);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+    
+  .actionsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .errorMessage {
+      color: var(--color-error, #dc3545);
+      font-size: 14px;
+      text-align: center;
+  }

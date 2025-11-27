@@ -5,12 +5,18 @@ import {dbConnect} from "@/lib/DB";
 export async function GET() {
     try {
       await dbConnect();
-      const posts = await Post.find().sort({ createdAt: -1 }); // הסדר: חדש → ישן
+  
+      const posts = await Post.find()
+        .sort({ createdAt: -1 })
+        .populate("userId", "name profileImg"); 
+  
       return NextResponse.json({ posts });
     } catch (err: any) {
       return NextResponse.json({ message: err.message || "Failed to fetch posts" }, { status: 500 });
     }
   }
+  
+  
   export async function POST(req: Request) {
     try {
       await dbConnect();

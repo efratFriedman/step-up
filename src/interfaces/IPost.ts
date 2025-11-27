@@ -8,5 +8,6 @@ export interface IPost extends Document {
     type: "image" | "video";
   }[];
   likesCount: number;
+  likedBy?: Types.ObjectId[]; 
   createdAt?: string;
 }
