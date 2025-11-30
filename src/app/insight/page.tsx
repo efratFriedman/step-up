@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { useInsightStore } from "@/app/store/useInsightStore";
 import GrowthTree from "../components/Insight/Blokes/GrowthTree/GrowthTree";
-// import DayStreakCard from "../components/Insight/Blokes/DayStreak/DayStreak";
-import AchievementsCard from "../components/Insight/Blokes/Achievements/Achievements";
+import FortuneFunChallenge from "../components/Insight/Blokes/FortuneFunChallenge/FortuneFunChallenge";
 import CompletedCard from "../components/Insight/Blokes/Completed/Completed";
 import TipCard from "../components/Insight/TipCard/TipCard";
 import { IQuote } from "@/interfaces/IQuote";
@@ -13,7 +12,6 @@ import styles from "./page.module.css";
 import InsightMessage from "../components/Insight/InsightCard/InsightMessage";
 import Ticker from "../components/Insight/Ticker/Ticker";
 import Loader from "../components/Loader/Loader";
-import StrongestHabit from "../components/Insight/Blokes/StrongestHabit/StrongestHabit";
 
 export default function InsightsPage() {
   const { strongestHabit, completed, completedThisWeek, fetchInsights } = useInsightStore();
@@ -42,10 +40,8 @@ export default function InsightsPage() {
     <div className={styles.container}>
       <InsightMessage/>
     <div className={styles.grid}>
-      {/* <DayStreakCard value={dayStreak} /> */}
       <GrowthTree completedCount={completedThisWeek} />
-      <StrongestHabit habit={strongestHabit} />
-      {/* <AchievementsCard value={achievements} /> */}
+      <FortuneFunChallenge />
       <CompletedCard value={completed} />
     </div>
 
