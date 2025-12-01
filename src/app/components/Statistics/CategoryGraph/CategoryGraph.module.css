@@ -1,0 +1,104 @@
+.container {
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 0.5rem;
+}
+
+/* מרכז את ה־RangeSelector בדיוק */
+.selectorWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin-bottom: 1.2rem;
+  margin-top: 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.loading {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.2rem;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  animation: fadeSlideIn 0.35s ease-out forwards;
+  opacity: 0;
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.categoryName {
+  font-weight: 600;
+}
+
+.percentage {
+  color: #666;
+  font-weight: 500;
+}
+
+.barBackground {
+  width: 100%;
+  height: 18px;
+  background-color: #f3f3f3;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.barFill {
+  height: 100%;
+  transition: width 0.35s ease-out;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  opacity: 0.9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 600px) {
+  .barBackground {
+    height: 24px;
+  }
+
+  .statHeader {
+    font-size: 0.95rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+}
