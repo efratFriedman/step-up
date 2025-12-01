@@ -3,39 +3,45 @@
 import { useEffect, useState } from "react";
 import { getAllPosts } from "@/services/client/postService";
 import PostItem from "../PostItem/PostItem";
-import AddPost from "../AddPost/AddPost"; 
+import AddPost from "../AddPost/AddPost";
+import Loader from "../../Loader/Loader"; 
 import styles from "./PostList.module.css";
 
 export default function PostList() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddPost, setShowAddPost] = useState(false); 
+  const [visibleCount, setVisibleCount] = useState(3)
+
+  const loadPosts = async () => {
+    setLoading(true);
+    try {
+      const { posts } = await getAllPosts();
+      setPosts(posts);
+    } catch (error) {
+      console.error("Failed to load posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function load() {
-      try {
-        const { posts } = await getAllPosts();
-        setPosts(posts);
-      } catch (error) {
-        console.error("Failed to load posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+    loadPosts();
   }, []);
 
   const handleShowAddPost = () => {
     setShowAddPost(true);
   };
 
-  if (loading) {
-    return <div className={styles.loading}> wait...</div>;
-  }
+  const handleAddPostSuccess = () => {
+    setShowAddPost(false); 
+    loadPosts(); 
+    setVisibleCount(3);
+  };
 
-  if (showAddPost) {
-    return <AddPost />;
-  }
+  const handleViewMore = () => {
+    setVisibleCount((prev) => prev + 3);
+  };
 
   return (
     <div className={styles.postList}>
@@ -43,10 +49,27 @@ export default function PostList() {
         Add New Post
       </button>
 
-      {posts.length === 0 ? (
-        <p className={styles.noPosts}>no posts</p>
-      ) : (
-        posts.map((post) => <PostItem key={post._id} post={post} />)
+      {posts.length === 0 && !loading && (
+        <p className={styles.noPosts}>No posts</p>
+      )}
+
+      {posts.slice(0, visibleCount).map((post) => (
+        <PostItem key={post._id} post={post} />
+      ))}
+
+      {visibleCount < posts.length && (
+        <button className={styles.viewMoreButton} onClick={handleViewMore}>
+          View More
+        </button>
+      )}
+
+      {loading && <Loader />}
+
+      {showAddPost && (
+        <AddPost
+          onSuccess={handleAddPostSuccess}
+          onClose={() => setShowAddPost(false)}
+        />
       )}
     </div>
   );

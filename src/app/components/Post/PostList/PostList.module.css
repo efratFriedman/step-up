@@ -1,0 +1,70 @@
+.postList {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 15px;
+    padding-bottom: 120px;
+    box-sizing: border-box;
+  }
+
+  .addPostButton {
+    width: 100%;
+    background-color: #8ac0cc;
+    color: white;
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .addPostButton:hover {
+    background-color: #7ab1be;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 18px;
+    padding: 40px 0;
+    color: #8ac0cc;
+  }
+  
+  .noPosts {
+    text-align: center;
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+  }
+
+  .viewMoreButton {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.viewMoreButton:hover {
+    background-color: #e0e0e0;
+}
+  
+  @media (max-width: 450px) {
+    .addPostButton {
+      font-size: 15px;
+      padding: 12px;
+    }
+  
+    .postList {
+      padding: 10px;
+      padding-bottom: 100px;
+    }
+  }
+  
