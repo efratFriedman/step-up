@@ -1,0 +1,143 @@
+.container {
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* מרכז את הסלקטור */
+.selectorWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.statsContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    min-height: 160px;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.cardIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.cardLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cardValue {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Success Card */
+.successCard {
+    border-color: #d4e4f7;
+}
+
+.successCard .cardIcon {
+    background: linear-gradient(135deg, #2e72ac 0%, #235784 100%);
+    color: white;
+}
+
+.successCard .cardValue {
+    color: #2e72ac;
+}
+
+.successCard:hover {
+    border-color: #2e72ac;
+}
+
+/* Completed Card */
+.completedCard {
+    border-color: #d9f0f2;
+}
+
+.completedCard .cardIcon {
+    background: linear-gradient(135deg, #99c8ce 0%, #80b8bf 100%);
+    color: white;
+}
+
+.completedCard .cardValue {
+    color: #5a9ba3;
+}
+
+.completedCard:hover {
+    border-color: #99c8ce;
+}
+
+/* Missed Card */
+.missedCard {
+    border-color: #d0dce5;
+}
+
+.missedCard .cardIcon {
+    background: linear-gradient(135deg, #183c5c 0%, #0f2a42 100%);
+    color: white;
+}
+
+.missedCard .cardValue {
+    color: #183c5c;
+}
+
+.missedCard:hover {
+    border-color: #183c5c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .statsContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    .cardValue {
+        font-size: 1.5rem;
+    }
+}

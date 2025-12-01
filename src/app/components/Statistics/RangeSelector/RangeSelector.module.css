@@ -1,0 +1,51 @@
+.selectorContainer {
+  display: inline-flex; /* Changed from flex to inline-flex */
+  gap: 0.25rem; /* Reduced gap for tighter button grouping */
+  padding: 4px;
+  border-radius: 10px;
+  background-color: #f3f4f6;
+  width: fit-content; /* Prevents stretching */
+}
+
+.buttonDefault,
+.buttonActive { 
+  padding: 8px 20px; /* Slightly more horizontal padding */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap; /* Prevents text wrapping */
+  transition: all 0.15s ease; /* Smoother transition */
+  user-select: none; /* Prevents text selection */
+}
+
+.buttonDefault {
+  background-color: transparent;
+  color: #6b7280;
+}
+
+.buttonDefault:hover {
+  color: #374151;
+  background-color: rgba(229, 231, 235, 0.5);
+}
+
+.buttonActive {
+  font-weight: 600;
+  background-color: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .buttonDefault,
+  .buttonActive {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .selectorContainer {
+    gap: 0.2rem;
+    padding: 3px;
+  }
+}
