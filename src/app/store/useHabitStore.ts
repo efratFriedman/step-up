@@ -1,7 +1,11 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { IHabit } from "@/interfaces/IHabit";
-import { addHabit, deleteHabit, getUserHabits, updateHabit } from "@/services/client/habitsService";
+import {
+  addHabit,
+  deleteHabit,
+  getUserHabits,
+  updateHabit,
+} from "@/services/client/habitsService";
 
 interface HabitStore {
   habits: IHabit[];
@@ -14,66 +18,51 @@ interface HabitStore {
   deleteHabit: (id: string) => Promise<void>;
 }
 
-export const useHabitStore = create<HabitStore>()(
-  persist(
-    (set, get) => ({
-      habits: [],
-      loading: false,
-      error: null,
+export const useHabitStore = create<HabitStore>((set, get) => ({
+  habits: [],
+  loading: false,
+  error: null,
 
-      fetchHabits: async () => {
-        set({ loading: true, error: null });
-        try {
-          const data = await getUserHabits();
-          set({ habits: data, loading: false });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-
-      addHabit: async (habitData) => {
-        set({ loading: true });
-        try {
-          const created = await addHabit(habitData);
-          set({
-            habits: [...get().habits, created],
-            loading: false,
-          });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-      updateHabit: async (habitId: string, updatedData: Partial<IHabit>) => {
-        set({ loading: true, error: null });
-
-        try {
-          const updatedHabit = await updateHabit(habitId, updatedData);
-          set((state) => ({
-            habits: state.habits.map((h) =>
-              h._id?.toString() === habitId ? updatedHabit : h
-            ),
-            loading: false,
-          }));
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-
-      deleteHabit: async (id) => {
-        set({ loading: true });
-        try {
-          await deleteHabit(id);
-          set({
-            habits: get().habits.filter((h) => h._id !== id),
-            loading: false,
-          });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-    }),
-    {
-      name: "habits-storage",
+  fetchHabits: async () => {
+    set({ loading: true, error: null });
+    try {
+      const data = await getUserHabits();
+      set({ habits: data, loading: false });
+    } catch (err: any) {
+      set({ error: err.message, loading: false });
     }
-  )
-);
+  },
+
+  addHabit: async (habitData) => {
+    try {
+      const created = await addHabit(habitData);
+      set({ habits: [...get().habits, created] });
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+
+  updateHabit: async (habitId, updatedData) => {
+    try {
+      const updatedHabit = await updateHabit(habitId, updatedData);
+      set((state) => ({
+        habits: state.habits.map((h) =>
+          h._id === habitId ? updatedHabit : h
+        ),
+      }));
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+
+  deleteHabit: async (id) => {
+    try {
+      await deleteHabit(id);
+      set({
+        habits: get().habits.filter((h) => h._id !== id),
+      });
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+}));
