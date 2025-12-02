@@ -1,69 +1,108 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useStatisticsStore } from "@/app/store/useStatisticsStore";
-import { DailyStat } from "@/utils/statistics";
-import styles from "./Heatmap.module.css";
+import styles from "@/app/components/Statistics/Heatmap/Heatmap.module.css";
 
-export default function Heatmap() {
+import {
+  getBeginDate,
+  getEndDate,
+  getNextMonth,
+  getPrevMonth,
+  applyCircularMonthBoundary,
+  filterMonthStats,
+  buildCalendarCells,
+  getColorLevel
+} from "@/utils/HeatMapFunctions";
+
+export default function HeatmapMonth() {
   const RANGE = 365;
-
   const { stats365, loading365, fetchStatisticsFor } = useStatisticsStore();
 
   useEffect(() => {
     fetchStatisticsFor(RANGE);
   }, []);
 
-  if (loading365) {
-    return (
-      <div className={styles.container}>
-        <p className={styles.loading}>Loading yearly heatmap…</p>
-      </div>
-    );
-  }
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
-  if (!stats365.length) {
-    return (
-      <div className={styles.container}>
-        <p className={styles.noData}>No data for the past year.</p>
-      </div>
-    );
-  }
+  const beginDate = useMemo(() => getBeginDate(stats365), [stats365]);
+  const endDate = useMemo(() => getEndDate(stats365), [stats365]);
 
-  const getColorClass = (percent: number) => {
-    if (percent === 0) return styles.levelNone;
-    if (percent < 40) return styles.levelLow;
-    if (percent < 70) return styles.levelMedium;
-    return styles.levelHigh;
+  const handleNext = () => {
+    const { newMonth, newYear } = getNextMonth(currentMonth, currentYear);
+    const target = new Date(newYear, newMonth, 1);
+
+    const clamp = applyCircularMonthBoundary(target, beginDate!, endDate!);
+    if (clamp) {
+      setCurrentMonth(clamp.month);
+      setCurrentYear(clamp.year);
+    } else {
+      setCurrentMonth(newMonth);
+      setCurrentYear(newYear);
+    }
   };
+
+  const handlePrev = () => {
+    const { newMonth, newYear } = getPrevMonth(currentMonth, currentYear);
+    const target = new Date(newYear, newMonth, 1);
+
+    const clamp = applyCircularMonthBoundary(target, beginDate!, endDate!);
+    if (clamp) {
+      setCurrentMonth(clamp.month);
+      setCurrentYear(clamp.year);
+    } else {
+      setCurrentMonth(newMonth);
+      setCurrentYear(newYear);
+    }
+  };
+
+  const monthStats = useMemo(
+    () => filterMonthStats(stats365, currentMonth, currentYear),
+    [stats365, currentMonth, currentYear]
+  );
+
+  const cells = useMemo(
+    () => buildCalendarCells(monthStats, currentMonth, currentYear),
+    [monthStats, currentMonth, currentYear]
+  );
+
+  const monthName = new Date(currentYear, currentMonth).toLocaleString("en", {
+    month: "long",
+  });
+
+  if (loading365 || !beginDate || !endDate) return <div className={styles.container}>Loading…</div>;
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3 className={styles.title}>Yearly Progress</h3>
-        
-        <div className={styles.legend}>
-          <span className={styles.legendLabel}>Less</span>
-          <div className={styles.legendColors}>
-            <div className={`${styles.legendSquare} ${styles.levelNone}`}></div>
-            <div className={`${styles.legendSquare} ${styles.levelLow}`}></div>
-            <div className={`${styles.legendSquare} ${styles.levelMedium}`}></div>
-            <div className={`${styles.legendSquare} ${styles.levelHigh}`}></div>
-          </div>
-          <span className={styles.legendLabel}>More</span>
-        </div>
+        <button className={styles.navBtn} onClick={handlePrev}>⟵</button>
+        <h3 className={styles.title}>{monthName} {currentYear}</h3>
+        <button className={styles.navBtn} onClick={handleNext}>⟶</button>
       </div>
 
-      <div className={styles.heatmapWrapper}>
-        <div className={styles.heatmapGrid}>
-          {stats365.map((day: DailyStat, i: number) => (
-            <div
-              key={i}
-              className={`${styles.day} ${getColorClass(day.percent)}`}
-              title={`${day.date} – ${day.percent}%`}
-            ></div>
-          ))}
+      <div className={styles.grid}>
+        {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+          <div key={`${d}-${i}`} className={styles.weekday}>{d}</div>
+        ))}
+
+        {cells.map((cell, i) => (
+          <div
+            key={i}
+            className={`${styles.day} ${getColorLevel(cell?.percent ?? null, styles)}`}
+          ></div>
+        ))}
+      </div>
+
+      <div className={styles.legend}>
+        <span>Less</span>
+        <div className={styles.legendColors}>
+          <div className={`${styles.legendSquare} ${styles.levelNone}`}></div>
+          <div className={`${styles.legendSquare} ${styles.levelLow}`}></div>
+          <div className={`${styles.legendSquare} ${styles.levelMedium}`}></div>
+          <div className={`${styles.legendSquare} ${styles.levelHigh}`}></div>
         </div>
+        <span>More</span>
       </div>
     </div>
   );

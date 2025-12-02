@@ -1,42 +1,90 @@
-/* Heatmap.module.css */
-
 .container {
-  margin-bottom: 2.5rem;
-  padding: 1.5rem 1rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(46, 114, 172, 0.1);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.03);
+  background: white;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(46,114,172,0.15);
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.04),
+    0 6px 12px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .title {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #235784;
-  margin: 0;
-  letter-spacing: 0.01em;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.navBtn {
+  background: #e8f2f7;
+  border: none;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #2e72ac;
+  transition: 0.2s ease;
+}
+
+.navBtn:hover {
+  background: #d6e9f1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.weekday {
+  font-size: 0.7rem;
+  text-align: center;
+  color: #7b96aa;
+  margin-bottom: 2px;
+}
+
+.day {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 3px;
+  transition: transform 0.15s ease;
+}
+
+.day:active {
+  transform: scale(0.85);
+}
+
+/* COLORS */
+.levelNone {
+  background-color: #e6f1f4;
+}
+
+.levelLow {
+  background-color: #99c8ce;
+}
+
+.levelMedium {
+  background-color: #2e72ac;
+}
+
+.levelHigh {
+  background-color: #235784;
 }
 
 .legend {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 1rem;
   color: #2e72ac;
-}
-
-.legendLabel {
-  font-weight: 500;
 }
 
 .legendColors {
@@ -50,159 +98,17 @@
   border-radius: 2px;
 }
 
-.heatmapWrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 0.5rem;
-  
-  /* Custom scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(46, 114, 172, 0.3) transparent;
-}
-
-.heatmapWrapper::-webkit-scrollbar {
-  height: 6px;
-}
-
-.heatmapWrapper::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.heatmapWrapper::-webkit-scrollbar-thumb {
-  background: rgba(46, 114, 172, 0.3);
-  border-radius: 3px;
-}
-
-.heatmapWrapper::-webkit-scrollbar-thumb:hover {
-  background: rgba(46, 114, 172, 0.5);
-}
-
-.heatmapGrid {
-  display: grid;
-  grid-template-rows: repeat(7, 12px);
-  grid-auto-flow: column;
-  gap: 3px;
-  width: max-content;
-}
-
-.day {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.day:hover {
-  transform: scale(1.3);
-  z-index: 10;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* Color variations using your brand colors */
-.levelNone {
-  background-color: #deeeef;
-  border: 1px solid rgba(188, 219, 223, 0.5);
-}
-
-.levelLow {
-  background-color: #99c8ce;
-  border: 1px solid rgba(46, 114, 172, 0.2);
-}
-
-.levelMedium {
-  background-color: #2e72ac;
-  border: 1px solid rgba(35, 87, 132, 0.3);
-}
-
-.levelHigh {
-  background-color: #235784;
-  border: 1px solid rgba(24, 60, 92, 0.4);
-}
-
-.loading, .noData {
-  text-align: center;
-  padding: 2rem 1rem;
-  color: #2e72ac;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-/* Mobile responsive */
-@media (max-width: 640px) {
-  .container {
-    padding: 1.25rem 0.875rem;
-    border-radius: 1.25rem;
-    margin-bottom: 2rem;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-
-  .title {
-    font-size: 1rem;
-  }
-
-  .legend {
-    font-size: 0.7rem;
-  }
-
-  .legendSquare {
-    width: 9px;
-    height: 9px;
-  }
-
-  .heatmapWrapper {
-    margin: 0 -0.875rem;
-    padding: 0 0.875rem;
-    padding-bottom: 0.75rem;
-  }
-
-  .heatmapGrid {
-    grid-template-rows: repeat(7, 10px);
-    gap: 2.5px;
-  }
-
-  .day {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-  }
-
-  .day:hover,
-  .day:active {
-    transform: scale(1.4);
-  }
-}
-
-/* Extra small devices */
-@media (max-width: 375px) {
-  .container {
-    padding: 1rem 0.75rem;
-  }
-
-  .title {
-    font-size: 0.95rem;
-  }
-
-  .heatmapWrapper {
-    margin: 0 -0.75rem;
-    padding: 0 0.75rem;
-  }
-
-  .heatmapGrid {
-    grid-template-rows: repeat(7, 8px);
+@media (max-width: 480px) {
+  .grid {
     gap: 2px;
   }
 
   .day {
+    border-radius: 2px;
+  }
+
+  .legendSquare {
     width: 8px;
     height: 8px;
-    border-radius: 1.5px;
   }
 }

@@ -22,23 +22,20 @@ export default function CategoryGraph() {
     const loading =
         range === 7 ? loading7 :
         range === 30 ? loading30 :
-                       loading365;
+        loading365;
 
     const categoryStats =
         range === 7 ? category7 :
         range === 30 ? category30 :
-                       category365;
+        category365;
 
     useEffect(() => {
         fetchStatisticsFor(range);
     }, [range]);
 
-    if (loading) return <Loader />;
-
     return (
         <div className={styles.container}>
 
-            {/* ⭐ הסלקטור ממורכז */}
             <div className={styles.selectorWrapper}>
                 <RangeSelector
                     value={range}
@@ -51,32 +48,38 @@ export default function CategoryGraph() {
                 />
             </div>
 
-            <div className={styles.statsContainer}>
-                {categoryStats
-                    ?.filter(cat => cat.percent > 0)
-                    .map((cat, index) => (
-                        <div
-                            key={cat.categoryId}
-                            className={styles.statItem}
-                            style={{ animationDelay: `${index * 0.05}s` }}
-                        >
-                            <div className={styles.statHeader}>
-                                <span className={styles.categoryName}>{cat.name}</span>
-                                <span className={styles.percentage}>{cat.percent}%</span>
-                            </div>
+            {loading ? (
+                <div className={styles.loaderWrapper}>
+                    <Loader />
+                </div>
+            ) : (
+                <div className={styles.statsContainer}>
+                    {categoryStats
+                        ?.filter(cat => cat.percent > 0)
+                        .map((cat, index) => (
+                            <div
+                                key={cat.categoryId}
+                                className={styles.statItem}
+                                style={{ animationDelay: `${index * 0.05}s` }}
+                            >
+                                <div className={styles.statHeader}>
+                                    <span className={styles.categoryName}>{cat.name}</span>
+                                    <span className={styles.percentage}>{cat.percent}%</span>
+                                </div>
 
-                            <div className={styles.barBackground}>
-                                <div
-                                    className={styles.barFill}
-                                    style={{
-                                        width: `${cat.percent}%`,
-                                        backgroundColor: cat.color,
-                                    }}
-                                />
+                                <div className={styles.barBackground}>
+                                    <div
+                                        className={styles.barFill}
+                                        style={{
+                                            width: `${cat.percent}%`,
+                                            backgroundColor: cat.color,
+                                        }}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-            </div>
+                        ))}
+                </div>
+            )}
         </div>
     );
 }
