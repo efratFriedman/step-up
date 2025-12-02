@@ -2,15 +2,26 @@ import { NextResponse } from "next/server";
 import Post from "@/models/Post";
 import {dbConnect} from "@/lib/DB";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
       await dbConnect();
+
+      const { searchParams } = new URL(request.url);
+      const skip = Number(searchParams.get("skip") || 0);
+      const limit = Number(searchParams.get("limit") || 3);
   
       const posts = await Post.find()
-        .sort({ createdAt: -1 })
-        .populate("userId", "name profileImg"); 
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate("userId", "name profileImg");
+
+      const total = await Post.countDocuments();
   
-      return NextResponse.json({ posts });
+      return NextResponse.json({
+        posts,
+        hasMore: skip + limit < total
+      });
     } catch (err: any) {
       return NextResponse.json({ message: err.message || "Failed to fetch posts" }, { status: 500 });
     }

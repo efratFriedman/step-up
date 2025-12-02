@@ -15,3 +15,11 @@
     if (!res.ok) throw new Error("Failed to add post");
     return res.json();
   }
+
+  export async function getPostsPaginated(skip: number, limit: number) {
+    const res = await fetch(`/api/posts?skip=${skip}&limit=${limit}`,{
+     credentials: "include",
+     });
+    if (!res.ok) throw new Error("Failed to fetch paginated posts");
+    return res.json();
+  }

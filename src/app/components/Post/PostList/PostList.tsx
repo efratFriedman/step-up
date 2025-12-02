@@ -1,23 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAllPosts } from "@/services/client/postService";
+import { useEffect, useState, useRef  } from "react";
+import { getPostsPaginated  } from "@/services/client/postService";
 import PostItem from "../PostItem/PostItem";
-import AddPost from "../AddPost/AddPost";
 import Loader from "../../Loader/Loader"; 
 import styles from "./PostList.module.css";
 
-export default function PostList() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showAddPost, setShowAddPost] = useState(false); 
-  const [visibleCount, setVisibleCount] = useState(3)
+interface PostListProps {
+  refreshTrigger?: number; 
+}
 
-  const loadPosts = async () => {
+
+export default function PostList({ refreshTrigger }: { refreshTrigger?: number }) {
+  const LIMIT = 3;
+
+  const [posts, setPosts] = useState<any[]>([]);
+  const [skip, setSkip] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+
+
+  useEffect(() => {
+    setPosts([]);
+    setSkip(0);
+    setHasMore(true);
+    loadMorePosts();
+  }, [refreshTrigger]);
+
+  const loadMorePosts = async () => {
+    if (!hasMore || loading) return;
     setLoading(true);
     try {
-      const { posts } = await getAllPosts();
-      setPosts(posts);
+      const data  = await getPostsPaginated(skip, LIMIT);
+
+      setPosts((prev) => {
+        const merged = [...prev, ...data.posts];
+        const unique = Array.from(
+          new Map(merged.map((post) => [post._id, post])).values()
+        );
+
+        return unique;
+      });
+      setSkip((prev) => prev + LIMIT);
+      setHasMore(data.hasMore);
+
     } catch (error) {
       console.error("Failed to load posts:", error);
     } finally {
@@ -25,52 +53,31 @@ export default function PostList() {
     }
   };
 
+ 
+
   useEffect(() => {
-    loadPosts();
-  }, []);
+    if(!bottomRef.current) return;
 
-  const handleShowAddPost = () => {
-    setShowAddPost(true);
-  };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMorePosts();
+        }
+      },
+      { threshold: 1 }
+    );
+    observer.observe(bottomRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading, posts]);
 
-  const handleAddPostSuccess = () => {
-    setShowAddPost(false); 
-    loadPosts(); 
-    setVisibleCount(3);
-  };
-
-  const handleViewMore = () => {
-    setVisibleCount((prev) => prev + 3);
-  };
-
+  
   return (
     <div className={styles.postList}>
-      <button onClick={handleShowAddPost} className={styles.addPostButton}>
-        Add New Post
-      </button>
-
-      {posts.length === 0 && !loading && (
-        <p className={styles.noPosts}>No posts</p>
-      )}
-
-      {posts.slice(0, visibleCount).map((post) => (
+      {posts.map((post) => (
         <PostItem key={post._id} post={post} />
       ))}
-
-      {visibleCount < posts.length && (
-        <button className={styles.viewMoreButton} onClick={handleViewMore}>
-          View More
-        </button>
-      )}
-
+      <div ref={bottomRef} style={{ height: "30px" }}></div>
       {loading && <Loader />}
-
-      {showAddPost && (
-        <AddPost
-          onSuccess={handleAddPostSuccess}
-          onClose={() => setShowAddPost(false)}
-        />
-      )}
     </div>
   );
 }
