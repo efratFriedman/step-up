@@ -1,7 +1,7 @@
 import Habit from "@/models/Habit";
 import HabitLog from "@/models/HabitLog";
-import Category from "@/models/Category";
 import { endOfDayUTC, startOfDayUTC } from "@/utils/date";
+import mongoose from "mongoose";
 
 type PopulatedCategory = {
     _id: string;
@@ -59,4 +59,63 @@ export async function getHabitsByDateService(userId: string, date: Date) {
         });
     }
     return result;
+}
+
+export async function deleteHabitWithFutureLogs(
+    habitId: string,
+    userId: string
+) {
+    const objectId = new mongoose.Types.ObjectId(habitId);
+
+    await Habit.deleteOne({ _id: objectId, userId });
+
+    const today = startOfDayUTC(new Date());
+
+    await HabitLog.deleteMany({
+        habitId: objectId,
+        userId,
+        date: { $gte: today },
+    });
+
+    return { ok: true };
+}
+
+export async function updateHabitWithFutureLogs(
+    habitId: string,
+    userId: string,
+    data: any
+) {
+    const objectId = new mongoose.Types.ObjectId(habitId);
+
+    const updated = await Habit.findOneAndUpdate(
+        {
+            _id: objectId,
+            userId
+        },
+        data,
+        { new: true }
+    );
+
+    if (!updated) throw new Error("Habit not found");
+
+    const today = startOfDayUTC(new Date());
+
+    const futureLogs = await HabitLog.find({
+        habitId: objectId,
+        userId,
+        date: { $gte: today }
+    });
+
+    for (const log of futureLogs) {
+        const logDate = new Date(log.date);
+        const dayIndex = logDate.getDay();
+
+        const shouldExist = updated.days[dayIndex];
+
+        if (!shouldExist) {
+            await HabitLog.deleteOne({ _id: log.id});
+        }
+    }
+
+    return updated;
 }

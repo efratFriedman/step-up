@@ -1,11 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import CategoryItem from "../CategoryItem/CategoryItem";
 
 
 export default function CategoriesPreview() {
-    const categories = useCategoriesStore((state) => state.categories);
+    const { categories, fetchCategories, loading } = useCategoriesStore();
+
+    useEffect(() => {
+        fetchCategories();
+    }, [fetchCategories]);
+
+    if (loading) {
+        return <div style={{ padding: 20 }}>Loading...</div>;
+    }
+
+    if (!categories.length) {
+        return <div style={{ padding: 20 }}>No categories found.</div>;
+    }
 
     return (
         <div

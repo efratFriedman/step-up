@@ -9,6 +9,6 @@ export interface IHabit extends Document {
   reminderTime: {
     hour: number;
     minute: number;
-  };
+  } | null;
   days: boolean[];  
 }
