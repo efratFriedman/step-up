@@ -44,6 +44,26 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
+
+  .likeWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .likeIcon {
+    width: 26px;
+    height: 26px;
+    transition: 0.2s ease;
+  }
+  
+  .likesCount {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
   
   .mediaGrid {
     display: grid;

@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose";
 
 export interface IPost extends Document {
+  _id: string;  
   userId: Types.ObjectId;
   content: string;
   media: {
@@ -8,6 +9,7 @@ export interface IPost extends Document {
     type: "image" | "video";
   }[];
   likesCount: number;
-  likedBy?: Types.ObjectId[]; 
+  likedBy?: string[]; 
   createdAt?: string;
+  currentUserId?: string;
 }
