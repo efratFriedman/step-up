@@ -10,12 +10,12 @@ import { Heart } from "lucide-react";
 export default function PostItem({ post }: { post: IPost & { userId: { name: string; profileImg?: string } } }) {
   const [likes, setLikes] = useState(post.likesCount);
   const [liked, setLiked] = useState(
-    post.likedBy?.includes(post.currentUserId ?? "") || false
-  );
+    post.likedBy?.some(id => id.toString() === post.currentUserId) 
+    || false);
 
   const onLike = async () => {
     try {
-      const res = await toggleLike(post._id);
+      const res = await toggleLike(post._id.toString());
       setLikes(res.likesCount);
       setLiked(res.liked);
     } catch (error) {

@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import Post from "@/models/Post";
 import {dbConnect} from "@/lib/DB";
+import { authenticate } from "@/lib/server/authMiddleware";
 
 export async function GET(request: Request) {
     try {
       await dbConnect();
 
+      const userId = await authenticate(request);
       const { searchParams } = new URL(request.url);
       const skip = Number(searchParams.get("skip") || 0);
       const limit = Number(searchParams.get("limit") || 3);
@@ -16,6 +18,11 @@ export async function GET(request: Request) {
       .limit(limit)
       .populate("userId", "name profileImg");
 
+      const postsWithCurrentUser = posts.map((p) => ({
+        ...p,
+        currentUserId: userId?.toString() || null, 
+      }));
+
       const total = await Post.countDocuments();
   
       return NextResponse.json({
@@ -23,7 +30,9 @@ export async function GET(request: Request) {
         hasMore: skip + limit < total
       });
     } catch (err: any) {
-      return NextResponse.json({ message: err.message || "Failed to fetch posts" }, { status: 500 });
+      return NextResponse.json(
+        { message: err.message || "Failed to fetch posts" }, 
+        { status: 500 });
     }
   }
   
