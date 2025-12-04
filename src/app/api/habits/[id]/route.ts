@@ -1,18 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import { habitSchema } from "@/lib/validation/habitValidation";
 import mongoose from "mongoose";
 import { authenticate } from "@/lib/server/authMiddleware";
+import { deleteHabitWithFutureLogs, updateHabitWithFutureLogs } from "@/services/server/habitService";
 
-export async function GET(req: Request, { params }: any) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
     const user = await authenticate(req);
     const userId = user._id;
 
-    const { id } = params;
+    const { id } = await context.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
@@ -33,14 +37,18 @@ export async function GET(req: Request, { params }: any) {
     );
   }
 }
-export async function PUT(req: Request, { params }: any) {
+
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
     const user = await authenticate(req);
     const userId = user._id;
 
-    const { id } = params;
+    const { id } = await context.params;
 
     const body = await req.json();
 
@@ -52,17 +60,10 @@ export async function PUT(req: Request, { params }: any) {
       );
     }
 
-    const updatedHabit = await Habit.findOneAndUpdate(
-      { _id: id, userId },
-      parsed.data,
-      { new: true }
-    );
-
-    if (!updatedHabit) {
-      return NextResponse.json({ message: "Habit not found" }, { status: 404 });
-    }
+    const updatedHabit = await updateHabitWithFutureLogs(id, userId, parsed.data);
 
     return NextResponse.json(updatedHabit);
+
   } catch (error: any) {
     console.error("PUT /habits/[id] error:", error);
     return NextResponse.json(
@@ -72,34 +73,50 @@ export async function PUT(req: Request, { params }: any) {
   }
 }
 
-
-export async function DELETE(req: Request, { params }: any) {
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
     const user = await authenticate(req);
-    const userId = user._id;
-
-    const { id } = params;
-
-    const deletedHabit = await Habit.findOneAndDelete({
-      _id: id,
-      userId, 
-    });
-
-    if (!deletedHabit) {
-      return NextResponse.json({ message: "Habit not found" }, { status: 404 });
+    if (!user || !user._id) {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
     }
 
-    return NextResponse.json({
+    const userId = user._id;
+    const { id } = await context.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
+    }
+
+    const deletedResult = await deleteHabitWithFutureLogs(id, userId.toString());
+    
+    // Verify the deletion happened
+    const habitStillExists = await Habit.findOne({ _id: id, userId });
+    if (habitStillExists) {
+      console.error("Habit deletion failed - habit still exists");
+      return NextResponse.json(
+        { message: "Failed to delete habit" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ 
       message: "Habit deleted successfully",
-      habit: deletedHabit,
+      ok: deletedResult.ok
     });
+    
   } catch (error: any) {
     console.error("DELETE /habits/[id] error:", error);
     return NextResponse.json(
-      { message: error.message ?? "Failed" },
-      { status: 401 }
+      { message: error.message ?? "Failed to delete habit" },
+      { status: 500 }
     );
   }
 }

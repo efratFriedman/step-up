@@ -17,7 +17,9 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     fetchTodayHabits,
     toggleStatus
   } = useTodayHabitStore();
+  
   const user = useUserStore((state) => state.user);
+
   const isToday = (() => {
     const today = new Date();
     return (
@@ -29,7 +31,6 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
 
   useEffect(() => {
     const dateStr=selectedDate.toISOString().split("T")[0];
-    const clean = toUTCDate(selectedDate);
     fetchTodayHabits(dateStr);
   }, [selectedDate]);
 

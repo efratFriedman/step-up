@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,12 +18,15 @@ interface HabitFormProps {
     categories: ICategory[];
     onSubmit: (data: HabitFormData) => void;
     onCancel?: () => void;
+    initialData?: Partial<HabitFormData>;
 }
 
-export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormProps) {
+export default function HabitForm({ categories, onSubmit, onCancel, initialData }: HabitFormProps) {
     const router = useRouter();
     const user = useUserStore((state) => state.user);
-    const { register, handleSubmit, control, formState } = useForm<HabitFormData>({
+    const isEditMode = !!initialData;
+    
+    const { register, handleSubmit, control, formState, reset } = useForm<HabitFormData>({
         resolver: zodResolver(habitSchema),
         defaultValues: {
             name: "",
@@ -33,6 +36,20 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
             days: [false, false, false, false, false, false, false]
         },
     });
+
+    // Initialize form with initialData when editing
+    useEffect(() => {
+        if (initialData) {
+            reset({
+                name: initialData.name || "",
+                description: initialData.description || "",
+                categoryId: initialData.categoryId || "",
+                reminderTime: initialData.reminderTime || null,
+                days: initialData.days || [false, false, false, false, false, false, false]
+            });
+        }
+    }, [initialData, reset]);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
 
@@ -52,12 +69,14 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
 
         setIsSubmitting(true);
 
-        confetti({
-            particleCount: 150,
-            spread: 90,
-            origin: { y: 0.6 },
-            colors: ["#AAD1DA", "#006E8C", "#ffffff"],
-        });
+        if (!isEditMode) {
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ["#AAD1DA", "#006E8C", "#ffffff"],
+            });
+        }
 
         await onSubmit(data);
         setIsSubmitting(false);
@@ -133,7 +152,8 @@ export default function HabitForm({ categories, onSubmit, onCancel }: HabitFormP
                         type="submit"
                         className={styles.submitButton}
                         disabled={isSubmitting}
-                    > Add Habit
+                    >
+                        {isEditMode ? "Update Habit" : "Add Habit"}
                     </button>
                 </form>
             </div>

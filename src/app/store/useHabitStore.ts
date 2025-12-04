@@ -1,12 +1,18 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { IHabit } from "@/interfaces/IHabit";
-import { addHabit, deleteHabit, getUserHabits, updateHabit } from "@/services/client/habitsService";
+import {
+  addHabit,
+  deleteHabit,
+  getUserHabits,
+  updateHabit,
+} from "@/services/client/habitsService";
+import { useHabitLogStore } from "./useHabitLogStore";
 
 interface HabitStore {
   habits: IHabit[];
   loading: boolean;
   error: string | null;
+  lastFetched: number | null;
 
   fetchHabits: () => Promise<void>;
   addHabit: (data: any) => Promise<void>;
@@ -14,66 +20,97 @@ interface HabitStore {
   deleteHabit: (id: string) => Promise<void>;
 }
 
-export const useHabitStore = create<HabitStore>()(
-  persist(
-    (set, get) => ({
-      habits: [],
-      loading: false,
-      error: null,
+export const useHabitStore = create<HabitStore>((set, get) => ({
+  habits: [],
+  loading: false,
+  error: null,
+  lastFetched: null,
 
-      fetchHabits: async () => {
-        set({ loading: true, error: null });
-        try {
-          const data = await getUserHabits();
-          set({ habits: data, loading: false });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
+  fetchHabits: async () => {
+    const { lastFetched, habits } = get();
 
-      addHabit: async (habitData) => {
-        set({ loading: true });
-        try {
-          const created = await addHabit(habitData);
-          set({
-            habits: [...get().habits, created],
-            loading: false,
-          });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-      updateHabit: async (habitId: string, updatedData: Partial<IHabit>) => {
-        set({ loading: true, error: null });
+    // 🟦 מניעת Fetch כפול
+    if (lastFetched && habits.length > 0) return;
 
-        try {
-          const updatedHabit = await updateHabit(habitId, updatedData);
-          set((state) => ({
-            habits: state.habits.map((h) =>
-              h._id?.toString() === habitId ? updatedHabit : h
-            ),
-            loading: false,
-          }));
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
+    set({ loading: true, error: null });
 
-      deleteHabit: async (id) => {
-        set({ loading: true });
-        try {
-          await deleteHabit(id);
-          set({
-            habits: get().habits.filter((h) => h._id !== id),
-            loading: false,
-          });
-        } catch (err: any) {
-          set({ error: err.message, loading: false });
-        }
-      },
-    }),
-    {
-      name: "habits-storage",
+    try {
+      const data = await getUserHabits();
+
+      if (!data || data.length === 0) {
+        set({
+          habits: [],
+          loading: false,
+          error: "NO_HABITS",
+          lastFetched: Date.now(),
+        });
+        return;
+      }
+
+      set({
+        habits: data,
+        loading: false,
+        error: null,
+        lastFetched: Date.now(),
+      });
+    } catch (err: any) {
+      set({
+        error: err.message || "FAILED_FETCH_HABITS",
+        loading: false,
+      });
     }
-  )
-);
+  },
+
+  addHabit: async (habitData) => {
+    try {
+      const created = await addHabit(habitData);
+
+      set({
+        habits: [...get().habits, created],
+        error: null,
+      });
+
+      // 🟦 הרגל חדש → נקה future logs
+      useHabitLogStore.getState().clearLogs();
+
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+
+  updateHabit: async (habitId, updatedData) => {
+    try {
+      const updatedHabit = await updateHabit(habitId, updatedData);
+
+      set((state) => ({
+        habits: state.habits.map((h) =>
+          h._id === habitId ? updatedHabit : h
+        ),
+        error: null,
+      }));
+
+      // 🟦 עדכון בהרגל → מחיקה/עדכון future logs
+      useHabitLogStore.getState().clearLogs();
+
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+
+  deleteHabit: async (id) => {
+    try {
+      await deleteHabit(id);
+
+      set({
+        habits: get().habits.filter((h) => h._id !== id),
+        error: null,
+      });
+
+      // 🟦 מחיקת הרגל → future logs נמחקים
+      useHabitLogStore.getState().clearLogs();
+
+    } catch (err: any) {
+      set({ error: err.message });
+    }
+  },
+}));

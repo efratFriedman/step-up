@@ -29,7 +29,7 @@ export async function getTodayHabits(date?: Date, retries = 3) {
 
       if (!response.ok) {
         if (i < retries - 1 && response.status === 500) {
-          
+
           await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
           continue;
         }
@@ -48,19 +48,6 @@ export async function getTodayHabits(date?: Date, retries = 3) {
     }
   }
 }
-
-export async function deleteHabit(habitId: string): Promise<{ success: boolean }> {
-  const response = await fetch(`/api/habits/${habitId}`, {
-    method: "DELETE",
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to delete habit");
-  }
-
-  return response.json();
-}
 export async function addHabit(habit: any) {
   const res = await fetch("/api/habits", {
     method: "POST",
@@ -77,36 +64,7 @@ export async function addHabit(habit: any) {
 
   return res.json();
 }
-export async function updateHabit(habitId: string, updatedData: any) {
-  const res = await fetch(`/api/habits/${habitId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify(updatedData),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to update habit");
-  }
-
-  return res.json(); 
-}
-
-// export async function getHabitsByDate(date: Date) {
-//   const dateString = date.toISOString().split("T")[0];
-
-//   const res = await fetch(`/api/habits/by-date?date=${dateString}`, {
-//     method: "GET",
-//     credentials: "include",
-//   });
-
-//   if (!res.ok) throw new Error("Failed to load habits");
-
-//   return res.json(); 
-// }
-export async function  getHabitsByDate(date: string) {
+export async function getHabitsByDate(date: string) {
 
   const res = await fetch(`/api/habits/by-date?date=${date}`, {
     method: "GET",
@@ -115,7 +73,36 @@ export async function  getHabitsByDate(date: string) {
 
   if (!res.ok) throw new Error("Failed to load habits");
 
-  return res.json(); 
+  return res.json();
 }
+export async function updateHabit(id: string, data: any) {
+  const res = await fetch(`/api/habits/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to update habit");
+  }
+
+  return res.json();
+}
+export async function deleteHabit(id: string) {
+  const res = await fetch(`/api/habits/${id}`,
+    {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to delete habit");
+  }
+
+  return res.json();
+
+}
 
