@@ -18,15 +18,24 @@ export async function GET(request: Request) {
       .limit(limit)
       .populate("userId", "name profileImg");
 
-      const postsWithCurrentUser = posts.map((p) => ({
-        ...p,
-        currentUserId: userId?.toString() || null, 
-      }));
+     const postsWithLikeStatus = posts.map((post) => {
+      const postObj = post.toObject();
+      const userIdString = userId?._id ? userId._id.toString() : userId?.toString();
+      
+      const isLikedByCurrentUser = userIdString && postObj.likedBy?.some(
+        (id: any) => id.toString() === userIdString
+      );
+        return {
+          ...postObj,
+          currentUserId: userId?.toString() || null,
+          isLikedByCurrentUser: isLikedByCurrentUser || false
+        };
+      });
 
       const total = await Post.countDocuments();
   
       return NextResponse.json({
-        posts,
+        posts: postsWithLikeStatus,
         hasMore: skip + limit < total
       });
     } catch (err: any) {

@@ -11,7 +11,7 @@ interface PostListProps {
 }
 
 
-export default function PostList({ refreshTrigger }: { refreshTrigger?: number }) {
+export default function PostList({ refreshTrigger }: PostListProps) {
   const LIMIT = 3;
 
   const [posts, setPosts] = useState<any[]>([]);
@@ -20,8 +20,7 @@ export default function PostList({ refreshTrigger }: { refreshTrigger?: number }
   const [hasMore, setHasMore] = useState(true);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-
-
+   
   useEffect(() => {
     setPosts([]);
     setSkip(0);

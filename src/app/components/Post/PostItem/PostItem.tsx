@@ -1,60 +1,67 @@
 "use client";
 
-import { useState } from "react";
-import { toggleLike } from "@/services/client/postService";
-import { IPost } from "@/interfaces/IPost";
-import Slider from "../Slider/Slider"; 
+import { useUserStore } from "@/app/store/useUserStore";
+import { useLikeStore } from "@/app/store/useLikesStore";
+import { IPost, IUserPopulated } from "@/interfaces/IPost";
+import Slider from "../Slider/Slider";
 import styles from "./PostItem.module.css";
 import { Heart } from "lucide-react";
 
-export default function PostItem({ post }: { post: IPost & { userId: { name: string; profileImg?: string } } }) {
-  const [likes, setLikes] = useState(post.likesCount);
-  const [liked, setLiked] = useState(
-    post.likedBy?.some(id => id.toString() === post.currentUserId) 
-    || false);
+export default function PostItem({ post }: { post: IPost }) {
+  const currentUser = useUserStore((state) => state.user);
+  const { likeStatus, likeCount, toggle } = useLikeStore();
 
-  const onLike = async () => {
-    try {
-      const res = await toggleLike(post._id.toString());
-      setLikes(res.likesCount);
-      setLiked(res.liked);
-    } catch (error) {
-      console.error("Error toggling like:", error);
-    }
-  }
+  const user = post.userId as IUserPopulated;
+
+  const liked = likeStatus[post._id.toString()] ?? post.isLikedByCurrentUser;
+  const likes = likeCount[post._id.toString()] ?? post.likesCount;
+
+  const isOwnPost =
+  currentUser?.id?.toString() === user._id?.toString();
+
+  const onLike = () => {
+    if (!isOwnPost) toggle(post._id.toString())
+    ;
+  };
 
   return (
     <div className={styles.postItem}>
       <div className={styles.profile}>
-        <img 
-          src={post.userId.profileImg || "/default-profile.png"} 
-          alt={post.userId.name} 
-          className={styles.profileImg} 
+        <img
+          src={user.profileImg || "/default-profile.png"}
+          alt={user.name}
+          className={styles.profileImg}
         />
-        <p className={styles.userName}>{post.userId.name}</p>
+        <p className={styles.userName}>{user.name}</p>
       </div>
 
       <div className={styles.content}>
-
-        {/* תמונות/וידאו */}
-        {post.media && post.media.length > 0 && (
-          <Slider items={post.media.map((item) => ({
-            url: item.url,
-            type: item.type,
-          }))} />
+        {post.media?.length > 0 && (
+          <Slider
+            items={post.media.map((item) => ({
+              url: item.url,
+              type: item.type,
+            }))}
+          />
         )}
 
         <p className={styles.postText}>{post.content}</p>
 
-        <div className={styles.likeWrapper} onClick={onLike}>
-          <Heart 
-            fill={liked ? "red" : "transparent"} 
+        <div
+          className={styles.likeWrapper}
+          onClick={onLike}
+          style={{
+            cursor: isOwnPost ? "not-allowed" : "pointer",
+            opacity: isOwnPost ? 0.5 : 1,
+          }}
+        >
+          <Heart
+            fill={liked ? "red" : "transparent"}
             color={liked ? "red" : "black"}
             className={styles.likeIcon}
           />
           <span className={styles.likesCount}>{likes}</span>
         </div>
-
       </div>
     </div>
   );
