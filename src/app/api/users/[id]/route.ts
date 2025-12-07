@@ -4,22 +4,21 @@ import User from "@/models/User";
 import mongoose from "mongoose";
 import { authenticate } from "@/lib/server/authMiddleware";
 
-
 // =======================
 // GET /api/users/[id]
 // =======================
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
 
+    const { id } = await context.params;
+
     const authUser = await authenticate(req);
     const authUserId = authUser._id.toString();
-    const id = params.id;
 
-    // Authorization
     if (id !== authUserId) {
       return NextResponse.json(
         { message: "Unauthorized" },
@@ -27,7 +26,6 @@ export async function GET(
       );
     }
 
-    // Validate ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: "Invalid ID format" },
@@ -64,17 +62,17 @@ export async function GET(
 // =======================
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
 
+    const { id } = await context.params;
+
     const authUser = await authenticate(req);
     const authUserId = authUser._id.toString();
-    const id = params.id;
     const body = await req.json();
 
-    // Authorization
     if (id !== authUserId) {
       return NextResponse.json(
         { message: "Unauthorized" },
@@ -82,7 +80,6 @@ export async function PUT(
       );
     }
 
-    // Validate ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: "Invalid ID format" },
