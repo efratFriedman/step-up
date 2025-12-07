@@ -2,16 +2,23 @@
 
 import { IHabit } from "@/interfaces/IHabit";
 import styles from "@/app/components/Settings/HabitItem/HabitItem.module.css"
-import { useState } from "react";
 import { Edit, MoreVertical, Trash2 } from "lucide-react";
 interface Props {
     habit: IHabit;
+    isMenuOpen: boolean;
+    onToggleMenu: () => void;
+    onCloseMenu: () => void;
     onEdit?: () => void;
     onDelete?: () => void;
 }
-export default function HabitItem({ habit, onEdit, onDelete }: Props) {
-    const [open, setOpen] = useState(false);
-
+export default function HabitItem({ 
+    habit, 
+    isMenuOpen, 
+    onToggleMenu, 
+    onCloseMenu,
+    onEdit, 
+    onDelete 
+}: Props) {
     const formattedTime = habit.reminderTime
         ? `${habit.reminderTime.hour
               .toString()
@@ -22,6 +29,7 @@ export default function HabitItem({ habit, onEdit, onDelete }: Props) {
 
     const handleTitleClick = (e: React.MouseEvent) => {
         e.stopPropagation();
+        onCloseMenu(); // Close menu when clicking title
         if (onEdit) {
             onEdit();
         }
@@ -32,9 +40,20 @@ export default function HabitItem({ habit, onEdit, onDelete }: Props) {
         if (target.closest(`.${styles.menuWrapper}`) || target.closest(`.${styles.title}`)) {
             return;
         }
+        onCloseMenu(); // Close menu when clicking card
         if (onEdit) {
             onEdit();
         }
+    };
+
+    const handleMenuClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onToggleMenu();
+    };
+
+    const handleMenuAction = (action: () => void) => {
+        onCloseMenu(); // Close menu after action
+        action();
     };
 
     return (
@@ -43,19 +62,16 @@ export default function HabitItem({ habit, onEdit, onDelete }: Props) {
                 <MoreVertical
                     size={20}
                     className={styles.menuIcon}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setOpen((prev) => !prev);
-                    }}
+                    onClick={handleMenuClick}
                 />
 
-                {open && (
+                {isMenuOpen && (
                     <div className={styles.menu}>
-                        <button onClick={onEdit}>
+                        <button onClick={() => handleMenuAction(onEdit!)}>
                             <Edit size={16} />
                             Edit
                         </button>
-                        <button onClick={onDelete}>
+                        <button onClick={() => handleMenuAction(onDelete!)}>
                             <Trash2 size={16} />
                             Delete
                         </button>

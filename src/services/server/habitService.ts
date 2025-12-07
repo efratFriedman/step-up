@@ -69,27 +69,26 @@ export async function deleteHabitWithFutureLogs(
         throw new Error("Invalid habit ID");
     }
 
-    const objectId = new mongoose.Types.ObjectId(habitId);
-    const userIdObjectId = typeof userId === 'string' 
-        ? new mongoose.Types.ObjectId(userId) 
-        : userId;
-
-    // Delete the habit
-    const deleteResult = await Habit.deleteOne({ _id: objectId, userId: userIdObjectId });
-
-    if (deleteResult.deletedCount === 0) {
-        throw new Error("Habit not found or already deleted");
+    const habit = await Habit.findOne({ _id: habitId });
+    if (!habit) {
+        throw new Error("Habit not found or not authorized");
     }
+
+    const deleteResult = await Habit.deleteOne({ _id: habitId });
 
     // Delete future logs
     const today = startOfDayUTC(new Date());
+
     const logsDeleteResult = await HabitLog.deleteMany({
-        habitId: objectId,
-        userId: userIdObjectId,
+        habitId,
+        userId,
         date: { $gte: today },
     });
+    console.log("deleteResult:", deleteResult);
+    console.log("logsDeleteResult:", logsDeleteResult);
 
-    return { 
+
+    return {
         ok: true,
         deletedCount: deleteResult.deletedCount,
         logsDeletedCount: logsDeleteResult.deletedCount
@@ -101,13 +100,8 @@ export async function updateHabitWithFutureLogs(
     userId: string,
     data: any
 ) {
-    const objectId = new mongoose.Types.ObjectId(habitId);
-
     const updated = await Habit.findOneAndUpdate(
-        {
-            _id: objectId,
-            userId
-        },
+        { _id: habitId, userId },
         data,
         { new: true }
     );
@@ -117,7 +111,7 @@ export async function updateHabitWithFutureLogs(
     const today = startOfDayUTC(new Date());
 
     const futureLogs = await HabitLog.find({
-        habitId: objectId,
+        habitId,
         userId,
         date: { $gte: today }
     });
@@ -129,7 +123,7 @@ export async function updateHabitWithFutureLogs(
         const shouldExist = updated.days[dayIndex];
 
         if (!shouldExist) {
-            await HabitLog.deleteOne({ _id: log.id});
+            await HabitLog.deleteOne({ _id: log.id });
         }
     }
 

@@ -8,7 +8,7 @@ import { deleteHabitWithFutureLogs, updateHabitWithFutureLogs } from "@/services
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
@@ -16,7 +16,7 @@ export async function GET(
     const user = await authenticate(req);
     const userId = user._id;
 
-    const { id } = await context.params;
+    const { id } = await params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
@@ -40,7 +40,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
@@ -48,7 +48,7 @@ export async function PUT(
     const user = await authenticate(req);
     const userId = user._id;
 
-    const { id } = await context.params;
+    const { id } = await params;
 
     const body = await req.json();
 
@@ -75,21 +75,18 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
 
     const user = await authenticate(req);
-    if (!user || !user._id) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!user?._id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const userId = user._id;
-    const { id } = await context.params;
+    const { id } = await params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });

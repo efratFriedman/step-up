@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/DB";
 import Habit from "@/models/Habit";
 import mongoose from "mongoose";
-import "@/models/User";
-import "@/models/Category";
 import { habitSchema } from "@/lib/validation/habitValidation";
 import { authenticate } from "@/lib/server/authMiddleware";
 
