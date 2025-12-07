@@ -1,0 +1,249 @@
+/* HabitsListDisplay.module.css - StepUp Brand Design */
+
+.container {
+  padding: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Back Button */
+.backButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #99c8ce;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background: rgba(188, 219, 223, 0.3);
+  color: #235784;
+}
+
+.backButton:active {
+  background: rgba(188, 219, 223, 0.5);
+  transform: translateX(-2px);
+}
+
+.backButton svg {
+  transition: transform 0.2s ease;
+}
+
+.backButton:hover svg {
+  transform: translateX(-2px);
+}
+
+/* Header Section */
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #183c5c;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #99c8ce;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Habits List */
+.habitsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 48px 24px;
+  margin-top: 32px;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.emptyText {
+  font-size: 15px;
+  color: #99c8ce;
+  margin: 0;
+  font-weight: 400;
+}
+
+.emptyHint {
+  font-size: 13px;
+  color: #bcdbdf;
+  margin: 8px 0 0 0;
+  font-weight: 400;
+}
+
+/* Category Badge */
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #235784, #2e72ac);
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(35, 87, 132, 0.2);
+}
+
+/* Statistics Section (Optional) */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #bcdbdf, #deeeef);
+  border-radius: 16px;
+  border: 1px solid rgba(188, 219, 223, 0.5);
+}
+
+.statItem {
+  text-align: center;
+  padding: 12px;
+}
+
+.statValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #235784;
+  margin: 0 0 4px 0;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #99c8ce;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #99c8ce;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+
+  .backButton {
+    margin-bottom: 32px;
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .habitsList {
+    gap: 20px;
+  }
+
+  .emptyState {
+    padding: 64px 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .backButton {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  .habitsList {
+    gap: 12px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .statItem {
+    padding: 8px;
+  }
+
+  .statValue {
+    font-size: 20px;
+  }
+
+  .statLabel {
+    font-size: 11px;
+  }
+}
+
+/* Animation for list items */
+.habitsList > * {
+  animation: fadeInUp 0.3s ease forwards;
+  opacity: 0;
+}
+
+.habitsList > *:nth-child(1) { animation-delay: 0.05s; }
+.habitsList > *:nth-child(2) { animation-delay: 0.1s; }
+.habitsList > *:nth-child(3) { animation-delay: 0.15s; }
+.habitsList > *:nth-child(4) { animation-delay: 0.2s; }
+.habitsList > *:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

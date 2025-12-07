@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import CategoryItem from "../CategoryItem/CategoryItem";
-
+import styles from "@/app/components/Settings/CategoriesPreview/CategoriesPreview.module.css";
 
 export default function CategoriesPreview() {
     const { categories, fetchCategories, loading } = useCategoriesStore();
@@ -12,32 +12,58 @@ export default function CategoriesPreview() {
         fetchCategories();
     }, [fetchCategories]);
 
+    // Loading State
     if (loading) {
-        return <div style={{ padding: 20 }}>Loading...</div>;
+        return (
+            <div className={styles.container}>
+                <div className={styles.loadingContainer}>
+                    <div className={styles.loadingSpinner}></div>
+                    <p className={styles.loadingText}>Loading categories...</p>
+                </div>
+            </div>
+        );
     }
 
+    // Empty State
     if (!categories.length) {
-        return <div style={{ padding: 20 }}>No categories found.</div>;
+        return (
+            <div className={styles.container}>
+                <div className={styles.emptyContainer}>
+                    <div className={styles.emptyIcon}>📂</div>
+                    <h3 className={styles.emptyTitle}>No Categories Yet</h3>
+                    <p className={styles.emptyText}>
+                        Create your first category to organize your habits
+                    </p>
+                    <button className={styles.emptyButton}>
+                        Add Category
+                    </button>
+                </div>
+            </div>
+        );
     }
 
+    // Categories Grid
     return (
-        <div
-            style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-                gap: "20px",
-                padding: "20px",
-            }}
-        >
-            {categories.map((cat) => (
-                <CategoryItem
-                    key={cat._id}
-                    id={cat._id}
-                    name={cat.name}
-                    image={cat.image!}
-                    color={cat.colorTheme!}
-                />
-            ))}
+        <div className={styles.container}>
+            {/* Optional: Header Section */}
+            {/* <div className={styles.header}>
+                <h2 className={styles.headerTitle}>My Categories</h2>
+                <p className={styles.headerSubtitle}>
+                    {categories.length} {categories.length === 1 ? 'category' : 'categories'}
+                </p>
+            </div> */}
+
+            <div className={styles.grid}>
+                {categories.map((cat) => (
+                    <CategoryItem
+                        key={cat._id}
+                        id={cat._id}
+                        name={cat.name}
+                        image={cat.image!}
+                        color={cat.colorTheme!}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

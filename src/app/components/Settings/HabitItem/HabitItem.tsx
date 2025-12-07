@@ -60,7 +60,7 @@ export default function HabitItem({
         <div className={styles.card} onClick={handleCardClick}>
             <div className={styles.menuWrapper}>
                 <MoreVertical
-                    size={20}
+                    // size={50}
                     className={styles.menuIcon}
                     onClick={handleMenuClick}
                 />

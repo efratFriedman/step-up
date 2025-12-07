@@ -1,7 +1,8 @@
 import { IHabit } from "@/interfaces/IHabit";
+import { ICategory } from "@/interfaces/ICategory";
 import { ArrowLeft } from "lucide-react";
 import HabitItem from "@/app/components/Settings/HabitItem/HabitItem";
-import { ICategory } from "@/interfaces/ICategory"; 
+import styles from "@/app/components/Settings/HabitsListDisplay/HabitsListDisplay.module.css";
 
 interface HabitsListDisplayProps {
     category: ICategory;
@@ -25,37 +26,25 @@ export default function HabitsListDisplay({
     onGoBack
 }: HabitsListDisplayProps) {
     return (
-        <>
-            <button
-                onClick={onGoBack}
-                style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    marginBottom: '16px',
-                    color: '#6b7280',
-                    fontSize: '14px'
-                }}
-            >
+        <div className={styles.container}>
+            <button onClick={onGoBack} className={styles.backButton}>
                 <ArrowLeft size={16} />
                 Back
             </button>
 
-            <h1 style={{ fontSize: "1.6rem", marginBottom: "8px" }}>
-                {category.name}
-            </h1>
+            {/* Header Section */}
+            <div className={styles.header}>
+                <h1 className={styles.title}>{category.name}</h1>
+                <p className={styles.subtitle}>
+                    {habitsInCategory.length} {habitsInCategory.length === 1 ? 'habit' : 'habits'} in this category
+                </p>
+            </div>
 
-            <p style={{ color: "#6b7280", marginBottom: "20px" }}>
-                Habits in this category
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {/* Habits List */}
+            <div className={styles.habitsList}>
                 {habitsInCategory.map((habit) => (
                     <HabitItem
-                        key={String(habit!._id)}
+                        key={String(habit._id)}
                         habit={habit}
                         isMenuOpen={openMenuId === String(habit._id)}
                         onToggleMenu={() => onToggleMenu(String(habit._id))}
@@ -66,11 +55,18 @@ export default function HabitsListDisplay({
                 ))}
             </div>
 
+            {/* Empty State */}
             {habitsInCategory.length === 0 && (
-                <p style={{ marginTop: "20px", color: "#9ca3af" }}>
-                    No habits in this category yet.
-                </p>
+                <div className={styles.emptyState}>
+                    <div className={styles.emptyIcon}>📋</div>
+                    <p className={styles.emptyText}>
+                        No habits in this category yet
+                    </p>
+                    <p className={styles.emptyHint}>
+                        Add your first habit to get started
+                    </p>
+                </div>
             )}
-        </>
+        </div>
     );
 }
