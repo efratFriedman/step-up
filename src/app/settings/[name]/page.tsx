@@ -5,14 +5,19 @@ import { toUrlName } from "@/app/components/Settings/CategoryItem/CategoryItem";
 import HabitItem from "@/app/components/Settings/HabitItem/HabitItem";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import { useHabitStore } from "@/app/store/useHabitStore";
-import { useParams, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Loader from "@/app/components/Loader/Loader";
 import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import { IHabit } from "@/interfaces/IHabit";
 import { ArrowLeft } from "lucide-react";
 
 export default function CategoryPage() {
-    const { name } = useParams();
+    // ❗ שליפה יציבה של שם הקטגוריה מה-URL
+    const pathname = usePathname();            // "/settings/health"
+    const routeName = pathname.split("/").pop();  // "health"
+
+    if (!routeName) return <Loader />;  // מגן מתקלות פרודקשן
+
     const router = useRouter();
     const [editingHabit, setEditingHabit] = useState<IHabit | null>(null);
     const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -29,8 +34,9 @@ export default function CategoryPage() {
         return <Loader />;
     }
 
+    // ❗ עכשיו routeName תמיד תקין
     const category = categories.find(
-        (c) => toUrlName(c.name) === name
+        (c) => toUrlName(c.name) === routeName
     );
 
     if (!category) {
@@ -41,11 +47,9 @@ export default function CategoryPage() {
         (h) => String(h.categoryId) === String(category._id)
     );
 
-    console.log("🔥 habitsInCategory:", habitsInCategory);
-
     const handleEdit = (habit: IHabit) => {
         setEditingHabit(habit);
-        setOpenMenuId(null); // Close menu when opening edit modal
+        setOpenMenuId(null);
     };
 
     const handleUpdateHabit = async (data: any) => {
@@ -59,17 +63,15 @@ export default function CategoryPage() {
             days: data.days,
         });
 
-        // Refresh the list
         await fetchHabits();
         setEditingHabit(null);
     };
 
     const handleDelete = async (habitId: string) => {
-        console.log("🛑 DELETE CLICKED WITH ID:", habitId); // <--- כאן
+        console.log("🛑 DELETE CLICKED WITH ID:", habitId);
 
         if (confirm("Are you sure you want to delete this habit?")) {
             await deleteHabit(habitId);
-            // Refresh the list after deletion
             await fetchHabits();
         }
     };
@@ -84,7 +86,7 @@ export default function CategoryPage() {
 
     return (
         <div style={{ padding: "16px" }}>
-            {/* Back Arrow Button */}
+
             <button
                 onClick={() => router.push('/settings')}
                 style={{
@@ -131,7 +133,6 @@ export default function CategoryPage() {
                 </p>
             )}
 
-            {/* Edit Modal */}
             {editingHabit && (
                 <HabitForm
                     categories={categories}
