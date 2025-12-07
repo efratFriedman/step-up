@@ -5,14 +5,17 @@ import { toUrlName } from "@/app/components/Settings/CategoryItem/CategoryItem";
 import HabitItem from "@/app/components/Settings/HabitItem/HabitItem";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
 import { useHabitStore } from "@/app/store/useHabitStore";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Loader from "@/app/components/Loader/Loader";
 import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import { IHabit } from "@/interfaces/IHabit";
+import { ArrowLeft } from "lucide-react";
 
 export default function CategoryPage() {
     const { name } = useParams();
+    const router = useRouter();
     const [editingHabit, setEditingHabit] = useState<IHabit | null>(null);
+    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
     const { categories, fetchCategories, loading: catLoading } = useCategoriesStore();
     const { habits, fetchHabits, loading: habitsLoading, deleteHabit, updateHabit } = useHabitStore();
@@ -42,6 +45,7 @@ export default function CategoryPage() {
 
     const handleEdit = (habit: IHabit) => {
         setEditingHabit(habit);
+        setOpenMenuId(null); // Close menu when opening edit modal
     };
 
     const handleUpdateHabit = async (data: any) => {
@@ -65,13 +69,40 @@ export default function CategoryPage() {
 
         if (confirm("Are you sure you want to delete this habit?")) {
             await deleteHabit(habitId);
+            // Refresh the list after deletion
             await fetchHabits();
         }
     };
 
+    const toggleMenu = (habitId: string) => {
+        setOpenMenuId(openMenuId === habitId ? null : habitId);
+    };
+
+    const closeMenu = () => {
+        setOpenMenuId(null);
+    };
 
     return (
         <div style={{ padding: "16px" }}>
+            {/* Back Arrow Button */}
+            <button
+                onClick={() => router.push('/settings')}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '16px',
+                    color: '#6b7280',
+                    fontSize: '14px'
+                }}
+            >
+                <ArrowLeft size={16} />
+                Back
+            </button>
+
             <h1 style={{ fontSize: "1.6rem", marginBottom: "8px" }}>
                 {category.name}
             </h1>
@@ -85,6 +116,9 @@ export default function CategoryPage() {
                     <HabitItem
                         key={String(habit!._id)}
                         habit={habit}
+                        isMenuOpen={openMenuId === String(habit._id)}
+                        onToggleMenu={() => toggleMenu(String(habit._id))}
+                        onCloseMenu={closeMenu}
                         onEdit={() => handleEdit(habit)}
                         onDelete={() => handleDelete(String(habit._id))}
                     />
