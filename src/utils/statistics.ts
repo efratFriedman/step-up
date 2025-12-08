@@ -132,7 +132,6 @@ export function buildCategoryBreakdown(
 
     return Array.from(map.entries()).map(([catId, data]) => {
 
-        // ⭐⭐ התיקון הקריטי ⭐⭐
         const cat = categories.find(
             (c) => c._id.toString() === catId.toString()
         );

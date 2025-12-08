@@ -36,7 +36,6 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
     const categoryKey = `category${range}` as const;
     const loadingKey = `loading${range}` as const;
 
-    // כבר נטען? לא נטען שוב
     if (get()[statsKey].length > 0 && get()[categoryKey].length > 0) {
       return;
     }

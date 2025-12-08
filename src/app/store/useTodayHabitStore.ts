@@ -22,7 +22,6 @@ export const useTodayHabitStore = create<TodayHabitsStore>((set, get) => ({
   fetchTodayHabits: async (date: string) => {
     const { lastFetchedDate, habits } = get();
 
-    // 🟦 מניעת fetch כפול לתאריך שכבר נטען
     if (lastFetchedDate === date && habits.length > 0) return;
 
     set({ loading: true, error: null });

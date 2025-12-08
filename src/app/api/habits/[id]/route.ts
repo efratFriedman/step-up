@@ -29,6 +29,7 @@ export async function GET(
     }
 
     return NextResponse.json(habit);
+
   } catch (error: any) {
     console.error("GET /habits/[id] error:", error);
     return NextResponse.json(
@@ -81,11 +82,8 @@ export async function DELETE(
     await dbConnect();
 
     const user = await authenticate(req);
-    if (!user || !user._id) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+    if (!user?._id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const userId = user._id;
@@ -96,7 +94,6 @@ export async function DELETE(
     }
 
     const deletedResult = await deleteHabitWithFutureLogs(id, userId.toString());
-    
     const habitStillExists = await Habit.findOne({ _id: id, userId });
     if (habitStillExists) {
       console.error("Habit deletion failed - habit still exists");
@@ -106,11 +103,11 @@ export async function DELETE(
       );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: "Habit deleted successfully",
       ok: deletedResult.ok
     });
-    
+
   } catch (error: any) {
     console.error("DELETE /habits/[id] error:", error);
     return NextResponse.json(

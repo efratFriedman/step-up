@@ -6,6 +6,7 @@ import { useUserStore } from "@/app/store/useUserStore";
 import { getEncouragingMessage } from "@/utils/progressHabit";
 import styles from "./ProgressBar.module.css";
 import { startOfDayUTC } from "@/utils/date";
+import Loader from "../../Loader/Loader";
 
 export default function ProgressBar() {
     const { user } = useUserStore();
@@ -15,7 +16,7 @@ export default function ProgressBar() {
     const { total, done, percent } = useProgress(userId, today);
 
     if (!userId) {
-        return <p>Loading...</p>;
+        return <Loader/>;
     }
 
     const frameColor = "#a9a9a9";
