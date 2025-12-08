@@ -13,8 +13,12 @@ const HabitSchema = new mongoose.Schema({
   days: [Boolean],
 });
 
-const Habit =
-  (models.Habit as mongoose.Model<IHabit>) ||
+// const Habit =
+//   (models.Habit as mongoose.Model<IHabit>) ||
+//   model<IHabit>("Habit", HabitSchema);
+
+  const Habit  =
+//  (models.Category  as mongoose.Model<ICategory>) ||
   model<IHabit>("Habit", HabitSchema);
 
 export default Habit;

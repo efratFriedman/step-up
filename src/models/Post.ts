@@ -9,5 +9,11 @@ const PostSchema = new mongoose.Schema({
   likedBy: [{ type: Schema.Types.ObjectId, ref: 'User' }] 
 });
 
-export default mongoose.models.Post||mongoose.model<IPost>("Post",PostSchema);
+// export default mongoose.models.Post||mongoose.model<IPost>("Post",PostSchema);
 
+
+const Post  =
+//  (models.Category  as mongoose.Model<ICategory>) ||
+  model<IPost>("Post", PostSchema);
+
+export default Post;

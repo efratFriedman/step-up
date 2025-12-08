@@ -59,8 +59,15 @@ export async function POST(request: Request) {
       password: hashedPassword,
     });
 
+    const tokenUser = {
+      _id: newUser._id.toString(), 
+      name: newUser.name,
+      email: newUser.email,
+    };
+
+
     return createAuthResponse(
-      newUser,
+      tokenUser,
       `Welcome ${name}! Your account has been created.`
     );
 
