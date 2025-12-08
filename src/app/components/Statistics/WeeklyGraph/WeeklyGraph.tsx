@@ -6,10 +6,8 @@ import RangeSelector from "../RangeSelector/RangeSelector";
 import WaveProgressChart from "../WaveProgressChart/WaveProgressChart";
 import Loader from "../../Loader/Loader";
 import styles from '@/app/components/Statistics/WeeklyGraph/WeeklyGraph.module.css'
-
-type RangeOption = 7 | 30;
 export default function WeeklyGraph() {
-    const [range, setRange] = useState<RangeOption>(7);
+    const [range, setRange] = useState<7 | 30>(7);
 
     const stats7 = useStatisticsStore(s => s.stats7);
     const stats30 = useStatisticsStore(s => s.stats30);
