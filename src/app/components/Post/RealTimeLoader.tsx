@@ -10,7 +10,6 @@ export default function RealTimeLoader() {
     const initializePusherChannel = usePostStore((s) => s.initializePusherChannel);
     useEffect(() => {
         if (!user?.id) return;
-
         const pusher = getPusherClient(user.id);
         const unsubscribe = initializePusherChannel(user.id, pusher);
 
