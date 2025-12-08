@@ -97,7 +97,6 @@ export async function DELETE(
 
     const deletedResult = await deleteHabitWithFutureLogs(id, userId.toString());
     
-    // Verify the deletion happened
     const habitStillExists = await Habit.findOne({ _id: id, userId });
     if (habitStillExists) {
       console.error("Habit deletion failed - habit still exists");
