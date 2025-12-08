@@ -61,7 +61,7 @@ export async function PUT(
       );
     }
 
-    const updatedHabit = await updateHabitWithFutureLogs(id, userId, parsed.data);
+    const updatedHabit = await updateHabitWithFutureLogs(id, userId.toString(), parsed.data);
 
     return NextResponse.json(updatedHabit);
 

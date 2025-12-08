@@ -30,9 +30,14 @@ export async function POST(request: Request) {
       user.profileImg ??= profileImg;
       await user.save();
     }
+    const tokenUser = {
+      _id: user._id.toString(), 
+      name: user.name,
+      email: user.email,
+    };
 
     return createAuthResponse(
-      user,
+      tokenUser,
       `Welcome back ${user.name}!`
     );
 
