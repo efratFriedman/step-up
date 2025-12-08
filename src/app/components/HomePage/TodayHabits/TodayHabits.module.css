@@ -1,6 +1,6 @@
 .habitsGrid {
     column-count: 2;
-    column-gap: 1rem;
+    column-gap: 0.875rem;
     padding: 0.5rem 1rem;
     padding-bottom: 120px;
     width: 100%;
@@ -9,220 +9,483 @@
 
 .habitCard {
     position: relative;
-    min-height: 130px;
-    border-radius: 1.5rem;
-    padding: 1.25rem;
+    border-radius: 1.75rem;
+    padding: 1.5rem 1rem 1.125rem;
     break-inside: avoid;
-    margin-bottom: 1rem;
+    margin-bottom: 0.875rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.05),
-        0 8px 16px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 0.5rem;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        0 4px 8px rgba(0, 0, 0, 0.08),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     color: #2c2c2c;
     overflow: hidden;
     transform: translateZ(0);
-    background-image: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.2) 0%,
-        rgba(255, 255, 255, 0) 50%,
-        rgba(0, 0, 0, 0.05) 100%
-    );
+    background-image:
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(255, 255, 255, 0.05) 40%,
+            rgba(0, 0, 0, 0.02) 100%);
     background-blend-mode: overlay;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Subtle inner glow for depth */
 .habitCard::before {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 1.5rem;
-    padding: 1px;
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.5),
-        rgba(255, 255, 255, 0.1)
-    );
-    -webkit-mask: 
-        linear-gradient(#fff 0 0) content-box, 
+    border-radius: 1.75rem;
+    padding: 1.5px;
+    background: linear-gradient(145deg,
+            rgba(255, 255, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: 0.6;
+    opacity: 0.8;
     pointer-events: none;
+    z-index: 1;
 }
 
 .habitCard:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 
-        0 4px 8px rgba(0, 0, 0, 0.08),
-        0 12px 24px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.08),
+        0 8px 16px rgba(0, 0, 0, 0.12),
+        0 16px 32px rgba(0, 0, 0, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .habitCard:active {
-    transform: translateY(-2px) scale(1.01);
-    transition: all 0.1s ease;
+    transform: translateY(-3px) scale(1.01);
+    transition: all 0.15s ease;
 }
 
+/* ========================================
+   DONE CARD - PERMANENT GRAY OVERLAY
+   ======================================== */
 .habitCard.isDone {
-    opacity: 0.85;
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.05),
-        0 8px 16px rgba(0, 0, 0, 0.08),
-        inset 0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    opacity: 0.88;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 4px 8px rgba(0, 0, 0, 0.12),
+        inset 0 3px 10px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    background-image:
+        linear-gradient(135deg,
+            rgba(0, 0, 0, 0.08) 0%,
+            rgba(0, 0, 0, 0.04) 50%,
+            rgba(0, 0, 0, 0.06) 100%);
 }
 
+/* PERMANENT gray overlay - always visible */
 .habitCard.isDone::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 1.5rem;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 1.75rem;
     pointer-events: none;
+    z-index: 2;
+    opacity: 1;
 }
 
+.habitCard.isDone .iconImage {
+    opacity: 0.65;
+    filter: grayscale(0.3);
+}
+
+/* Icon container */
 .iconWrapper {
     flex: 1;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 0.75rem;
-    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
+    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.18));
+    z-index: 3;
 }
 
 .iconImage {
-    max-width: 65%;
-    max-height: 65%;
     width: auto;
     height: auto;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .habitCard:hover .iconImage {
-    transform: scale(1.05);
+    transform: scale(1.08) translateY(-2px);
 }
 
-.habitCard.isDone .iconImage {
-    opacity: 0.7;
-}
-
+/* Improved habit name styling */
 .habitName {
-    font-size: 1rem;
-    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 600;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.25;
     width: 100%;
-    z-index: 2;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    z-index: 3;
+    text-shadow:
+        0 1px 3px rgba(255, 255, 255, 0.9),
+        0 2px 4px rgba(255, 255, 255, 0.5);
     letter-spacing: 0.01em;
+    padding: 0 0.5rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* Enhanced status circle */
 .statusCircle {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 28px;
-    height: 28px;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    border: 2.5px solid rgba(0, 0, 0, 0.25);
+    border: 2.5px solid rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(4px);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.6) 100%);
+    backdrop-filter: blur(8px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.1),
-        inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 1),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.08);
     z-index: 10;
 }
 
 .statusCircle:hover {
-    transform: scale(1.1);
-    border-color: rgba(0, 0, 0, 0.35);
+    transform: scale(1.15);
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.2),
+        0 6px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 1);
 }
 
 .isDone .statusCircle {
     background: linear-gradient(135deg, #4a4a4a 0%, #2d2d2d 100%);
     border-color: #3a3b3a;
-    box-shadow: 
-        0 3px 8px rgba(0, 0, 0, 0.25),
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25),
         inset 0 1px 2px rgba(255, 255, 255, 0.2),
         inset 0 -1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .checkmark {
     color: white;
-    font-size: 18px;
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    animation: checkmarkPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    font-size: 20px;
+    font-weight: 900;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 @keyframes checkmarkPop {
     0% {
-        transform: scale(0);
+        transform: scale(0) rotate(-45deg);
         opacity: 0;
     }
+
     50% {
-        transform: scale(1.2);
+        transform: scale(1.25) rotate(5deg);
     }
+
     100% {
-        transform: scale(1);
+        transform: scale(1) rotate(0deg);
         opacity: 1;
     }
 }
 
 .readOnly {
     cursor: default;
-    opacity: 0.9;
+    opacity: 0.92;
 }
 
 .readOnly:hover {
     transform: none;
-    box-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.05),
-        0 8px 16px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        0 4px 8px rgba(0, 0, 0, 0.08),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-.height-small {
-    height: 120px;
+/* ========================================
+   EXTREME ASYMMETRIC SIZES
+   Icon & Text scale proportionally to card size
+   ======================================== */
+
+/* Size 1: TINY - 110px */
+.habitCard:nth-child(8n+1) {
+    min-height: 110px;
+    padding: 0.75rem 0.625rem 0.625rem;
+    gap: 0.25rem;
 }
 
-.height-medium {
-    height: 160px;
+.habitCard:nth-child(8n+1) .iconWrapper {
+    min-height: 45px;
+    max-height: 45px;
 }
 
-.height-large {
-    height: 200px;
+.habitCard:nth-child(8n+1) .iconImage {
+    max-width: 42px;
+    max-height: 42px;
 }
 
-.habitCard:nth-child(3n+1) {
-    height: 140px;
+.habitCard:nth-child(8n+1) .habitName {
+    font-size: 0.8125rem;
 }
 
-.habitCard:nth-child(3n+2) {
-    height: 180px;
+.habitCard:nth-child(8n+1) .statusCircle {
+    width: 26px;
+    height: 26px;
+    top: 10px;
+    right: 10px;
 }
 
-.habitCard:nth-child(3n) {
-    height: 130px;
+.habitCard:nth-child(8n+1) .checkmark {
+    font-size: 16px;
 }
 
-.span-two-rows {
-    height: 280px;
+/* Size 2: EXTRA LARGE - 240px */
+.habitCard:nth-child(8n+2) {
+    min-height: 240px;
+    padding: 2rem 1.25rem 1.5rem;
+    gap: 0.875rem;
 }
 
+.habitCard:nth-child(8n+2) .iconWrapper {
+    min-height: 110px;
+    max-height: 110px;
+}
+
+.habitCard:nth-child(8n+2) .iconImage {
+    max-width: 95px;
+    max-height: 95px;
+}
+
+.habitCard:nth-child(8n+2) .habitName {
+    font-size: 1.0625rem;
+}
+
+.habitCard:nth-child(8n+2) .statusCircle {
+    width: 38px;
+    height: 38px;
+    top: 16px;
+    right: 16px;
+}
+
+.habitCard:nth-child(8n+2) .checkmark {
+    font-size: 24px;
+}
+
+/* Size 3: SMALL - 135px */
+.habitCard:nth-child(8n+3) {
+    min-height: 135px;
+    padding: 1rem 0.8125rem 0.8125rem;
+    gap: 0.375rem;
+}
+
+.habitCard:nth-child(8n+3) .iconWrapper {
+    min-height: 58px;
+    max-height: 58px;
+}
+
+.habitCard:nth-child(8n+3) .iconImage {
+    max-width: 52px;
+    max-height: 52px;
+}
+
+.habitCard:nth-child(8n+3) .habitName {
+    font-size: 0.875rem;
+}
+
+.habitCard:nth-child(8n+3) .statusCircle {
+    width: 28px;
+    height: 28px;
+    top: 12px;
+    right: 12px;
+}
+
+.habitCard:nth-child(8n+3) .checkmark {
+    font-size: 17px;
+}
+
+/* Size 4: MEGA - 280px */
+.habitCard:nth-child(8n+4) {
+    min-height: 280px;
+    padding: 2.5rem 1.5rem 2rem;
+    gap: 1.125rem;
+}
+
+.habitCard:nth-child(8n+4) .iconWrapper {
+    min-height: 130px;
+    max-height: 130px;
+}
+
+.habitCard:nth-child(8n+4) .iconImage {
+    max-width: 115px;
+    max-height: 115px;
+}
+
+.habitCard:nth-child(8n+4) .habitName {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.habitCard:nth-child(8n+4) .statusCircle {
+    width: 42px;
+    height: 42px;
+    top: 18px;
+    right: 18px;
+}
+
+.habitCard:nth-child(8n+4) .checkmark {
+    font-size: 26px;
+}
+
+/* Size 5: MEDIUM - 165px */
+.habitCard:nth-child(8n+5) {
+    min-height: 165px;
+    padding: 1.375rem 1rem 1.125rem;
+    gap: 0.5rem;
+}
+
+.habitCard:nth-child(8n+5) .iconWrapper {
+    min-height: 72px;
+    max-height: 72px;
+}
+
+.habitCard:nth-child(8n+5) .iconImage {
+    max-width: 65px;
+    max-height: 65px;
+}
+
+.habitCard:nth-child(8n+5) .habitName {
+    font-size: 0.9375rem;
+}
+
+/* Size 6: LARGE - 210px */
+.habitCard:nth-child(8n+6) {
+    min-height: 210px;
+    padding: 1.875rem 1.125rem 1.5rem;
+    gap: 0.75rem;
+}
+
+.habitCard:nth-child(8n+6) .iconWrapper {
+    min-height: 92px;
+    max-height: 92px;
+}
+
+.habitCard:nth-child(8n+6) .iconImage {
+    max-width: 82px;
+    max-height: 82px;
+}
+
+.habitCard:nth-child(8n+6) .habitName {
+    font-size: 1rem;
+}
+
+.habitCard:nth-child(8n+6) .statusCircle {
+    width: 36px;
+    height: 36px;
+    top: 15px;
+    right: 15px;
+}
+
+.habitCard:nth-child(8n+6) .checkmark {
+    font-size: 22px;
+}
+
+/* Size 7: COMPACT - 145px */
+.habitCard:nth-child(8n+7) {
+    min-height: 145px;
+    padding: 1.125rem 0.875rem 0.9375rem;
+    gap: 0.4375rem;
+}
+
+.habitCard:nth-child(8n+7) .iconWrapper {
+    min-height: 62px;
+    max-height: 62px;
+}
+
+.habitCard:nth-child(8n+7) .iconImage {
+    max-width: 56px;
+    max-height: 56px;
+}
+
+.habitCard:nth-child(8n+7) .habitName {
+    font-size: 0.875rem;
+}
+
+.habitCard:nth-child(8n+7) .statusCircle {
+    width: 29px;
+    height: 29px;
+}
+
+.habitCard:nth-child(8n+7) .checkmark {
+    font-size: 18px;
+}
+
+/* Size 8: MEDIUM-LARGE - 190px */
+.habitCard:nth-child(8n) {
+    min-height: 190px;
+    padding: 1.625rem 1.0625rem 1.375rem;
+    gap: 0.625rem;
+}
+
+.habitCard:nth-child(8n) .iconWrapper {
+    min-height: 82px;
+    max-height: 82px;
+}
+
+.habitCard:nth-child(8n) .iconImage {
+    max-width: 74px;
+    max-height: 74px;
+}
+
+.habitCard:nth-child(8n) .habitName {
+    font-size: 0.9375rem;
+}
+
+.habitCard:nth-child(8n) .statusCircle {
+    width: 34px;
+    height: 34px;
+}
+
+.habitCard:nth-child(8n) .checkmark {
+    font-size: 21px;
+}
+
+/* ========================================
+   SHINE EFFECT - only on NON-done cards
+   ======================================== */
 .habitCard::after {
     content: '';
     position: absolute;
@@ -230,19 +493,18 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 70%
-    );
+    background: linear-gradient(45deg,
+            transparent 35%,
+            rgba(255, 255, 255, 0.15) 50%,
+            transparent 65%);
     transform: rotate(45deg);
     transition: all 0.6s ease;
     opacity: 0;
     pointer-events: none;
+    z-index: 0;
 }
 
-.habitCard:hover::after {
+.habitCard:not(.isDone):hover::after {
     opacity: 1;
     animation: shine 1.5s ease;
 }
@@ -251,7 +513,134 @@
     0% {
         left: -50%;
     }
+
     100% {
         left: 150%;
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 380px) {
+    .habitsGrid {
+        column-gap: 0.75rem;
+    }
+
+    .habitName {
+        padding: 0 0.375rem;
+    }
+
+    /* Scale proportionally for mobile */
+    .habitCard:nth-child(8n+1) {
+        min-height: 100px;
+        padding: 0.625rem 0.5rem;
+    }
+
+    .habitCard:nth-child(8n+1) .iconImage {
+        max-width: 26px;
+        max-height: 26px;
+    }
+
+    .habitCard:nth-child(8n+1) .habitName {
+        font-size: 0.6875rem;
+    }
+
+    .habitCard:nth-child(8n+2) {
+        min-height: 210px;
+        padding: 1.75rem 1.125rem;
+    }
+
+    .habitCard:nth-child(8n+2) .iconImage {
+        max-width: 70px;
+        max-height: 70px;
+    }
+
+    .habitCard:nth-child(8n+2) .habitName {
+        font-size: 1rem;
+    }
+
+    .habitCard:nth-child(8n+3) {
+        min-height: 120px;
+        padding: 0.875rem 0.6875rem;
+    }
+
+    .habitCard:nth-child(8n+3) .iconImage {
+        max-width: 35px;
+        max-height: 35px;
+    }
+
+    .habitCard:nth-child(8n+3) .habitName {
+        font-size: 0.75rem;
+    }
+
+    .habitCard:nth-child(8n+4) {
+        min-height: 245px;
+        padding: 2.125rem 1.25rem;
+    }
+
+    .habitCard:nth-child(8n+4) .iconImage {
+        max-width: 82px;
+        max-height: 82px;
+    }
+
+    .habitCard:nth-child(8n+4) .habitName {
+        font-size: 1.125rem;
+    }
+
+    .habitCard:nth-child(8n+5) {
+        min-height: 145px;
+        padding: 1.25rem 0.875rem;
+    }
+
+    .habitCard:nth-child(8n+5) .iconImage {
+        max-width: 45px;
+        max-height: 45px;
+    }
+
+    .habitCard:nth-child(8n+5) .habitName {
+        font-size: 0.875rem;
+    }
+
+    .habitCard:nth-child(8n+6) {
+        min-height: 185px;
+        padding: 1.625rem 1rem;
+    }
+
+    .habitCard:nth-child(8n+6) .iconImage {
+        max-width: 60px;
+        max-height: 60px;
+    }
+
+    .habitCard:nth-child(8n+6) .habitName {
+        font-size: 0.9375rem;
+    }
+
+    .habitCard:nth-child(8n+7) {
+        min-height: 130px;
+        padding: 1rem 0.75rem;
+    }
+
+    .habitCard:nth-child(8n+7) .iconImage {
+        max-width: 38px;
+        max-height: 38px;
+    }
+
+    .habitCard:nth-child(8n+7) .habitName {
+        font-size: 0.8125rem;
+    }
+
+    .habitCard:nth-child(8n) {
+        min-height: 165px;
+        padding: 1.5rem 0.9375rem;
+    }
+
+    .habitCard:nth-child(8n) .iconImage {
+        max-width: 52px;
+        max-height: 52px;
+    }
+
+    .habitCard:nth-child(8n) .habitName {
+        font-size: 0.9375rem;
     }
 }

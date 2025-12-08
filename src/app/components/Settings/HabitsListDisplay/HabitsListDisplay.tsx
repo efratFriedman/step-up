@@ -35,9 +35,6 @@ export default function HabitsListDisplay({
             {/* Header Section */}
             <div className={styles.header}>
                 <h1 className={styles.title}>{category.name}</h1>
-                <p className={styles.subtitle}>
-                    {habitsInCategory.length} {habitsInCategory.length === 1 ? 'habit' : 'habits'} in this category
-                </p>
             </div>
 
             {/* Habits List */}

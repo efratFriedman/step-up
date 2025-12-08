@@ -35,9 +35,6 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
     try {
       const data = await getUserHabits();
-
-      console.log("⭐ HABITS FROM SERVER:", data);
-
       if (!data || data.length === 0) {
         set({
           habits: [],
