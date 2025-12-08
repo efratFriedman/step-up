@@ -58,12 +58,12 @@ export async function POST(
     await post.save();
 
     await pusher.trigger(
-      `private-user-${userId}`,
+      `post-likes-${postId}`,
       "like-toggled",
       {
-        postId: postId,
+        postId,
         likesCount: post.likesCount,
-        changedByUserId: userId._id,
+        changedByUserId: userId,
         action: alreadyLiked ? 'unliked' : 'liked',
       }
     );

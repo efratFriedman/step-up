@@ -15,4 +15,6 @@ export default function RealTimeLoader() {
 
         return () => unsubscribe();
     }, [user?.id]);
+
+    return null;
 }

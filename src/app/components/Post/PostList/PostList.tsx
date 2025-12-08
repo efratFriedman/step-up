@@ -6,6 +6,9 @@ import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
 import { usePostStore } from "@/app/store/usePostStore";
+import { useUserStore } from "@/app/store/useUserStore";
+import { getPusherClient } from "@/lib/pusher-frontend";
+import { IPost } from "@/interfaces/IPost";
 
 interface PostListProps {
   refreshTrigger?: number;
@@ -15,12 +18,14 @@ interface PostListProps {
 export default function PostList({ refreshTrigger }: PostListProps) {
   const LIMIT = 3;
 
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const updatePostLikes = usePostStore((s) => s.updatePostLikes);
+
+  const initializePostChannel = usePostStore((s) => s.initializePusherChannel);
+  const userId = useUserStore((s) => s.user?.id);
 
 
   useEffect(() => {
@@ -32,6 +37,7 @@ export default function PostList({ refreshTrigger }: PostListProps) {
 
   const loadMorePosts = async () => {
     if (!hasMore || loading) return;
+
     setLoading(true);
     try {
       const data = await getPostsPaginated(skip, LIMIT);
@@ -44,6 +50,13 @@ export default function PostList({ refreshTrigger }: PostListProps) {
 
         return unique;
       });
+
+      const pusher = getPusherClient(userId);
+
+      data.posts.forEach((post: IPost) => {
+        initializePostChannel(post.id, pusher);
+      });
+
       setSkip((prev) => prev + LIMIT);
       setHasMore(data.hasMore);
 
@@ -69,13 +82,13 @@ export default function PostList({ refreshTrigger }: PostListProps) {
     );
     observer.observe(bottomRef.current);
     return () => observer.disconnect();
-  }, [hasMore, loading, posts, updatePostLikes]);
+  }, [hasMore, loading, posts]);
 
 
   return (
     <div className={styles.postList}>
       {posts.map((post) => (
-        <PostItem key={post._id} post={post} />
+        <PostItem key={post.id} post={post} />
       ))}
       <div ref={bottomRef} style={{ height: "30px" }}></div>
       {loading && <Loader />}

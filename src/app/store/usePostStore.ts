@@ -3,8 +3,7 @@
 import { create } from "zustand";
 import { IPost } from "@/interfaces/IPost";
 import Pusher from "pusher-js";
-import { getPusherClient } from "@/lib/pusher-frontend";
-import { useUserStore } from "./useUserStore";
+
 interface PostState {
   posts: IPost[];
   setPosts: (posts: IPost[]) => void;
@@ -12,7 +11,7 @@ interface PostState {
   updatePost: (id: string, updated: Partial<IPost>) => void;
   removePost: (id: string) => void;
   updatePostLikes: (postId: string, newLikesCount: number) => void;
-  initializePusherChannel: (userId: string, pusher: Pusher) => () => void;
+  initializePusherChannel: (postId: string, pusher: Pusher) => () => void;
 }
 
 export const usePostStore = create<PostState>((set, get) => ({
@@ -39,15 +38,14 @@ export const usePostStore = create<PostState>((set, get) => ({
       ),
     })),
 
-  initializePusherChannel: (userId: string, pusher: Pusher) => {
-    const channelName = `private-user-${userId}`;
+  initializePusherChannel: (postId: string, pusher: Pusher) => {
+    const channelName = `post-likes-${postId}`;
     const channel = pusher.subscribe(channelName);
 
     channel.bind("like-toggled", (data: any) => {
       get().updatePostLikes(data.postId, data.likesCount);
     });
 
-    // מחזיר פונקציה שמנתקת את המנוי
     return () => {
       channel.unbind("like-toggled");
       pusher.unsubscribe(channelName);
