@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/useUserStore";
@@ -27,31 +28,25 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <div>
-          <h2 className={styles.title}>Verify Code</h2>
-          <p className={styles.subtitle}>
-            Please enter the temporary password sent to {tempEmail || "your email"}.
-          </p>
-        </div>
-
-        <div className={styles.inputGroup}>
+      <div className={styles.container}>
+        <div className={styles.card}>
+          <h2 className={styles.title}>Verify Temporary Password</h2>
+          <p>Please enter the temporary password sent to {tempEmail}.</p>
+  
           <input
             type="password"
-            placeholder="Enter password from email"
+            placeholder="Enter temporary password"
             value={tempInput}
             onChange={(e) => setTempInput(e.target.value)}
             className={styles.input}
           />
+  
+          <button onClick={handleVerify} className={styles.button}>
+            Verify
+          </button>
+  
+          {error && <p className={styles.error}>{error}</p>}
         </div>
-
-        <button onClick={handleVerify} className={styles.button}>
-          Verify Code
-        </button>
-
-        {error && <div className={styles.error}>{error}</div>}
       </div>
-    </div>
   );
 }
