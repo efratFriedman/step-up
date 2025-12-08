@@ -34,17 +34,7 @@ export async function POST(request: Request) {
       });
     }
 
-
- const tokenUser = {
-      _id: user._id.toString(), 
-      name: user.name,
-      email: user.email,
-    };
-
-    return createAuthResponse(
-      tokenUser,
-      `Welcome ${user.name} Your account has been created.`
-    );
+    return createAuthResponse(user, `Welcome ${name}!`);
 
   } catch (error) {
     console.error("❌ Google signup error:", error);

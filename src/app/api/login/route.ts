@@ -35,7 +35,6 @@ export async function POST(request: Request) {
     }
 
     const user = await User.findOne({ email });
-    
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -45,13 +44,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Invalid password" }, { status: 401 });
     }
 
-    const tokenUser = {
-      _id: user._id.toString(),
-      name: user.name,
-      email: user.email,
-    };
-    
-    return createAuthResponse(tokenUser, `Welcome back ${user.name}!`);
+    return createAuthResponse(user, `Welcome back ${user.name}!`);
     
   } catch (error) {
     console.error("Login error:", error);
