@@ -28,14 +28,14 @@ export default function WeeklyGraph() {
     return (
         <div style={{ marginBottom: "1.5rem", padding: "0 8px" }}>
             <div className={styles.selectorWrapper}>
-                <RangeSelector
-                    value={range}
-                    onChange={setRange}
-                    options={[
-                        { value: 7, label: "Weekly" },
-                        { value: 30, label: "Monthly" },
-                    ]}
-                />
+            <RangeSelector
+                value={range}
+                onChange={(value: number) => setRange(value as 7 | 30 )}
+                options={[
+                    { value: 7, label: "Weekly" },
+                    { value: 30, label: "Monthly" },
+                ]}
+            />
             </div>
 
             {loading ? <Loader /> : <WaveProgressChart data={stats} />}
