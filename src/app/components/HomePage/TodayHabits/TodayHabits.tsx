@@ -1,24 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTodayHabitStore } from "@/app/store/useTodayHabitStore";
-import { useHabitLogStore } from "@/app/store/useHabitLogStore";
+import { useHabitAppStore } from "@/app/store/habitAppStore/store"; 
 import { useUserStore } from "@/app/store/useUserStore";
 import { getCategoryStyle } from "@/utils/todayHabitsHelper";
-import { toUTCDate } from "@/utils/date";
 import { ITodayHabit } from "@/interfaces/ITodayHabit";
 import styles from "./TodayHabits.module.css";
 import Loader from "../../Loader/Loader";
 
 export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
-  const {
-    habits,
-    loading,
-    fetchTodayHabits,
-    toggleStatus
-  } = useTodayHabitStore();
-  
-  const user = useUserStore((state) => state.user);
+  const todayHabits = useHabitAppStore((s) => s.todayHabits);
+  const loading = useHabitAppStore((s) => s.loadingToday);
+  const fetchTodayHabits = useHabitAppStore((s) => s.fetchTodayHabits);
+  const toggleTodayStatus = useHabitAppStore((s) => s.toggleTodayStatus);
+
+  const fetchLogs = useHabitAppStore((s) => s.fetchLogs); 
+  const user = useUserStore((s) => s.user);
 
   const isToday = (() => {
     const today = new Date();
@@ -30,7 +27,7 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
   })();
 
   useEffect(() => {
-    const dateStr=selectedDate.toISOString().split("T")[0];
+    const dateStr = selectedDate.toISOString().split("T")[0];
     fetchTodayHabits(dateStr);
   }, [selectedDate]);
 
@@ -46,12 +43,12 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
     }
   };
 
-  if (loading) return <Loader/>;
-  if (!habits?.length) return <p>No habits for this day</p>;
+  if (loading) return <Loader />;
+  if (!todayHabits?.length) return <p>No habits for this day</p>;
 
   return (
     <div className={styles.habitsGrid}>
-      {habits.map((habit: ITodayHabit, index: number) => {
+      {todayHabits.map((habit: ITodayHabit, index: number) => {
         const sizeClass = habit.size ? styles[`height-${habit.size}`] : "";
         const customClass = index === 0 ? styles["span-two-rows"] : "";
 
@@ -68,13 +65,12 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
             style={getCategoryStyle(habit)}
             onClick={async () => {
               if (!isToday) return;
-              await toggleStatus(habit.logId);
 
-              const userId = user?.id;
-              const dateIso = selectedDate.toISOString();
-              if (userId) {
-                const fetchLogs = useHabitLogStore.getState().fetchLogs;
-                await fetchLogs(userId, dateIso);
+              await toggleTodayStatus(habit.logId);
+
+              if (user?.id) {
+                const iso = selectedDate.toISOString();
+                await fetchLogs(user.id, iso);
               }
             }}
           >

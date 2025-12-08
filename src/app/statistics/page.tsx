@@ -9,10 +9,9 @@ import { useStatisticsStore } from "@/app/store/useStatisticsStore";
 export default function StatisticsPage() {
   const fetchStatisticsFor = useStatisticsStore(s => s.fetchStatisticsFor);
 
-  // Optional: Pre-fetch initial data on page load
   useEffect(() => {
-    fetchStatisticsFor(7); // Load weekly stats initially
-    fetchStatisticsFor(365); // Load yearly stats for heatmap
+    fetchStatisticsFor(7); 
+    fetchStatisticsFor(365); 
   }, [fetchStatisticsFor]);
 
   return (

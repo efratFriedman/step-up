@@ -37,7 +37,6 @@ export default function HabitForm({ categories, onSubmit, onCancel, initialData 
         },
     });
 
-    // Initialize form with initialData when editing
     useEffect(() => {
         if (initialData) {
             reset({

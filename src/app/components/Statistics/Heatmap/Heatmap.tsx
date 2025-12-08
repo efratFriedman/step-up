@@ -14,6 +14,7 @@ import {
   buildCalendarCells,
   getColorLevel
 } from "@/utils/HeatMapFunctions";
+import Loader from "../../Loader/Loader";
 
 export default function HeatmapMonth() {
   const RANGE = 365;
@@ -71,7 +72,7 @@ export default function HeatmapMonth() {
     month: "long",
   });
 
-  if (loading365 || !beginDate || !endDate) return <div className={styles.container}>Loading…</div>;
+  if (loading365 || !beginDate || !endDate) return <Loader/>;
 
   return (
     <div className={styles.container}>
