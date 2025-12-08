@@ -26,7 +26,7 @@ export async function GET(req: Request) {
         const date = SendingValidDate(dateParam);
 
 
-        const dailyHabits = await getHabitsByDateService(userId.toString(), date);
+        const dailyHabits = await getHabitsByDateService(userId, date);
 
         return NextResponse.json(dailyHabits, { status: 200 });
 

@@ -1,5 +1,5 @@
 import { IHabitLog } from '@/interfaces/IHabitLog';
-import mongoose, { Schema, model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const HabitLogSchema = new mongoose.Schema({
   habitId: { type: Schema.Types.ObjectId, ref: 'Habit', required: true },
@@ -7,11 +7,5 @@ const HabitLogSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   isDone: { type: Boolean, default: false }
 });
-// export default mongoose.models.HabitLog||mongoose.model<IHabitLog>("HabitLog",HabitLogSchema);
+export default mongoose.models.HabitLog||mongoose.model<IHabitLog>("HabitLog",HabitLogSchema);
 
-
-const HabitLog  =
-//  (models.Category  as mongoose.Model<ICategory>) ||
-  model<IHabitLog>("HabitLog", HabitLogSchema);
-
-export default HabitLog;

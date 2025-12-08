@@ -37,15 +37,15 @@ export default function CategoryGraph() {
         <div className={styles.container}>
 
             <div className={styles.selectorWrapper}>
-            <RangeSelector
-                value={range}
-                onChange={(value: number) => setRange(value as 7 | 30 | 365)}
-                options={[
-                    { value: 7, label: "Weekly" },
-                    { value: 30, label: "Monthly" },
-                    { value: 365, label: "Yearly" },
-                ]}
-            />
+                <RangeSelector
+                    value={range}
+                    onChange={setRange}
+                    options={[
+                        { value: 7, label: "Weekly" },
+                        { value: 30, label: "Monthly" },
+                        { value: 365, label: "Yearly" },
+                    ]}
+                />
             </div>
 
             {loading ? (
