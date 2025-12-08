@@ -1,4 +1,3 @@
-"use client";
 import { useEffect } from "react";
 
 function urlBase64ToUint8Array(base64String: string) {
