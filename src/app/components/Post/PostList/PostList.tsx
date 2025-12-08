@@ -88,7 +88,7 @@ export default function PostList({ refreshTrigger }: PostListProps) {
   return (
     <div className={styles.postList}>
       {posts.map((post) => (
-        <PostItem key={post.id} post={post} />
+        <PostItem key={String(post._id)} post={post} />
       ))}
       <div ref={bottomRef} style={{ height: "30px" }}></div>
       {loading && <Loader />}
