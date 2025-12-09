@@ -6,21 +6,22 @@ import { IPost, IUserPopulated } from "@/interfaces/IPost";
 import Slider from "../Slider/Slider";
 import styles from "./PostItem.module.css";
 import { Heart } from "lucide-react";
+import { usePostStore } from "@/app/store/usePostStore";
 
 export default function PostItem({ post }: { post: IPost }) {
   const currentUser = useUserStore((state) => state.user);
-  const { likeStatus, likeCount, toggle } = useLikeStore();
+  const toggleLike = usePostStore((s) => s.toggleLikeAction);
 
   const user = post.userId as IUserPopulated;
 
-  const liked = likeStatus[post._id.toString()] ?? post.isLikedByCurrentUser;
-  const likes = likeCount[post._id.toString()] ?? post.likesCount;
+  const liked = post.isLikedByCurrentUser;
+  const likes = post.likesCount;
 
   const isOwnPost =
-  currentUser?.id?.toString() === user._id?.toString();
+    currentUser?.id?.toString() === user._id?.toString();
 
   const onLike = () => {
-    if (!isOwnPost) toggle(String(post._id));
+    if (!isOwnPost) toggleLike(String(post._id));
   };
 
   return (
