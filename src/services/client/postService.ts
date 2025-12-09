@@ -65,3 +65,16 @@ export async function deletePost(postId: string) {
 
   return true;
 }
+
+export async function getPersonalPosts() {
+  const res = await fetch(`/api/posts/personal`, {
+    credentials: "include"
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to fetch posts");
+  }
+
+  return res.json();
+}

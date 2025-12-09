@@ -1,0 +1,135 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1d486a;
+}
+
+.empty {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 10px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.media img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.content {
+  color: #374151;
+  font-size: 15px;
+}
+
+.deleteBtn {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.deleteBtn:hover {
+  background: #b91c1c;
+}
+/* Modal Background */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* Modal Box */
+.modal {
+  background: #fff;
+  padding: 22px;
+  border-radius: 12px;
+  width: 85%;
+  max-width: 380px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modalTitle {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+.modalText {
+  margin-bottom: 16px;
+  color: #374151;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 16px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancelBtn {
+  background: #e5e7eb;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+}
+
+.confirmBtn {
+  background: #dc2626;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  opacity: 0.5;
+}
+
+.confirmBtn:not([disabled]) {
+  opacity: 1;
+  cursor: pointer;
+}

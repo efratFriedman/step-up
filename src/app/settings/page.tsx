@@ -1,9 +1,8 @@
 "use client";
 
-import CategoriesPreview from "../components/Settings/CategoriesPreview/CategoriesPreview";
+import SettingsTabs from "../components/Settings/Tabs/SettingsTabs";
 
-export default function ProfilePage() {
-  return (
-    <CategoriesPreview/>
-  );
+
+export default function SettingsPage() {
+  return <SettingsTabs />;
 }
