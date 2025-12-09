@@ -637,3 +637,40 @@
         font-size: 0.9375rem;
     }
 }
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 400px;
+}
+
+.emptyIllustration {
+  margin-bottom: 24px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.emptyTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0 0 12px 0;
+}
+
+.emptyDescription {
+  font-size: 16px;
+  color: #6B7280;
+  margin: 0;
+  max-width: 400px;
+}
