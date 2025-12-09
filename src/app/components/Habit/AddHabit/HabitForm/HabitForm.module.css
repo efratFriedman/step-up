@@ -51,7 +51,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 900;
+    z-index: 999999;
     opacity: 1;
     transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
 }

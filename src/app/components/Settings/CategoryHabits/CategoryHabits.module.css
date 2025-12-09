@@ -107,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 999999;
   padding: 16px;
   animation: fadeIn 0.2s ease;
 }
@@ -130,19 +130,8 @@
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 8px 32px rgba(24, 60, 92, 0.3);
-  animation: slideUp 0.3s ease;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .modalHeader {
   display: flex;

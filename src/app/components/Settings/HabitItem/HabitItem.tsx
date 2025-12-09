@@ -27,24 +27,24 @@ export default function HabitItem({
                   .padStart(2, "0")}`
         : "No reminder";
 
-    const handleTitleClick = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onCloseMenu(); 
-        if (onEdit) {
-            onEdit();
-        }
-    };
+    // const handleTitleClick = (e: React.MouseEvent) => {
+    //     e.stopPropagation();
+    //     onCloseMenu(); 
+    //     if (onEdit) {
+    //         onEdit();
+    //     }
+    // };
 
-    const handleCardClick = (e: React.MouseEvent) => {
-        const target = e.target as HTMLElement;
-        if (target.closest(`.${styles.menuWrapper}`) || target.closest(`.${styles.title}`)) {
-            return;
-        }
-        onCloseMenu(); 
-        if (onEdit) {
-            onEdit();
-        }
-    };
+    // const handleCardClick = (e: React.MouseEvent) => {
+    //     const target = e.target as HTMLElement;
+    //     if (target.closest(`.${styles.menuWrapper}`) || target.closest(`.${styles.title}`)) {
+    //         return;
+    //     }
+    //     onCloseMenu(); 
+    //     if (onEdit) {
+    //         onEdit();
+    //     }
+    // };
 
     const handleMenuClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -57,7 +57,7 @@ export default function HabitItem({
     };
 
     return (
-        <div className={styles.card} onClick={handleCardClick}>
+        <div className={styles.card} >
             <div className={styles.menuWrapper}>
                 <MoreVertical
                     className={styles.menuIcon}
@@ -86,7 +86,6 @@ export default function HabitItem({
                 <div className={styles.textWrapper}>
                     <h3 
                         className={styles.title} 
-                        onClick={handleTitleClick}
                         style={{ cursor: onEdit ? 'pointer' : 'default' }}
                     >
                         {habit.name}
@@ -95,7 +94,6 @@ export default function HabitItem({
                     {habit.description && (
                         <p 
                             className={styles.description}
-                            onClick={handleTitleClick}
                             style={{ cursor: onEdit ? 'pointer' : 'default' }}
                         >
                             {habit.description}

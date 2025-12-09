@@ -57,20 +57,14 @@ export const usePostStore = create<PostState>((set, get) => ({
     const channelName = `post-likes-${postId}`;
     const subscribed = get().subscribedChannels;
     if (subscribed.has(channelName)) return;
-    console.log(`[Pusher] Initializing channel: ${channelName}`);
-
 
     subscribed.add(channelName);
 
     const channel = pusher.subscribe(channelName);
 
     channel.bind("like-toggled", (data: any) => {
-      console.log(`[Pusher] Received like-toggled event for post ${data.postId}:`, data);
-      console.log(`[Pusher] Updating likes count to: ${data.likesCount}`);
       get().updatePostLikes(data.postId, data.likesCount);
     });
-
-    console.log(`[Pusher] Channel subscribed and event listener bound`);
   },
   unsubscribeAll: (pusher: Pusher) => {
     const subscribed = get().subscribedChannels;
