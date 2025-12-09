@@ -6,7 +6,6 @@ import DaysSlider from "../components/HomePage/DaysSlider/DaysSlider";
 import TodayHabits from "../components/HomePage/TodayHabits/TodayHabits";
 import NewHabit from "../components/Habit/AddHabit/NewHabit/NewHabit";
 import styles from "./HomePage.module.css";
-import RealTimeLoader from "../components/Post/RealTimeLoader";
 
 
 export default function HomePage() {
@@ -23,7 +22,6 @@ export default function HomePage() {
       </h2>
       <TodayHabits selectedDate={selectedDate} />
       <NewHabit />
-      <RealTimeLoader/>
     </div>
   );
 }

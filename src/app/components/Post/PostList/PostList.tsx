@@ -54,7 +54,7 @@ export default function PostList({ refreshTrigger }: PostListProps) {
       const pusher = getPusherClient(userId);
 
       data.posts.forEach((post: IPost) => {
-        initializePostChannel(post.id, pusher);
+        initializePostChannel(String(post._id), pusher);
       });
 
       setSkip((prev) => prev + LIMIT);

@@ -20,8 +20,7 @@ export default function PostItem({ post }: { post: IPost }) {
   currentUser?.id?.toString() === user._id?.toString();
 
   const onLike = () => {
-    if (!isOwnPost) toggle(post._id.toString())
-    ;
+    if (!isOwnPost) toggle(String(post._id));
   };
 
   return (
