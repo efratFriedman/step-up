@@ -6,6 +6,8 @@ import { logout } from "@/services/client/authService";
 import { useUserStore } from "@/app/store/useUserStore";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/config/routes";
+import { getPusherClient } from "@/lib/pusher-frontend";
+import { usePostStore } from "@/app/store/usePostStore";
 
 export default function ProfileSidebarWrapper() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,11 +16,14 @@ export default function ProfileSidebarWrapper() {
   const clearUser = useUserStore((state) => state.clearUser);
 
   const handleLogout = async () => {
+    const pusher = getPusherClient();
+    if (pusher) {
+      usePostStore.getState().unsubscribeAll(pusher);
+    }
     await logout();
-    router.replace(ROUTES.LANDING);
     clearUser();
+    router.replace(ROUTES.LANDING);
     setIsOpen(false);
-
   };
 
   if (!user) return null;
