@@ -1,7 +1,6 @@
 "use client";
 
 import { useUserStore } from "@/app/store/useUserStore";
-import { useLikeStore } from "@/app/store/useLikesStore";
 import { IPost, IUserPopulated } from "@/interfaces/IPost";
 import Slider from "../Slider/Slider";
 import styles from "./PostItem.module.css";

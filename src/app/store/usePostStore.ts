@@ -42,7 +42,7 @@ export const usePostStore = create<PostState>((set, get) => ({
   updatePostLikes: (postId, newLikesCount, liked) =>
     set((state) => ({
       posts: state.posts.map((p) =>
-        String(p._id)=== postId
+        String(p._id) === postId
           ? {
             ...p,
             likesCount: newLikesCount,
@@ -55,9 +55,9 @@ export const usePostStore = create<PostState>((set, get) => ({
 
   initializePusherChannel: (postId: string, pusher: Pusher) => {
     const channelName = `post-likes-${postId}`;
-    console.log(`[Pusher] Initializing channel: ${channelName}`);
     const subscribed = get().subscribedChannels;
     if (subscribed.has(channelName)) return;
+    console.log(`[Pusher] Initializing channel: ${channelName}`);
 
 
     subscribed.add(channelName);

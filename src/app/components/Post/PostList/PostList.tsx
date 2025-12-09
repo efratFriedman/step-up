@@ -1,31 +1,31 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { usePostStore } from "@/app/store/usePostStore";
+import { useUserStore } from "@/app/store/useUserStore";
 import { getPostsPaginated } from "@/services/client/postService";
+import { getPusherClient } from "@/lib/pusher-frontend";
+import { IPost } from "@/interfaces/IPost";
 import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
-import { usePostStore } from "@/app/store/usePostStore";
-import { useUserStore } from "@/app/store/useUserStore";
-import { getPusherClient } from "@/lib/pusher-frontend";
-import { IPost } from "@/interfaces/IPost";
 
 interface PostListProps {
   refreshTrigger?: number;
 }
 
-
 export default function PostList({ refreshTrigger }: PostListProps) {
   const LIMIT = 3;
+  const posts = usePostStore((s) => s.posts);
+  const setPosts = usePostStore((s) => s.setPosts);
+  const initializePostChannel = usePostStore((s) => s.initializePusherChannel);
+  const userId = useUserStore((s) => s.user?.id);
 
-  const [posts, setPosts] = useState<IPost[]>([]);
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  const initializePostChannel = usePostStore((s) => s.initializePusherChannel);
-  const userId = useUserStore((s) => s.user?.id);
 
 
   useEffect(() => {
@@ -41,15 +41,10 @@ export default function PostList({ refreshTrigger }: PostListProps) {
     setLoading(true);
     try {
       const data = await getPostsPaginated(skip, LIMIT);
+      const merged = [...posts, ...data.posts];
+      const unique = Array.from(new Map(merged.map((p) => [p._id, p])).values());
 
-      setPosts((prev) => {
-        const merged = [...prev, ...data.posts];
-        const unique = Array.from(
-          new Map(merged.map((post) => [post._id, post])).values()
-        );
-
-        return unique;
-      });
+      setPosts(unique);
 
       const pusher = getPusherClient(userId);
 
