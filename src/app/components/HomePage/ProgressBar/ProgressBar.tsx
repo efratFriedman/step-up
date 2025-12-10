@@ -22,6 +22,11 @@ export default function ProgressBar() {
     const frameColor = "#a9a9a9";
     const progressColor = "#2e72ac";
 
+    const SVG_SIZE = 120; 
+    const STROKE_WIDTH = 10;
+    const CIRCLE_RADIUS = (SVG_SIZE / 2) - (STROKE_WIDTH / 2); // 55
+    const circumference = 2 * Math.PI * CIRCLE_RADIUS; 
+    const dashOffset = circumference * (1 - percent / 100);
     return (
         <div className={styles.container}>
             <div className={styles.progressCard}>
@@ -40,28 +45,31 @@ export default function ProgressBar() {
                 </div>
 
                 <div className={styles.circularProgress}>
-                    <svg className={styles.progressRing} width="120" height="120">
+                    <svg 
+                        className={styles.progressRing} 
+                        viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`}
+                    >
                         <circle
                             className={styles.progressRingCircle}
                             stroke={frameColor}
-                            strokeWidth="10"
+                            strokeWidth={STROKE_WIDTH}
                             fill="transparent"
-                            r="52"
-                            cx="60"
-                            cy="60"
+                            r={CIRCLE_RADIUS} 
+                            cx={SVG_SIZE / 2} 
+                            cy={SVG_SIZE / 2} 
                         />
 
                         <circle
                             className={styles.progressRingCircleActive}
                             stroke={progressColor}
-                            strokeWidth="10"
+                            strokeWidth={STROKE_WIDTH}
                             fill="transparent"
-                            r="45"
-                            cx="60"
-                            cy="60"
+                            r={CIRCLE_RADIUS} 
+                            cx={SVG_SIZE / 2} 
+                            cy={SVG_SIZE / 2} 
                             style={{
-                                strokeDasharray: `${2 * Math.PI * 45}`,
-                                strokeDashoffset: `${2 * Math.PI * 45 * (1 - percent / 100)}`
+                                strokeDasharray: circumference,
+                                strokeDashoffset: dashOffset
                             }}
                         />
                     </svg>

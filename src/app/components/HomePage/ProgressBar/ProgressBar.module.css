@@ -1,4 +1,4 @@
-.container {
+/* .container {
     padding: 20px;
 }
 
@@ -120,5 +120,155 @@
 
     .percentText {
         font-size: 20px;
+    }
+} */
+/* הגדרות ברירת מחדל (טלפונים בינוניים-גדולים, מעל 480px) */
+.container {
+    padding: 1.25rem 1rem; /* 20px 16px */
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.progressCard {
+    background: linear-gradient(135deg, #bcdbdf 0%, #99c8ce 100%);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0.25rem 0.75rem rgba(24, 60, 92, 0.15);
+    width: 100%;
+    /* הגודל המקסימלי הסטנדרטי יוגדר כאן, אבל נשנה אותו ב-Media Query לטאבלט */
+    max-width: 25rem; /* 400px */
+    box-sizing: border-box;
+}
+
+.textSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.encouragement {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #183c5c;
+    margin: 0;
+}
+
+.habitCount {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+}
+
+.done {
+    /* גודל יחסי */
+    font-size: clamp(3rem, 7vw, 3.5rem); 
+    font-weight: 700;
+    color: #183c5c;
+    line-height: 1;
+}
+
+.separator {
+    /* גודל יחסי */
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 600;
+    color: #2e72ac;
+}
+
+.total {
+    /* גודל יחסי */
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-weight: 600;
+    color: #2e72ac;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #183c5c;
+    margin: 0;
+}
+
+.circularProgress {
+    position: relative;
+    /* גודל מעגל יחסי לברירת מחדל (100px-120px) */
+    width: clamp(6.25rem, 18vw, 7.5rem); 
+    height: clamp(6.25rem, 18vw, 7.5rem);
+    flex-shrink: 0; 
+}
+
+.progressRing {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.progressRingCircle {
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+.progressRingCircleActive {
+    transition: stroke-dashoffset 0.8s ease;
+    stroke-linecap: round;
+}
+
+.percentText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* גודל יחסי (20px-24px) */
+    font-size: clamp(1.25rem, 4vw, 1.5rem); 
+    font-weight: 700;
+    color: #183c5c;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 1. טאבלטים (רוחב מעל 768px): הכרטיס תופס את כל רוחב הדף */
+/* ---------------------------------------------------------------------- */
+@media (min-width: 769px) {
+    .progressCard {
+        /* מבטל את הגודל המקסימלי כדי שיתפרס לכל רוחב ה-container */
+        max-width: 100%; 
+        padding: 2rem 3rem; /* הגדלת ריווח פנימי לטאבלט/דסקטופ */
+    }
+
+    .circularProgress {
+        width: 8.75rem; /* 140px */
+        height: 8.75rem;
+    }
+
+    .percentText {
+        font-size: 1.75rem; /* 28px */
+    }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 2. טלפונים קטנים (רוחב עד 480px): הקטנת העיגול והאחוזים */
+/* ---------------------------------------------------------------------- */
+@media (max-width: 480px) {
+    .progressCard {
+        padding: 1rem; /* 16px */
+    }
+
+    .done {
+        font-size: 2.5rem; /* 40px */
+    }
+
+    .separator,
+    .total {
+        font-size: 1.75rem; /* 28px */
+    }
+    
+    .circularProgress {
+        width: 5.5rem; /* 88px - הקטנת גודל העיגול */
+        height: 5.5rem;
+    }
+
+    .percentText {
+        font-size: 1.125rem; /* 18px - הקטנת גודל האחוזים */
     }
 }

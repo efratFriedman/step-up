@@ -1,15 +1,15 @@
-.sliderWrapper {
+  .sliderWrapper {
     width: 100%;
-    max-width: 480px; 
-    margin: 0 auto; 
+    max-width: 480px;
+    margin: 0 auto;
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch; 
-    scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
   
   .sliderWrapper::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
   
   .sliderContainer {
@@ -20,7 +20,7 @@
   }
   
   .dayItem {
-    flex: 0 0 auto; 
+    flex: 0 0 auto;
     width: 55px;
     padding: 8px 10px;
     border-radius: 12px;
@@ -60,11 +60,51 @@
     border: 2px solid #4a6cf7;
     box-sizing: border-box;
   }
+    
+  @media (max-width: 360px) {
+    .dayItem {
+      width: 45px;
+      padding: 6px 8px;
+    }
   
-  @media (min-width: 481px) {
+    .date {
+      font-size: 13px;
+    }
+  
+    .day {
+      font-size: 11px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sliderWrapper {
+      max-width: 100%;
+      padding: 4px;
+    }
+  }
+  
+  @media (min-width: 600px) and (max-width: 768px) {
+    .sliderWrapper {
+      max-width: 600px;
+    }
+    .dayItem {
+      width: 65px;
+      padding: 10px;
+    }
+    .date {
+      font-size: 16px;
+    }
+  }
+  
+  @media (min-width: 768px) {
     .sliderWrapper {
       border-radius: 16px;
       background-color: #f8f9ff;
       padding: 8px;
+      max-width: 700px;
+    }
+    .dayItem {
+      width: 70px;
     }
   }
+  

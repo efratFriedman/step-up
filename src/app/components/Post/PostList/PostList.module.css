@@ -68,3 +68,24 @@
     }
   }
   
+  .scrollTopBtn {
+    margin-bottom: 40px;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background-color: #7ab1be;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease;
+    z-index: 999;
+  }
+  
+  .scrollTopBtn:hover {
+    transform: scale(1.12);
+  }
+  
