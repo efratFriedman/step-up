@@ -9,13 +9,14 @@ import { IPost } from "@/interfaces/IPost";
 import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
+import { log } from "console";
 
 interface PostListProps {
   refreshTrigger?: number;
 }
 
 export default function PostList({ }: PostListProps) {
-  const LIMIT = 9;
+  const LIMIT: number = 9;
   const posts = usePostStore((s) => s.posts);
   const setPosts = usePostStore((s) => s.setPosts);
   const initializePostChannel = usePostStore((s) => s.initializePusherChannel);
@@ -41,8 +42,11 @@ export default function PostList({ }: PostListProps) {
     setLoading(true);
     try {
       const data = await getPostsPaginated(skip, LIMIT);
+      console.log("data post ", data.posts);
+      console.log("data.posts ", data.posts.length);
       const merged = [...posts, ...data.posts];
       const unique = Array.from(new Map(merged.map((p) => [p._id, p])).values());
+      console.log("unique", unique.length);
 
       setPosts(unique);
 
@@ -52,7 +56,7 @@ export default function PostList({ }: PostListProps) {
         initializePostChannel(String(post._id), pusher);
       });
 
-      setSkip((prev) => prev + LIMIT);
+      setSkip(prev => prev + data.posts.length);
       setHasMore(data.hasMore);
 
     } catch (error) {
