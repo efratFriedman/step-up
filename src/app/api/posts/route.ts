@@ -3,51 +3,107 @@ import Post from "@/models/Post";
 import { dbConnect } from "@/lib/DB";
 import { authenticate } from "@/lib/server/authMiddleware";
 
+// export async function GET(request: Request) {
+//   try {
+//     await dbConnect();
+
+//     const userId = await authenticate(request);
+//     const { searchParams } = new URL(request.url);
+//     const skip = Number(searchParams.get("skip") || 0);
+//     const limit = Number(searchParams.get("limit")) || 3;
+
+//     const posts = await Post.find()
+//     .skip(skip)
+//     .limit(limit)
+//     .populate("userId", "name profileImg");
+//     // .sort({ createdAt: -1 })
+
+//     const postsWithLikeStatus = posts.map((post) => {
+//       const postObj = post.toObject();
+//       const userIdString = userId?._id ? userId._id.toString() : userId?.toString();
+
+//       const isLikedByCurrentUser = userIdString && postObj.likedBy?.some(
+//         (id: any) => id.toString() === userIdString
+//       );
+
+//       return {
+//         ...postObj,
+//         currentUserId: userId?.toString() || null,
+//         isLikedByCurrentUser: isLikedByCurrentUser || false
+//       };
+//     });
+
+//     const total = await Post.countDocuments();
+
+//     console.log("Fetched posts:", postsWithLikeStatus);
+
+//     return NextResponse.json({
+//       posts: postsWithLikeStatus,
+//       hasMore: skip + limit < total
+//     });
+
+//   } catch (err: any) {
+//     return NextResponse.json(
+//       { message: err.message || "Failed to fetch posts" },
+//       { status: 500 });
+//   }
+// }
+
 export async function GET(request: Request) {
   try {
     await dbConnect();
-
     const userId = await authenticate(request);
     const { searchParams } = new URL(request.url);
-    const skip = Number(searchParams.get("skip") || 0);
-    const limit = Number(searchParams.get("limit")) || 3;
+    const limit = Number(searchParams.get("limit")) || 9;
 
-    const posts = await Post.find()
-    .skip(skip)
-    .limit(limit)
-    .populate("userId", "name profileImg");
-    // .sort({ createdAt: -1 })
+    const posts = await Post.aggregate([
+      { $sample: { size: limit } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      { $unwind: "$user" }
+    ]);
 
-    const postsWithLikeStatus = posts.map((post) => {
-      const postObj = post.toObject();
-      const userIdString = userId?._id ? userId._id.toString() : userId?.toString();
-
-      const isLikedByCurrentUser = userIdString && postObj.likedBy?.some(
-        (id: any) => id.toString() === userIdString
-      );
+    // צריך להחזיר את אותו מבנה כמו קודם
+    const postsWithLikeStatus = posts.map((post: any) => {
+      post.userId = {
+        _id: post.user._id,
+        name: post.user.name,
+        profileImg: post.user.profileImg
+      };
       
+      delete post.user;
+      
+      const userIdString = userId?._id?.toString() || userId?.toString();
+
+      const isLikedByCurrentUser = userIdString &&
+        post.likedBy?.some((id: any) => id.toString() === userIdString);
+
       return {
-        ...postObj,
-        currentUserId: userId?.toString() || null,
+        ...post,
+        currentUserId: userIdString,
         isLikedByCurrentUser: isLikedByCurrentUser || false
       };
     });
 
-    const total = await Post.countDocuments();
-
-    console.log("Fetched posts:", postsWithLikeStatus);
-
     return NextResponse.json({
       posts: postsWithLikeStatus,
-      hasMore: skip + limit < total
+      hasMore: true   // תמיד יש עוד
     });
 
   } catch (err: any) {
     return NextResponse.json(
-      { message: err.message || "Failed to fetch posts" },
-      { status: 500 });
+      { message: err.message || "Failed to fetch random posts" },
+      { status: 500 }
+    );
   }
 }
+
 
 
 export async function POST(req: Request) {
