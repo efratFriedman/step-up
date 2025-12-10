@@ -7,16 +7,16 @@ import { useModalPostStore } from "@/app/store/usePostModelStore";
 
 export default function PostsPage() {
   const closePostModal = useModalPostStore((s) => s.closePostModal);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  // const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handlePostSuccess = () => {
-    setRefreshTrigger((prev) => prev + 1);
-  };
+  // const handlePostSuccess = () => {
+  //   setRefreshTrigger((prev) => prev + 1);
+  // };
 
   return (
     <>
-      <PostList refreshTrigger={refreshTrigger} />
-      <AddPost onClose={closePostModal} onSuccess={handlePostSuccess} />
+      <PostList />
+      <AddPost onClose={closePostModal}  />
     </>
 
   )

@@ -14,26 +14,26 @@ interface PostListProps {
   refreshTrigger?: number;
 }
 
-export default function PostList({ refreshTrigger }: PostListProps) {
-  const LIMIT = 3;
+export default function PostList({ }: PostListProps) {
+  const LIMIT = 9;
   const posts = usePostStore((s) => s.posts);
   const setPosts = usePostStore((s) => s.setPosts);
   const initializePostChannel = usePostStore((s) => s.initializePusherChannel);
   const userId = useUserStore((s) => s.user?.id);
+  const hasMore = usePostStore((s) => s.hasMore);
+  const setHasMore = usePostStore((s) => s.setHasMore);
 
   const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
 
 
   useEffect(() => {
-    setPosts([]);
     setSkip(0);
     setHasMore(true);
     loadMorePosts();
-  }, [refreshTrigger]);
+  }, [setHasMore]);
 
   const loadMorePosts = async () => {
     if (!hasMore || loading) return;
@@ -77,7 +77,7 @@ export default function PostList({ refreshTrigger }: PostListProps) {
     );
     observer.observe(bottomRef.current);
     return () => observer.disconnect();
-  }, [hasMore, loading, posts]);
+  }, [hasMore, loading]);
 
 
   return (

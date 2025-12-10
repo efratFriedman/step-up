@@ -6,8 +6,11 @@ import { toggleLike } from "@/services/client/postService";
 interface PostState {
   posts: IPost[];
   subscribedChannels: Set<string>;
+  hasMore: boolean;
   setPosts: (posts: IPost[]) => void;
   clearPosts: () => void;
+  setHasMore: (value: boolean) => void;
+
 
   updatePost: (id: string, updated: Partial<IPost>) => void;
   removePost: (id: string) => void;
@@ -23,10 +26,12 @@ interface PostState {
 export const usePostStore = create<PostState>((set, get) => ({
   posts: [],
   subscribedChannels: new Set(),
+  hasMore: true,
+
 
   setPosts: (posts) => set({ posts }),
   clearPosts: () => set({ posts: [] }),
-
+  setHasMore: (value: boolean) => set({ hasMore: value }),
   updatePost: (id, updated) =>
     set((state) => ({
       posts: state.posts.map((p) =>
