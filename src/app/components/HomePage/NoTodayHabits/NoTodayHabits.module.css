@@ -1,51 +1,56 @@
 .wrapper {
-  width: 100%;
-  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  color: #1d486a;
-  animation: fadeIn 0.6s ease;
+  padding: 30px 20px;
+  animation: fadeIn 0.5s ease;
 }
 
-/* Sunrise bounce */
-.illustration {
-  margin-bottom: 1rem;
-  animation: softBounce 2s infinite ease-in-out;
-}
-
-/* Soft glowing sun */
 .sun {
-  animation: glow 2.5s infinite ease-in-out;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
 }
 
 .title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  margin-bottom: 0.3rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1d486a;
+  margin-top: 20px;
 }
 
 .text {
-  font-size: 1rem;
-  color: #3d6f8e;
-  max-width: 240px;
+  opacity: 0.7;
+  margin-top: 8px;
+  max-width: 260px;
 }
 
-/* Fade-in */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+.hintWrapper {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
-/* Soft bounce */
-@keyframes softBounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-5px); }
+.arrowIcon {
+  animation: bounce 1.4s infinite ease-in-out;
 }
 
-/* Glow animation for sun */
-@keyframes glow {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.65; }
+.hintText {
+  font-size: 0.95rem;
+  color: #1d486a;
+  opacity: 0.8;
 }
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+

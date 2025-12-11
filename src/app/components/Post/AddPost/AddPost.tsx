@@ -104,12 +104,14 @@ export default function AddPost({ onClose }: AddPostProps) {
 
       const aiData = await aiResponse.json();
 
+      // BLOCKED
       if (!aiData.allowed) {
         setError("This post is not suitable for StepUp.");
         setIsLoading(false);
         return;
       }
 
+      // NEGATIVE → Suggest rewrite
       if (aiData.rewrite) {
         setAiSuggestion(aiData.rewrite);
         setIsLoading(false);
