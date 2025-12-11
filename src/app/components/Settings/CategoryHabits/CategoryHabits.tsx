@@ -123,7 +123,6 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
                     onGoBack={() => router.push('/settings')}
                 />
 
-                {/* Edit Modal */}
                 {editingHabit && (
                     <div className={styles.modalOverlay}>
                         <div className={styles.modalContent}>
@@ -138,6 +137,7 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
                             </div>
                             
                             <HabitForm
+                                isOpen={true} 
                                 categories={categories}
                                 onSubmit={handleUpdateHabit}
                                 onCancel={() => setEditingHabit(null)}
