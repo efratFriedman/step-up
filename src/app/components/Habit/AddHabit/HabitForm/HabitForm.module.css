@@ -1,48 +1,3 @@
-.formContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    background-color: white;
-    border-radius: 12px;
-    padding: 24px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
-    z-index: 1000;
-    opacity: 1;
-    transition: transform 0.4s ease, opacity 0.4s ease;
-}
-
-.formContainer.closing {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.92);
-}
-
-.error {
-    color: #e53e3e;
-    margin-top: 4px;
-    font-size: 12px;
-}
-
-.closeButton {
-    position: absolute;
-    top: 10px;
-    right: 16px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    font-weight: 700;
-    color: #006E8C;
-    cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.closeButton:hover {
-    transform: scale(1.2);
-    color: #004c60;
-}
-
 .overlay {
     position: fixed;
     inset: 0;
@@ -51,40 +6,61 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 999999;
-    opacity: 1;
-    transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
-}
-
-.overlay.closing {
-    opacity: 0;
-    backdrop-filter: blur(0);
-}
-
-.form {
+    padding: 16px;
+    z-index: 9999;
+    overflow-y: auto;
+  }
+  
+  .formContainer {
+    position: relative;
+    background-color: white;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    padding: 24px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+    overflow-y: auto;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    font-weight: 700;
+    color: #006e8c;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+  
+  .closeButton:hover {
+    transform: scale(1.2);
+    color: #004c60;
+  }
+  
+  .form {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    color: #111827;
-}
-
-.formGroup {
+  }
+  
+  .formGroup {
     display: flex;
     flex-direction: column;
     gap: 6px;
-}
-
-.label {
+  }
+  
+  .label {
     font-weight: 600;
-    color: #006E8C;
+    color: #006e8c;
     font-size: 14px;
-}
-
-.input,
-.textarea {
+  }
+  
+  .input,
+  .textarea {
     background-color: rgb(224, 244, 244);
     border: 1px solid transparent;
     border-radius: 10px;
@@ -93,53 +69,49 @@
     outline: none;
     width: 100%;
     box-sizing: border-box;
-    color: #006E8C;
+    color: #006e8c;
     transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
-}
-
-.textarea {
+  }
+  
+  .textarea {
     resize: vertical;
     min-height: 80px;
-}
-
-.input:focus,
-.textarea:focus {
+  }
+  
+  .input:focus,
+  .textarea:focus {
     border-color: #111827;
     box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06), 0 0 0 3px rgba(17, 24, 39, 0.06);
-}
-
-.submitButton,
-.cancelButton {
+  }
+  
+  .submitButton {
     padding: 12px;
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-}
-
-.submitButton {
-    background-color: #AAD1DA;
-    color: #006E8C;
+    background-color: #aad1da;
+    color: #006e8c;
     border: none;
     font-size: 16px;
     margin-top: 12px;
-}
-
-.cancelButton {
-    background-color: transparent;
-    color: #006E8C;
-    border: 1px solid transparent;
-    margin-top: 8px;
-}
-
-.cancelButton:hover {
-    background-color: #f3f4f6;
-    border-color: #e5e7eb;
-}
-
-@media (min-width: 640px) {
+  }
+  
+  .submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 400px) {
     .formContainer {
-        max-width: 500px;
-        padding: 32px;
+      padding: 16px;
     }
-}
+  }
+  
+  @media (min-width: 640px) {
+    .formContainer {
+      max-width: 500px;
+      padding: 32px;
+    }
+  }
+  

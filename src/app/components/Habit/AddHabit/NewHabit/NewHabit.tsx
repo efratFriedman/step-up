@@ -35,6 +35,7 @@ export default function NewHabit() {
 
   return (
     <HabitForm
+      isOpen={isHabitModalOpen}  
       categories={categories}
       onSubmit={handleAddHabit}
       onCancel={closeHabitModal}

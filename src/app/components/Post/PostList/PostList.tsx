@@ -9,7 +9,7 @@ import { IPost } from "@/interfaces/IPost";
 import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
-import { log } from "console";
+
 
 interface PostListProps {
   refreshTrigger?: number;
@@ -24,7 +24,6 @@ export default function PostList({ }: PostListProps) {
   const hasMore = usePostStore((s) => s.hasMore);
   const setHasMore = usePostStore((s) => s.setHasMore);
 
-  // const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -32,7 +31,6 @@ export default function PostList({ }: PostListProps) {
 
 
   useEffect(() => {
-    // setSkip(0);
     setHasMore(true);
     loadMorePosts();
   }, [setHasMore]);
@@ -63,13 +61,6 @@ export default function PostList({ }: PostListProps) {
       data.posts.forEach((post: IPost) => {
         initializePostChannel(String(post._id), pusher);
       });
-
-      // setSkip(prev => prev + data.posts.length);
-      // setHasMore(data.hasMore);
-      // if (data.posts.length === 0) {
-      //   setHasMore(false);
-      //   return;
-      // }
 
     } catch (error) {
       console.error("Failed to load posts:", error);
