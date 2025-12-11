@@ -1,175 +1,215 @@
-.postItem {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.2s ease;
-  }
-  
-  .postItem:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .profile {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  
-  .profileImg {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-left: 12px;
-  }
-  
-  .content {
-    width: 100%;
-  }
-  
-  .userName {
-    font-weight: 600;
-    font-size: 15px;
-    color: #1a1a1a;
-    margin: 0 0 8px 0;
-  }
-  
-  .postText {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #333;
-    margin: 0 0 12px 0;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
+/* PostItem.module.css - StepUp Brand Aligned */
 
-  .likeWrapper {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .likeIcon {
-    width: 26px;
-    height: 26px;
-    transition: 0.2s ease;
-  }
-  
-  .likesCount {
-    font-size: 16px;
-    font-weight: 500;
-  }
-  
-  
-  .mediaGrid {
-    display: grid;
-    gap: 8px;
-    margin-top: 12px;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .mediaGrid.single {
-    grid-template-columns: 1fr;
-  }
-  
-  .mediaGrid.double {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .mediaGrid.triple {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .mediaGrid.triple .media:first-child {
-    grid-column: 1 / -1;
-  }
-  
-  .mediaGrid.four {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .mediaGrid.multiple {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .media {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-    background: #f0f0f0;
-    min-height: 200px;
-    max-height: 500px;
-  }
-  
-  .mediaGrid.single .media {
-    max-height: 600px;
-  }
-  
-  .media[controls] {
-    background: #000;
-  }
-  
-  @media (max-width: 768px) {
-    .postItem {
-      padding: 12px;
-      border-radius: 8px;
-    }
-  
-    .profileImg {
-      width: 40px;
-      height: 40px;
-    }
-  
-    .userName {
-      font-size: 14px;
-    }
-  
-    .postText {
-      font-size: 14px;
-    }
-  
-    .media {
-      min-height: 150px;
-      max-height: 400px;
-    }
-  
-    .mediaGrid.multiple {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .postItem {
-      padding: 10px;
-    }
-  
-    .profileImg {
-      width: 36px;
-      height: 36px;
-    }
-  
-    .media {
-      min-height: 120px;
-      max-height: 300px;
-    }
-  }
-  .translateButton {
-  margin-top: 8px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  background-color: #e8e8e8;
-  border: none;
-  border-radius: 8px;
+.postItem {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(35, 87, 132, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.postItem:hover {
+  box-shadow: 0 4px 20px rgba(35, 87, 132, 0.12);
+}
+
+/* Profile Section */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #deeeef, #bcdbdf);
+}
+
+.profileImg {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #235784;
+  flex-shrink: 0;
+}
+
+.userName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #183c5c;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Content Section */
+.content {
+  padding: 0;
+}
+
+/* ⭐ FIXED SIZE MEDIA AREA (מונע קפיצות) */
+.mediaBox {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* ריבוע קבוע */
+  background: #f5f5f5;
+  position: relative;
+  overflow: hidden;
+}
+
+.mediaBox img,
+.mediaBox video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Post Text */
+.postText {
+  padding: 16px 16px 8px 16px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #183c5c;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Translate Button */
+.translateBtn {
+  background: transparent;
+  border: 1px solid #99c8ce;
+  color: #2e72ac;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 0 16px 12px 16px;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.translateBtn:hover:not(:disabled) {
+  background: #deeeef;
+  border-color: #2e72ac;
+}
+
+.translateBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ⭐ Like + Share Row */
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px 16px 16px;
+  margin-top: 4px;
+}
+
+/* Like Section */
+.likeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.2s ease;
   cursor: pointer;
 }
 
-.translateButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.likeIcon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.likeWrapper:hover .likeIcon {
+  transform: scale(1.1);
+}
+
+.likesCount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #183c5c;
+  user-select: none;
+}
+
+/* ⭐ Share Button */
+.shareButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #183c5c;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.shareButton:hover {
+  color: #2e72ac;
+}
+
+/* Mobile Optimization */
+@media (max-width: 480px) {
+  .postItem {
+    border-radius: 0;
+    margin-bottom: 12px;
+  }
+
+  .profile {
+    padding: 14px;
+  }
+
+  .profileImg {
+    width: 38px;
+    height: 38px;
+  }
+
+  .userName {
+    font-size: 14px;
+  }
+
+  .postText {
+    padding: 14px 14px 8px 14px;
+    font-size: 13px;
+  }
+
+  .translateBtn {
+    margin: 0 14px 10px 14px;
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+
+  .actionsRow {
+    padding: 10px 14px 14px 14px;
+  }
+}
+
+/* Tablet & Desktop */
+@media (min-width: 768px) {
+  .postItem {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .postItem {
+    border-radius: 20px;
+  }
+
+  .profile {
+    padding: 18px 20px;
+  }
+
+  .postText {
+    padding: 18px 20px 10px 20px;
+    font-size: 15px;
+  }
+
+  .translateBtn {
+    margin: 0 20px 14px 20px;
+  }
+
+  .actionsRow {
+    padding: 14px 20px 18px 20px;
+  }
 }

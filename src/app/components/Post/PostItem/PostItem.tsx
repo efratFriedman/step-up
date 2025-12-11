@@ -54,6 +54,8 @@ export default function PostItem({ post }: { post: IPost }) {
     }
   };
 
+ 
+
   return (
     <div className={styles.postItem}>
       <div className={styles.profile}>
@@ -67,20 +69,20 @@ export default function PostItem({ post }: { post: IPost }) {
 
       <div className={styles.content}>
         {post.media?.length > 0 && (
-          <Slider
-            items={post.media.map((item) => ({
-              url: item.url,
-              type: item.type,
-            }))}
-          />
+          <div className={styles.mediaBox}>
+            <Slider
+              items={post.media.map((item) => ({
+                url: item.url,
+                type: item.type,
+              }))}
+            />
+          </div>
         )}
 
-        {/* ⭐ NEW — הצגת תרגום או טקסט מקורי */}
         <p className={styles.postText}>
           {!translated || showOriginal ? post.content : translated}
         </p>
 
-        {/* ⭐ NEW — כפתור תרגום */}
         <button
           className={styles.translateBtn}
           onClick={handleTranslate}
@@ -95,20 +97,22 @@ export default function PostItem({ post }: { post: IPost }) {
               : "Translate"}
         </button>
 
-        <div
-          className={styles.likeWrapper}
-          onClick={onLike}
-          style={{
-            cursor: isOwnPost ? "not-allowed" : "pointer",
-            opacity: isOwnPost ? 0.5 : 1,
-          }}
-        >
-          <Heart
-            fill={liked ? "red" : "transparent"}
-            color={liked ? "red" : "black"}
-            className={styles.likeIcon}
-          />
-          <span className={styles.likesCount}>{likes}</span>
+        <div className={styles.actionsRow}>
+          <div
+            className={styles.likeWrapper}
+            onClick={onLike}
+            style={{
+              cursor: isOwnPost ? "not-allowed" : "pointer",
+              opacity: isOwnPost ? 0.5 : 1,
+            }}
+          >
+            <Heart
+              fill={liked ? "red" : "transparent"}
+              color={liked ? "red" : "black"}
+              className={styles.likeIcon}
+            />
+            <span className={styles.likesCount}>{likes}</span>
+          </div>
         </div>
       </div>
     </div>

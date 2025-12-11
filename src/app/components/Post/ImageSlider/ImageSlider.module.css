@@ -1,0 +1,102 @@
+/* ============================================
+   FILE: ImageSlider.module.css  
+   עיצוב לסליידר תמונות של פוסט
+   ============================================ */
+
+.sliderContainer {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  background-color: #bcdbdf;
+  overflow: hidden;
+}
+
+.sliderTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+.slide {
+  min-width: 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #bcdbdf, #deeeef);
+  font-size: 48px;
+  color: #99c8ce;
+}
+
+.sliderButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(35, 87, 132, 0.15);
+  color: #183c5c;
+  transition: background-color 0.2s ease;
+  z-index: 2;
+}
+
+.sliderButton:hover {
+  background-color: #ffffff;
+}
+
+.sliderButtonLeft {
+  left: 8px;
+}
+
+.sliderButtonRight {
+  right: 8px;
+}
+
+.sliderDots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+  cursor: pointer;
+}
+
+.dotActive {
+  background-color: #ffffff;
+  width: 8px;
+  height: 8px;
+}

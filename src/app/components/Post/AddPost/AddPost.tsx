@@ -25,8 +25,8 @@ export default function AddPost({ onClose }: AddPostProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null); 
-  const [generatedPost, setGeneratedPost] = useState<string | null>(null); 
+  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
+  const [generatedPost, setGeneratedPost] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [show, setShow] = useState(false);
@@ -36,7 +36,7 @@ export default function AddPost({ onClose }: AddPostProps) {
     if (isPostModalOpen) {
       setShow(true);
     } else {
-      const timeout = setTimeout(() => setShow(false), 300); // match CSS transition
+      const timeout = setTimeout(() => setShow(false), 300);
       return () => clearTimeout(timeout);
     }
   }, [isPostModalOpen]);
@@ -78,8 +78,15 @@ export default function AddPost({ onClose }: AddPostProps) {
     setIsLoading(true);
 
     try {
-      if (!aiSuggestion) {
+      // 🚨 מניעת שליחת פוסט ריק לגמרי — חייב להיות או טקסט או קבצים
+      if (content.trim() === "" && files.length === 0) {
+        setError("Please add text or upload media.");
+        setIsLoading(false);
+        return;
+      }
 
+      // אם אין aiSuggestion — נתיב רגיל
+      if (!aiSuggestion) {
         const mediaUrls = await Promise.all(
           files.map(async (file) => {
             if (file.size > 20 * 1024 * 1024)
@@ -110,8 +117,8 @@ export default function AddPost({ onClose }: AddPostProps) {
         return;
       }
 
-      const aiResponse =await filterPostAI(content, files.length > 0);
-
+      // נתיב עם ה-AI (פילטר + שכתוב)
+      const aiResponse = await filterPostAI(content, files.length > 0);
       const aiData = await aiResponse.json();
 
       if (!aiData.allowed) {
@@ -146,7 +153,6 @@ export default function AddPost({ onClose }: AddPostProps) {
         media: mediaUrls,
       });
 
-      
       setContent("");
       setFiles([]);
       setGeneratedPost(null);
@@ -154,7 +160,6 @@ export default function AddPost({ onClose }: AddPostProps) {
       setHasMore(true);
 
       (onClose || closePostModal)();
-
     } catch (err) {
       console.error(err);
       setError((err as Error).message || "Error adding post");
@@ -176,7 +181,7 @@ export default function AddPost({ onClose }: AddPostProps) {
           <div className={styles.aiSuggestionBox}>
             <h4>✨ Suggested post from AI:</h4>
             <p>{generatedPost}</p>
-  
+
             <button
               className={styles.useSuggestionButton}
               onClick={() => {
@@ -186,7 +191,7 @@ export default function AddPost({ onClose }: AddPostProps) {
             >
               Use this post
             </button>
-  
+
             <button
               className={styles.rejectSuggestionButton}
               onClick={() => setGeneratedPost(null)}
@@ -195,12 +200,12 @@ export default function AddPost({ onClose }: AddPostProps) {
             </button>
           </div>
         )}
-  
+
         {aiSuggestion && (
           <div className={styles.aiSuggestionBox}>
             <h4>✨ Improved wording the AI suggests:</h4>
             <p>{aiSuggestion}</p>
-  
+
             <button
               className={styles.useSuggestionButton}
               onClick={() => {
@@ -212,7 +217,7 @@ export default function AddPost({ onClose }: AddPostProps) {
             </button>
           </div>
         )}
-  
+
         <form onSubmit={handleSubmit} className={styles.addPostForm}>
           <button
             type="button"
@@ -221,9 +226,9 @@ export default function AddPost({ onClose }: AddPostProps) {
           >
             ×
           </button>
-  
+
           {error && <p className={styles.errorMessage}>❌ {error}</p>}
-  
+
           <textarea
             placeholder="Add comment..."
             value={content}
@@ -231,7 +236,7 @@ export default function AddPost({ onClose }: AddPostProps) {
             className={styles.contentTextArea}
             disabled={isLoading}
           />
-  
+
           <button
             type="button"
             className={styles.generateButton}
@@ -240,7 +245,7 @@ export default function AddPost({ onClose }: AddPostProps) {
           >
             {isGenerating ? "Generating..." : "✨ Generate Post"}
           </button>
-  
+
           <div className={styles.actionsContainer}>
             <label htmlFor="file-upload" className={styles.fileInputLabel}>
               <span className={styles.fileInputIcon}>🖼️</span>
@@ -257,7 +262,7 @@ export default function AddPost({ onClose }: AddPostProps) {
             />
             <PostMedia files={files} />
           </div>
-  
+
           <button
             type="submit"
             className={styles.submitButton}
@@ -269,6 +274,7 @@ export default function AddPost({ onClose }: AddPostProps) {
           >
             {isLoading ? "Uploading..." : "Upload Post"}
           </button>
+
           {aiSuggestion && (
             <p className={styles.disabledMessage}>
               Your post sounds a bit discouraging, so it can’t be published as-is 😊
@@ -280,5 +286,4 @@ export default function AddPost({ onClose }: AddPostProps) {
       </div>
     </div>
   );
-  
 }

@@ -113,8 +113,8 @@ export async function POST(req: Request) {
 
     const { userId, title, content, media } = body;
 
-    if (!userId || !content) {
-      console.log("Missing userId or content!");
+    if (!userId) {
+      console.log("Missing userId!");
       return NextResponse.json({ message: "Missing userId or content" }, { status: 400 });
     }
 
