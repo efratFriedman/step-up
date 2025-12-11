@@ -6,7 +6,7 @@ import { useUserStore } from "@/app/store/useUserStore";
 import { IPost, IUserPopulated } from "@/interfaces/IPost";
 import Slider from "../Slider/Slider";
 import styles from "./PostItem.module.css";
-import { Heart } from "lucide-react";
+import { Heart, UserRound } from "lucide-react";
 import { usePostStore } from "@/app/store/usePostStore";
 import { translateText } from "@/services/client/postService";
 
@@ -15,6 +15,7 @@ export default function PostItem({ post }: { post: IPost }) {
   const toggleLike = usePostStore((s) => s.toggleLikeAction);
 
   const user = post.userId as IUserPopulated;
+  const hasProfileImage = Boolean(user.profileImg);
 
   const liked = post.isLikedByCurrentUser;
   const likes = post.likesCount;
@@ -44,7 +45,6 @@ export default function PostItem({ post }: { post: IPost }) {
     setIsLoading(true);
 
     const res = await translateText(post.content, userLang);
-
     setIsLoading(false);
 
     if (res.translatedText) {
@@ -54,16 +54,26 @@ export default function PostItem({ post }: { post: IPost }) {
     }
   };
 
- 
-
   return (
     <div className={styles.postItem}>
       <div className={styles.profile}>
-        <img
-          src={user.profileImg || "/default-profile.png"}
-          alt={user.name}
-          className={styles.profileImg}
-        />
+        {hasProfileImage ? (
+          <img
+            src={user.profileImg}
+            alt={user.name}
+            className={styles.profileImg}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+              const fallback = e.currentTarget.nextElementSibling;
+              if (fallback) fallback.classList.add(styles.showIcon);
+            }}
+          />
+        ) :  <UserRound
+          className={`${styles.avatarIcon} ${
+            hasProfileImage ? styles.hiddenIcon : ""
+          }`}
+        />}
+
         <p className={styles.userName}>{user.name}</p>
       </div>
 
@@ -83,6 +93,7 @@ export default function PostItem({ post }: { post: IPost }) {
           {!translated || showOriginal ? post.content : translated}
         </p>
 
+        {/* ⭐ TRANSLATION BUTTON */}
         <button
           className={styles.translateBtn}
           onClick={handleTranslate}
@@ -91,10 +102,10 @@ export default function PostItem({ post }: { post: IPost }) {
           {isLoading
             ? "Translating..."
             : translated
-              ? showOriginal
-                ? "Show translation"
-                : "Show original"
-              : "Translate"}
+            ? showOriginal
+              ? "Show translation"
+              : "Show original"
+            : "Translate"}
         </button>
 
         <div className={styles.actionsRow}>
