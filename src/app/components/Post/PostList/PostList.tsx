@@ -9,7 +9,6 @@ import { IPost } from "@/interfaces/IPost";
 import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
-import { log } from "console";
 
 interface PostListProps {
   refreshTrigger?: number;
