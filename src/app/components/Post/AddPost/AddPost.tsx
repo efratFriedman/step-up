@@ -8,6 +8,7 @@ import { addPost } from "@/services/client/postService";
 import PostMedia from "../PostMedia/PostMedia";
 import styles from "./AddPost.module.css";
 import { usePostStore } from "@/app/store/usePostStore";
+import { filterPostAI, generatePostAI } from "@/services/client/habitsService";
 
 interface AddPostProps {
   onSuccess?: () => void;
@@ -49,14 +50,7 @@ export default function AddPost({ onClose }: AddPostProps) {
     setError(null);
 
     try {
-      const res = await fetch("/api/agent/posts/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea: content }),
-      });
-
-      const data = await res.json();
-
+      const data = await generatePostAI(content);
       if (data.post) {
         setGeneratedPost(data.post);
       } else {
@@ -78,31 +72,60 @@ export default function AddPost({ onClose }: AddPostProps) {
     setIsLoading(true);
 
     try {
-      // FILTER AI (checks tone + positivity)
-      const aiResponse = await fetch("/api/agent/posts/filter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      if (!aiSuggestion) {
+
+        // UPLOAD MEDIA
+        const mediaUrls = await Promise.all(
+          files.map(async (file) => {
+            if (file.size > 20 * 1024 * 1024)
+              throw new Error(`File ${file.name} too big.`);
+
+            const url = await uploadImageToCloudinary(file);
+
+            return {
+              url,
+              type: file.type.startsWith("video") ? "video" : "image",
+            };
+          })
+        );
+
+        await addPost({
+          userId: user.id,
           content,
-          hasMedia: files.length > 0,
-        }),
-      });
+          media: mediaUrls,
+        });
+
+        // RESET
+        setContent("");
+        setFiles([]);
+        setGeneratedPost(null);
+        setAiSuggestion(null);
+        setHasMore(true);
+
+        (onClose || closePostModal)();
+        return;
+      }
+
+      // ⭐ CASE 2 — CONTENT STILL NEEDS TO BE FILTERED
+      const aiResponse =await filterPostAI(content, files.length > 0);
 
       const aiData = await aiResponse.json();
 
+      // BLOCKED
       if (!aiData.allowed) {
         setError("This post is not suitable for StepUp.");
         setIsLoading(false);
         return;
       }
 
+      // NEGATIVE → Suggest rewrite
       if (aiData.rewrite) {
         setAiSuggestion(aiData.rewrite);
         setIsLoading(false);
         return;
       }
 
-      // UPLOAD MEDIA
+      // ⭐ FINAL CASE — FILTER PASSED AND NO REWRITE
       const mediaUrls = await Promise.all(
         files.map(async (file) => {
           if (file.size > 20 * 1024 * 1024)
@@ -131,6 +154,7 @@ export default function AddPost({ onClose }: AddPostProps) {
       setHasMore(true);
 
       (onClose || closePostModal)();
+
     } catch (err) {
       console.error(err);
       setError((err as Error).message || "Error adding post");
@@ -138,6 +162,7 @@ export default function AddPost({ onClose }: AddPostProps) {
       setIsLoading(false);
     }
   };
+
 
   // ----- UI -----
   return (
@@ -184,16 +209,15 @@ export default function AddPost({ onClose }: AddPostProps) {
             Use this wording
           </button>
 
-          <button
+          {/* <button
             className={styles.rejectSuggestionButton}
             onClick={() => setAiSuggestion(null)}
           >
             Keep my original text
-          </button>
+          </button> */}
         </div>
       )}
 
-      {/* ----- FORM ----- */}
       <form onSubmit={handleSubmit} className={styles.addPostForm}>
         <button
           type="button"
@@ -223,7 +247,6 @@ export default function AddPost({ onClose }: AddPostProps) {
           {isGenerating ? "Generating..." : "✨ Generate Post"}
         </button>
 
-        {/* ---- MEDIA INPUT ---- */}
         <div className={styles.actionsContainer}>
           <label htmlFor="file-upload" className={styles.fileInputLabel}>
             <span className={styles.fileInputIcon}>🖼️</span>
@@ -244,10 +267,23 @@ export default function AddPost({ onClose }: AddPostProps) {
         <button
           type="submit"
           className={styles.submitButton}
-          disabled={isLoading || (content.trim() === "" && files.length === 0)}
+          disabled={
+            isLoading ||
+            !!aiSuggestion ||
+            (content.trim() === "" && files.length === 0)
+          }
         >
           {isLoading ? "Uploading..." : "Upload Post"}
         </button>
+        {aiSuggestion && (
+          <p className={styles.disabledMessage}>
+            Your post sounds a bit discouraging, so it can’t be published as-is 😊
+            You’re welcome to use the improved version suggested by the system,
+            or edit your text into something more positive and uplifting.
+          </p>
+        )}
+
+
       </form>
     </div>
   );

@@ -9,7 +9,6 @@ import { IPost } from "@/interfaces/IPost";
 import PostItem from "../PostItem/PostItem";
 import Loader from "../../Loader/Loader";
 import styles from "./PostList.module.css";
-import { log } from "console";
 
 interface PostListProps {
   refreshTrigger?: number;
@@ -63,13 +62,6 @@ export default function PostList({ }: PostListProps) {
       data.posts.forEach((post: IPost) => {
         initializePostChannel(String(post._id), pusher);
       });
-
-      // setSkip(prev => prev + data.posts.length);
-      // setHasMore(data.hasMore);
-      // if (data.posts.length === 0) {
-      //   setHasMore(false);
-      //   return;
-      // }
 
     } catch (error) {
       console.error("Failed to load posts:", error);

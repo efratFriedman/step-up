@@ -175,3 +175,10 @@
   border: none;
   cursor: pointer;
 }
+.disabledMessage {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #4a6eb1;
+  text-align: center;
+  line-height: 1.4;
+}
