@@ -69,7 +69,6 @@ export async function GET(request: Request) {
       { $unwind: "$user" }
     ]);
 
-    // צריך להחזיר את אותו מבנה כמו קודם
     const postsWithLikeStatus = posts.map((post: any) => {
       post.userId = {
         _id: post.user._id,
@@ -93,7 +92,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       posts: postsWithLikeStatus,
-      hasMore: true   // תמיד יש עוד
+      hasMore: true   
     });
 
   } catch (err: any) {

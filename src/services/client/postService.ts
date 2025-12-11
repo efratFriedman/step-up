@@ -16,13 +16,7 @@ export async function addPost(postData: any) {
   return res.json();
 }
 
-// export async function getPostsPaginated(skip: number, limit: number) {
-//   const res = await fetch(`/api/posts?skip=${skip}&limit=${limit}`, {
-//     credentials: "include",
-//   });
-//   if (!res.ok) throw new Error("Failed to fetch paginated posts");
-//   return res.json();
-// }
+
 
 export async function getPostsPaginated(skip: number, limit: number) {
   const res = await fetch(`/api/posts?&limit=${limit}`, {
@@ -83,6 +77,16 @@ export async function getPersonalPosts() {
     const error = await res.json();
     throw new Error(error.message || "Failed to fetch posts");
   }
+
+  return res.json();
+}
+
+export async function translateText(text: string, targetLang: string) {
+  const res = await fetch("/api/agent/translate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, targetLang }),
+  });
 
   return res.json();
 }

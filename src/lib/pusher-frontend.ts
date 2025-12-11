@@ -9,18 +9,14 @@ if (!PUSHER_KEY || !PUSHER_CLUSTER) {
 
 let pusherInstance: any = null;
 export const getPusherClient = (userId?:string) => {
-    // 1. אם המופע כבר קיים (Singleton), החזר אותו מיד
     if (pusherInstance) {
         return pusherInstance;
     }
 
-    // 2. אם המפתח חסר, אין טעם להמשיך
     if (!PUSHER_KEY) {
-        // יכול להיות undefined או לזרוק שגיאה
         console.error("Pusher key is missing. Cannot initialize client.");
         return undefined;
     }
-    // 3. יצירת המופע בפעם הראשונה ושמירתו
     pusherInstance = new Pusher(PUSHER_KEY, {
         cluster: PUSHER_CLUSTER!,
         authEndpoint: "/api/pusher/auth",

@@ -20,26 +20,23 @@ export default function AddPost({ onClose }: AddPostProps) {
   const closePostModal = useModalPostStore((state) => state.closePostModal);
   const user = useUserStore((state) => state.user);
 
-  // ----- STATE -----
   const [content, setContent] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null); // FILTER suggestion
-  const [generatedPost, setGeneratedPost] = useState<string | null>(null); // GENERATE Post AI
+  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null); 
+  const [generatedPost, setGeneratedPost] = useState<string | null>(null); 
   const [isGenerating, setIsGenerating] = useState(false);
 
   const setHasMore = usePostStore((s) => s.setHasMore);
 
   if (!isPostModalOpen) return null;
 
-  // ----- FILE HANDLING -----
   const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setFiles(Array.from(e.target.files));
   };
 
-  // ----- GENERATE POST -----
   const handleGeneratePost = async () => {
     if (!content.trim()) {
       setError("Write a short idea first so I can build a post ✨");
@@ -63,7 +60,6 @@ export default function AddPost({ onClose }: AddPostProps) {
     }
   };
 
-  // ----- SUBMIT POST -----
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.id) return;
@@ -74,7 +70,6 @@ export default function AddPost({ onClose }: AddPostProps) {
     try {
       if (!aiSuggestion) {
 
-        // UPLOAD MEDIA
         const mediaUrls = await Promise.all(
           files.map(async (file) => {
             if (file.size > 20 * 1024 * 1024)
@@ -95,7 +90,6 @@ export default function AddPost({ onClose }: AddPostProps) {
           media: mediaUrls,
         });
 
-        // RESET
         setContent("");
         setFiles([]);
         setGeneratedPost(null);
@@ -106,7 +100,6 @@ export default function AddPost({ onClose }: AddPostProps) {
         return;
       }
 
-      // ⭐ CASE 2 — CONTENT STILL NEEDS TO BE FILTERED
       const aiResponse =await filterPostAI(content, files.length > 0);
 
       const aiData = await aiResponse.json();
@@ -125,7 +118,6 @@ export default function AddPost({ onClose }: AddPostProps) {
         return;
       }
 
-      // ⭐ FINAL CASE — FILTER PASSED AND NO REWRITE
       const mediaUrls = await Promise.all(
         files.map(async (file) => {
           if (file.size > 20 * 1024 * 1024)
@@ -146,7 +138,7 @@ export default function AddPost({ onClose }: AddPostProps) {
         media: mediaUrls,
       });
 
-      // RESET
+      
       setContent("");
       setFiles([]);
       setGeneratedPost(null);
@@ -164,11 +156,9 @@ export default function AddPost({ onClose }: AddPostProps) {
   };
 
 
-  // ----- UI -----
   return (
     <div className={styles.addPostModal}>
 
-      {/* ----- GENERATED POST SUGGESTION ----- */}
       {generatedPost && (
         <div className={styles.aiSuggestionBox}>
           <h4>✨ Suggested post from AI:</h4>
@@ -193,7 +183,6 @@ export default function AddPost({ onClose }: AddPostProps) {
         </div>
       )}
 
-      {/* ----- FILTER AI SUGGESTION (Rewrite) ----- */}
       {aiSuggestion && (
         <div className={styles.aiSuggestionBox}>
           <h4>✨ Improved wording the AI suggests:</h4>
@@ -208,13 +197,6 @@ export default function AddPost({ onClose }: AddPostProps) {
           >
             Use this wording
           </button>
-
-          {/* <button
-            className={styles.rejectSuggestionButton}
-            onClick={() => setAiSuggestion(null)}
-          >
-            Keep my original text
-          </button> */}
         </div>
       )}
 
@@ -237,7 +219,6 @@ export default function AddPost({ onClose }: AddPostProps) {
           disabled={isLoading}
         />
 
-        {/* ---- GENERATE BUTTON ---- */}
         <button
           type="button"
           className={styles.generateButton}

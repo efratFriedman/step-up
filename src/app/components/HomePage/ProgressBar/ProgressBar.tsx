@@ -24,7 +24,7 @@ export default function ProgressBar() {
 
     const SVG_SIZE = 120; 
     const STROKE_WIDTH = 10;
-    const CIRCLE_RADIUS = (SVG_SIZE / 2) - (STROKE_WIDTH / 2); // 55
+    const CIRCLE_RADIUS = (SVG_SIZE / 2) - (STROKE_WIDTH / 2); 
     const circumference = 2 * Math.PI * CIRCLE_RADIUS; 
     const dashOffset = circumference * (1 - percent / 100);
     return (

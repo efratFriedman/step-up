@@ -4,10 +4,10 @@ export async function getInsights() {
         headers: { "Content-Type": "application/json" },
         credentials: "include",
     });
-    
+
     if (!res.ok) {
         throw new Error("Failed to fetch insights");
     }
-    
+
     return res.json();
 }

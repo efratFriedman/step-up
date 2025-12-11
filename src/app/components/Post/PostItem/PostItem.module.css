@@ -159,3 +159,17 @@
       max-height: 300px;
     }
   }
+  .translateButton {
+  margin-top: 8px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  background-color: #e8e8e8;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.translateButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

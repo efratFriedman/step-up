@@ -25,7 +25,6 @@ export async function PUT(req: Request, { params }: any) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    // Validate content
     if (content !== undefined && content.trim() === "") {
       return NextResponse.json(
         { message: "Content cannot be empty" },
@@ -33,7 +32,6 @@ export async function PUT(req: Request, { params }: any) {
       );
     }
 
-    // Update fields
     if (content !== undefined) post.content = content;
     if (media !== undefined) post.media = media;
 

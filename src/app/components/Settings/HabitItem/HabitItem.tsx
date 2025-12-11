@@ -27,25 +27,7 @@ export default function HabitItem({
                   .padStart(2, "0")}`
         : "No reminder";
 
-    // const handleTitleClick = (e: React.MouseEvent) => {
-    //     e.stopPropagation();
-    //     onCloseMenu(); 
-    //     if (onEdit) {
-    //         onEdit();
-    //     }
-    // };
-
-    // const handleCardClick = (e: React.MouseEvent) => {
-    //     const target = e.target as HTMLElement;
-    //     if (target.closest(`.${styles.menuWrapper}`) || target.closest(`.${styles.title}`)) {
-    //         return;
-    //     }
-    //     onCloseMenu(); 
-    //     if (onEdit) {
-    //         onEdit();
-    //     }
-    // };
-
+    
     const handleMenuClick = (e: React.MouseEvent) => {
         e.stopPropagation();
         onToggleMenu();

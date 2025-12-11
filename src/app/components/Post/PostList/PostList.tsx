@@ -23,7 +23,6 @@ export default function PostList({ }: PostListProps) {
   const hasMore = usePostStore((s) => s.hasMore);
   const setHasMore = usePostStore((s) => s.setHasMore);
 
-  // const [skip, setSkip] = useState(0);
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -31,7 +30,6 @@ export default function PostList({ }: PostListProps) {
 
 
   useEffect(() => {
-    // setSkip(0);
     setHasMore(true);
     loadMorePosts();
   }, [setHasMore]);

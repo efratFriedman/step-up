@@ -10,7 +10,7 @@ export default function PostsPanel() {
   const { posts, setPosts, removePost } = usePostStore();
 
   const [postToDelete, setPostToDelete] = useState<any>(null);
-  const [postToEdit, setPostToEdit] = useState<any>(null); // ← חדש
+  const [postToEdit, setPostToEdit] = useState<any>(null); 
   const [confirmText, setConfirmText] = useState("");
 
   useEffect(() => {
