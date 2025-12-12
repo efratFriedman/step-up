@@ -5,9 +5,8 @@ import "./globals.css";
 import ProfileSidebarWrapper from "./components/ProfileSidebarWrapper/ProfileSidebarWrapper";
 import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NewHabit from "./components/Habit/AddHabit/NewHabit/NewHabit";
-// import LoginForm from "./components/User/LoginForm/LoginForm";
-// import LandingPage from "./components/LandingPage/LandingPage";
 import PageTransitionWrapper from "./components/PageTransitionWrapper/PageTransitionWrapper";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -30,7 +29,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }:
-   { children: React.ReactNode }) {
+  { children: React.ReactNode }) {
 
 
   return (
@@ -38,15 +37,22 @@ export default function RootLayout({ children }:
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster
+          toastOptions={{
+            style: {
+              zIndex: 999999,
+            },
+          }}
+        />
         <ProfileSidebarWrapper />
         <PageTransitionWrapper>
           {children}
         </PageTransitionWrapper>
-        <NewHabit/>
+        <NewHabit />
         <footer>
           <BottomNavbar />
         </footer>
-        
+
       </body>
     </html>
   );

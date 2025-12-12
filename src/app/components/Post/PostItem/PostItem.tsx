@@ -5,10 +5,11 @@ import { useState } from "react";
 import { useUserStore } from "@/app/store/useUserStore";
 import { IPost, IUserPopulated } from "@/interfaces/IPost";
 import Slider from "../Slider/Slider";
-import styles from "./PostItem.module.css";
+import styles from "@/app/components/Post/PostItem/PostItem.module.css";
 import { Heart, UserRound } from "lucide-react";
 import { usePostStore } from "@/app/store/usePostStore";
 import { translateText } from "@/services/client/postService";
+import toast from "react-hot-toast";
 
 export default function PostItem({ post }: { post: IPost }) {
   const currentUser = useUserStore((state) => state.user);
@@ -50,7 +51,7 @@ export default function PostItem({ post }: { post: IPost }) {
     if (res.translatedText) {
       setTranslated(res.translatedText);
     } else {
-      alert("Translation temporarily unavailable.");
+      toast.error("Translation temporarily unavailable.");
     }
   };
 

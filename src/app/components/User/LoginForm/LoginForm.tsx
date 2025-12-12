@@ -8,6 +8,7 @@ import { useUserStore } from "@/app/store/useUserStore";
 import { mapUserToClient } from "@/utils/mapUser";
 import { loginService, googleLoginService } from "@/services/client/authService";
 import { ROUTES } from "@/config/routes";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -50,7 +51,7 @@ export default function LoginForm() {
 
       if (ok) {
         setUser(mapUserToClient(data.user));
-        alert(data.message);
+        toast.success(data.message)
         router.push(ROUTES.HOME);
       }
       else {

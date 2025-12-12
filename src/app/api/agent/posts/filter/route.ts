@@ -15,36 +15,38 @@ export async function POST(req: Request) {
         const { content, hasMedia } = await req.json();
 
         if (!content && !hasMedia) {
-            return NextResponse.json(
-                { allowed: false, reason: "Post is empty", rewrite: null },
-                { status: 400 }
-            );
+            return NextResponse.json({
+                allowed: false,
+                reason: "empty",
+                rewrite: null,
+            });
         }
 
-
         const prompt = `
-   You are an AI moderation agent for a habit-building community app called StepUp.
+You are an AI moderation agent for a habit-building community app called StepUp.
 
-Your tasks:
-1. Check if the post is RELEVANT to self-improvement, habits, progress, mindset, challenges, or achievements.
-2. If the tone is overly negative:
-    - allowed= false
-    - reason= "negative tone"
-    - rewrite= improved motivational version
-3. If irrelevant → allowed = false + reason.
-4. If relevant → allowed = true.
-5. If rewritten → include "rewrite" field.
-6. If no change needed → rewrite = null.
-7. If media exists without text → allowed = true and rewrite = null.
+CLASSIFICATION RULES:
+1. If the post is about habits, progress, mindset, motivation, challenges, or achievements → allowed = true, rewrite = null.
+
+2. If the post has a negative tone (self-doubt, hopelessness, attacks on self, discouragement):
+   allowed = true
+   reason = "negative"
+   rewrite = a positive, supportive version in the SAME LANGUAGE.
+
+3. If the post is irrelevant (news, gossip, politics, unrelated opinions):
+   allowed = false
+   reason = "irrelevant"
+   rewrite = null
+
+4. If media exists without text → allowed = true, rewrite = null.
 
 LANGUAGE RULES:
-- Detect the user's dominant language from their post.
+- Detect the user’s language.
 - Respond ONLY in that language.
-- Do NOT switch languages.
-- Do NOT translate the content.
-- If rewriting, rewrite using the SAME language the user wrote in.
+- Never switch languages.
+- Rewrite must be fully in the same language.
 
-Return ONLY JSON in this exact format:
+Return ONLY valid JSON:
 {
   "allowed": boolean,
   "reason": string | null,
@@ -53,8 +55,8 @@ Return ONLY JSON in this exact format:
 
 Post content:
 """${content || ""}"""
-Media attached: ${hasMedia ? "YES" : "NO"}
-   `
+Media: ${hasMedia ? "YES" : "NO"}
+`;
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -72,17 +74,14 @@ Media attached: ${hasMedia ? "YES" : "NO"}
         const jsonString = extractJSON(raw);
         if (!jsonString) {
             return NextResponse.json(
-                { error: "Invalid JSON from AI" },
+                { error: "Invalid JSON output" },
                 { status: 500 }
             );
         }
 
-        const aiData = JSON.parse(jsonString);
-
-        return NextResponse.json(aiData);
-    }
-    catch (err: any) {
-        console.error("AI Filter Error:", err);
+        return NextResponse.json(JSON.parse(jsonString));
+    } catch (err) {
+        console.error("FILTER ERROR", err);
         return NextResponse.json(
             {
                 allowed: true,

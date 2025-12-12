@@ -1,16 +1,19 @@
-/* ===== Overlay (מסך אפור רקע) ===== */
+/* AddPost.module.css - StepUp Brand Design */
+
+/* Modal Overlay */
 .addPostModal {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(2px);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(24, 60, 92, 0.7);
+  backdrop-filter: blur(8px);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  z-index: 9999;
   padding: 16px;
-  overflow-y: auto;
-  z-index: 1000;
-  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
@@ -20,93 +23,229 @@
 
 .addPostModal.hide {
   opacity: 0;
+  pointer-events: none;
 }
 
-/* ===== Modal Wrapper אנימציית כניסה ===== */
+/* Modal Container */
 .modal {
+  background: #ffffff;
+  border-radius: 20px;
   width: 100%;
-  max-width: 600px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.slideIn {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.slideOut {
-  transform: translateY(-30px);
-  opacity: 0;
-}
-
-/* ===== תיבת הטופס של הפוסט ===== */
-.addPostForm {
-  background-color: var(--color-background-card, #ffffff);
-  border: 1px solid var(--color-border, #e0e0e0);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  width: 100%;
+  max-width: 520px;
   max-height: 90vh;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  box-shadow: 0 20px 60px rgba(35, 87, 132, 0.3);
   position: relative;
-
-  transform: scale(0.9);
-  opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.addPostModal.show .addPostForm {
-  transform: scale(1);
-  opacity: 1;
+.modal.slideIn {
+  transform: translateY(0) scale(1);
 }
 
+.modal.slideOut {
+  transform: translateY(20px) scale(0.95);
+}
 
+/* Close Button */
 .closeButton {
   position: absolute;
-  top: 0;
-  right: 12px;
-  background: none;
+  top: 16px;
+  right: 16px;
+  background: #deeeef;
   border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 24px;
+  color: #183c5c;
   cursor: pointer;
-  color: #333;
+  transition: all 0.2s ease;
   z-index: 10;
-  font-weight: bold;
-  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .closeButton:hover {
-  transform: scale(1.2);
-  color: #007bff;
+  background: #bcdbdf;
+  transform: rotate(90deg);
 }
 
-.contentTextArea {
-  margin-top: 5%;
-  width: 100%;
-  min-height: 100px;
-  padding: 20px;
-  border: 1px solid var(--color-input-border, #ccc);
-  border-radius: 8px;
+/* AI Suggestion Box */
+.aiSuggestionBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #bcdbdf 0%, #deeeef 100%);
+  border: 2px solid #99c8ce;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 0;
+  max-width: 480px;
+  width: calc(100% - 32px);
+  box-shadow: 0 20px 60px rgba(35, 87, 132, 0.4);
+  z-index: 10001;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.aiSuggestionBox h4 {
+  margin: 0 0 12px 0;
+  color: #235784;
   font-size: 16px;
-  resize: vertical;
-  outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiSuggestionBox p {
+  color: #183c5c;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+}
+
+.useSuggestionButton {
+  background: linear-gradient(135deg, #235784, #2e72ac);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.useSuggestionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(35, 87, 132, 0.3);
+}
+
+.rejectSuggestionButton {
+  background: transparent;
+  color: #183c5c;
+  border: 2px solid #99c8ce;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rejectSuggestionButton:hover {
+  background: #deeeef;
+  border-color: #235784;
+}
+
+/* Form */
+.addPostForm {
+  padding: 24px;
+}
+
+/* Error Message */
+.errorMessage {
+  background: linear-gradient(135deg, #ff6b6b, #ff8787);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Textarea */
+.contentTextArea {
+  width: 100%;
+  min-height: 140px;
+  padding: 16px;
+  border: 2px solid #bcdbdf;
+  border-radius: 16px;
+  font-size: 15px;
   font-family: inherit;
+  color: #183c5c;
+  resize: vertical;
+  transition: all 0.2s ease;
+  background: #deeeef;
+  margin-bottom: 16px;
 }
 
 .contentTextArea:focus {
-  border-color: var(--color-primary, #007bff);
-  box-shadow: 0 0 0 3px var(--color-primary-light, rgba(0, 123, 255, 0.2));
+  outline: none;
+  border-color: #2e72ac;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(46, 114, 172, 0.1);
 }
 
 .contentTextArea::placeholder {
-  color: var(--color-placeholder, #999);
+  color: #99c8ce;
 }
 
+.contentTextArea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Generate Button */
+.generateButton {
+  width: 100%;
+  background: linear-gradient(135deg, #bcdbdf, #99c8ce);
+  color: #235784;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.generateButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(153, 200, 206, 0.4);
+}
+
+.generateButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Actions Container */
+.actionsContainer {
+  margin-bottom: 16px;
+}
+
+/* File Input */
 .fileInput {
   display: none;
 }
@@ -115,132 +254,123 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 15px;
-  background-color: var(--color-secondary-button, #f0f0f0);
-  color: var(--color-secondary-text, #333);
-  border-radius: 20px;
-  cursor: pointer;
+  padding: 12px 20px;
+  background: #deeeef;
+  color: #235784;
+  border-radius: 12px;
+  border: 2px solid #bcdbdf;
   font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  user-select: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
 }
 
 .fileInputLabel:hover {
-  background-color: var(--color-secondary-button-hover, #e0e0e0);
+  background: #bcdbdf;
+  border-color: #99c8ce;
+  transform: translateY(-1px);
 }
 
 .fileInputIcon {
   font-size: 18px;
-  line-height: 1;
 }
 
+/* Submit Button */
 .submitButton {
-  background-color: var(--color-primary, #007bff);
-  color: #ffffff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  margin-top: 10px;
   width: 100%;
+  background: linear-gradient(135deg, #235784, #2e72ac);
+  color: white;
+  border: none;
+  padding: 16px 20px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(35, 87, 132, 0.2);
 }
 
-.submitButton:hover {
-  background-color: var(--color-primary-dark, #0056b3);
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(35, 87, 132, 0.3);
 }
 
 .submitButton:disabled {
-  background-color: var(--color-disabled, #a0c9f1);
+  background: linear-gradient(135deg, #99c8ce, #bcdbdf);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
   opacity: 0.7;
 }
 
-.generateButton {
-  margin: 8px 0;
-  background: #3dd2cc;
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.generateButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.actionsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-.errorMessage {
-  color: var(--color-error, #dc3545);
-  font-size: 14px;
-  text-align: center;
-}
-
-.aiSuggestionBox {
-  background: #eef9ff;
-  padding: 1rem;
+/* Disabled Message */
+.disabledMessage {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fff5e6, #ffe6cc);
+  border-left: 4px solid #2e72ac;
   border-radius: 12px;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  animation: fadeIn 0.3s ease;
+  color: #183c5c;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.useSuggestionButton {
-  background: #3dd2cc;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  margin-right: 8px;
-  cursor: pointer;
-}
-
-.rejectSuggestionButton {
-  background: transparent;
-  border: 1px solid #aaa;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Responsive Design - Mobile First */
 @media (max-width: 480px) {
+  .modal {
+    border-radius: 20px 20px 0 0;
+    max-height: 95vh;
+  }
+
   .addPostForm {
-    padding: 16px;
-    max-width: 100%;
+    padding: 20px 16px;
+  }
+
+  .aiSuggestionBox {
+    max-width: calc(100% - 32px);
+    padding: 20px;
   }
 
   .contentTextArea {
-    min-height: 80px;
+    min-height: 120px;
+    font-size: 14px;
   }
 
-  .submitButton,
-  .generateButton,
-  .fileInputLabel {
-    font-size: 14px;
-    padding: 10px;
+  .useSuggestionButton,
+  .rejectSuggestionButton {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
   }
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .modal {
+    max-height: 85vh;
+  }
+
+  .contentTextArea {
+    min-height: 160px;
+  }
+}
+
+/* Smooth scrollbar for modal */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: #deeeef;
+  border-radius: 0 20px 20px 0;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #99c8ce;
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: #235784;
 }

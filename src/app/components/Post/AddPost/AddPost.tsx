@@ -8,7 +8,7 @@ import { addPost } from "@/services/client/postService";
 import PostMedia from "../PostMedia/PostMedia";
 import styles from "./AddPost.module.css";
 import { usePostStore } from "@/app/store/usePostStore";
-import { filterPostAI, generatePostAI } from "@/services/client/habitsService";
+import { filterPostAI, generatePostAI } from "@/services/client/aiPostService";
 
 interface AddPostProps {
   onSuccess?: () => void;
@@ -16,9 +16,9 @@ interface AddPostProps {
 }
 
 export default function AddPost({ onClose }: AddPostProps) {
-  const isPostModalOpen = useModalPostStore((state) => state.isPostModalOpen);
-  const closePostModal = useModalPostStore((state) => state.closePostModal);
-  const user = useUserStore((state) => state.user);
+  const isPostModalOpen = useModalPostStore((s) => s.isPostModalOpen);
+  const closePostModal = useModalPostStore((s) => s.closePostModal);
+  const user = useUserStore((s) => s.user);
 
   const [content, setContent] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -29,13 +29,15 @@ export default function AddPost({ onClose }: AddPostProps) {
   const [generatedPost, setGeneratedPost] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // ⭐ האם הפוסט כבר אושר בסינון AI?
+  const [wasApprovedByAI, setWasApprovedByAI] = useState(false);
+
   const [show, setShow] = useState(false);
   const setHasMore = usePostStore((s) => s.setHasMore);
 
   useEffect(() => {
-    if (isPostModalOpen) {
-      setShow(true);
-    } else {
+    if (isPostModalOpen) setShow(true);
+    else {
       const timeout = setTimeout(() => setShow(false), 300);
       return () => clearTimeout(timeout);
     }
@@ -47,9 +49,36 @@ export default function AddPost({ onClose }: AddPostProps) {
     if (e.target.files) setFiles(Array.from(e.target.files));
   };
 
+  const uploadMedia = async () => {
+    return Promise.all(
+      files.map(async (file) => {
+        if (file.size > 20 * 1024 * 1024)
+          throw new Error(`File ${file.name} too big.`);
+
+        const url = await uploadImageToCloudinary(file);
+
+        return {
+          url,
+          type: file.type.startsWith("video") ? "video" : "image",
+        };
+      })
+    );
+  };
+
+  const reset = () => {
+    setContent("");
+    setFiles([]);
+    setAiSuggestion(null);
+    setGeneratedPost(null);
+    setWasApprovedByAI(false);
+    setHasMore(true);
+    (onClose || closePostModal)();
+  };
+
+  // ⭐ Generate inspirational post
   const handleGeneratePost = async () => {
     if (!content.trim()) {
-      setError("Write a short idea first so I can build a post ✨");
+      setError("Write a short idea first ✨");
       return;
     }
 
@@ -58,11 +87,8 @@ export default function AddPost({ onClose }: AddPostProps) {
 
     try {
       const data = await generatePostAI(content);
-      if (data.post) {
-        setGeneratedPost(data.post);
-      } else {
-        setError("Failed to generate post.");
-      }
+      if (data.post) setGeneratedPost(data.post);
+      else setError("Failed to generate post.");
     } catch {
       setError("Failed to generate post.");
     } finally {
@@ -70,6 +96,7 @@ export default function AddPost({ onClose }: AddPostProps) {
     }
   };
 
+  // ⭐ MAIN SUBMIT HANDLER
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.id) return;
@@ -78,48 +105,23 @@ export default function AddPost({ onClose }: AddPostProps) {
     setIsLoading(true);
 
     try {
-      // 🚨 מניעת שליחת פוסט ריק לגמרי — חייב להיות או טקסט או קבצים
-      if (content.trim() === "" && files.length === 0) {
+      // ❌ מניעת פוסט ריק
+      if (!content.trim() && files.length === 0) {
         setError("Please add text or upload media.");
         setIsLoading(false);
         return;
       }
 
-      // אם אין aiSuggestion — נתיב רגיל
-      if (!aiSuggestion) {
-        const mediaUrls = await Promise.all(
-          files.map(async (file) => {
-            if (file.size > 20 * 1024 * 1024)
-              throw new Error(`File ${file.name} too big.`);
-
-            const url = await uploadImageToCloudinary(file);
-
-            return {
-              url,
-              type: file.type.startsWith("video") ? "video" : "image",
-            };
-          })
-        );
-
-        await addPost({
-          userId: user.id,
-          content,
-          media: mediaUrls,
-        });
-
-        setContent("");
-        setFiles([]);
-        setGeneratedPost(null);
-        setAiSuggestion(null);
-        setHasMore(true);
-
-        (onClose || closePostModal)();
+      // ⭐ CASE 1 — כבר עבר סינון AI → מעלים מיד
+      if (wasApprovedByAI) {
+        const mediaUrls = await uploadMedia();
+        await addPost({ userId: user.id, content, media: mediaUrls });
+        reset();
         return;
       }
 
-      // נתיב עם ה-AI (פילטר + שכתוב)
-      const aiResponse = await filterPostAI(content, files.length > 0);
-      const aiData = await aiResponse.json();
+      // ⭐ CASE 2 — סינון AI ראשון
+      const aiData = await filterPostAI(content, files.length > 0);
 
       if (!aiData.allowed) {
         setError("This post is not suitable for StepUp.");
@@ -127,39 +129,19 @@ export default function AddPost({ onClose }: AddPostProps) {
         return;
       }
 
+      // ⭐ הצעת שכתוב
       if (aiData.rewrite) {
         setAiSuggestion(aiData.rewrite);
         setIsLoading(false);
         return;
       }
 
-      const mediaUrls = await Promise.all(
-        files.map(async (file) => {
-          if (file.size > 20 * 1024 * 1024)
-            throw new Error(`File ${file.name} too big.`);
+      // ⭐ הפוסט מאושר → מעלים
+      const mediaUrls = await uploadMedia();
+      await addPost({ userId: user.id, content, media: mediaUrls });
 
-          const url = await uploadImageToCloudinary(file);
-
-          return {
-            url,
-            type: file.type.startsWith("video") ? "video" : "image",
-          };
-        })
-      );
-
-      await addPost({
-        userId: user.id,
-        content: aiData.rewrite || content,
-        media: mediaUrls,
-      });
-
-      setContent("");
-      setFiles([]);
-      setGeneratedPost(null);
-      setAiSuggestion(null);
-      setHasMore(true);
-
-      (onClose || closePostModal)();
+      setWasApprovedByAI(true);
+      reset();
     } catch (err) {
       console.error(err);
       setError((err as Error).message || "Error adding post");
@@ -169,17 +151,13 @@ export default function AddPost({ onClose }: AddPostProps) {
   };
 
   return (
-    <div
-      className={`${styles.addPostModal} ${isPostModalOpen ? styles.show : styles.hide}`}
-    >
-      <div
-        className={`${styles.modal} ${
-          isPostModalOpen ? styles.slideIn : styles.slideOut
-        }`}
-      >
+    <div className={`${styles.addPostModal} ${isPostModalOpen ? styles.show : styles.hide}`}>
+      <div className={`${styles.modal} ${isPostModalOpen ? styles.slideIn : styles.slideOut}`}>
+
+        {/* ⭐ GENERATED POST */}
         {generatedPost && (
           <div className={styles.aiSuggestionBox}>
-            <h4>✨ Suggested post from AI:</h4>
+            <h4>✨ Suggested post:</h4>
             <p>{generatedPost}</p>
 
             <button
@@ -187,30 +165,30 @@ export default function AddPost({ onClose }: AddPostProps) {
               onClick={() => {
                 setContent(generatedPost);
                 setGeneratedPost(null);
+                setWasApprovedByAI(true);
               }}
             >
               Use this post
             </button>
 
-            <button
-              className={styles.rejectSuggestionButton}
-              onClick={() => setGeneratedPost(null)}
-            >
+            <button className={styles.rejectSuggestionButton} onClick={() => setGeneratedPost(null)}>
               Cancel
             </button>
           </div>
         )}
 
+        {/* ⭐ FILTER REWRITE */}
         {aiSuggestion && (
           <div className={styles.aiSuggestionBox}>
-            <h4>✨ Improved wording the AI suggests:</h4>
+            <h4>✨ Improved wording:</h4>
             <p>{aiSuggestion}</p>
 
             <button
               className={styles.useSuggestionButton}
               onClick={() => {
-                setContent(aiSuggestion);
+                setContent(aiSuggestion!);
                 setAiSuggestion(null);
+                setWasApprovedByAI(true);
               }}
             >
               Use this wording
@@ -232,7 +210,10 @@ export default function AddPost({ onClose }: AddPostProps) {
           <textarea
             placeholder="Add comment..."
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value);
+              setWasApprovedByAI(false); // אם המשתמש שינה — חייב סינון מחדש
+            }}
             className={styles.contentTextArea}
             disabled={isLoading}
           />
@@ -241,7 +222,7 @@ export default function AddPost({ onClose }: AddPostProps) {
             type="button"
             className={styles.generateButton}
             onClick={handleGeneratePost}
-            disabled={isGenerating || !content.trim()}
+            disabled={!content.trim()}
           >
             {isGenerating ? "Generating..." : "✨ Generate Post"}
           </button>
@@ -251,6 +232,7 @@ export default function AddPost({ onClose }: AddPostProps) {
               <span className={styles.fileInputIcon}>🖼️</span>
               Add image/video
             </label>
+
             <input
               id="file-upload"
               type="file"
@@ -258,30 +240,18 @@ export default function AddPost({ onClose }: AddPostProps) {
               accept="image/*,video/*"
               onChange={handleFiles}
               className={styles.fileInput}
-              disabled={isLoading}
             />
+
             <PostMedia files={files} />
           </div>
 
           <button
             type="submit"
             className={styles.submitButton}
-            disabled={
-              isLoading ||
-              !!aiSuggestion ||
-              (content.trim() === "" && files.length === 0)
-            }
+            disabled={isLoading || (!content.trim() && files.length === 0)}
           >
             {isLoading ? "Uploading..." : "Upload Post"}
           </button>
-
-          {aiSuggestion && (
-            <p className={styles.disabledMessage}>
-              Your post sounds a bit discouraging, so it can’t be published as-is 😊
-              You’re welcome to use the improved version suggested by the system,
-              or edit your text into something more positive and uplifting.
-            </p>
-          )}
         </form>
       </div>
     </div>
