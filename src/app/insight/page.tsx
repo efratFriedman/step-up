@@ -14,7 +14,7 @@ import Ticker from "../components/Insight/Ticker/Ticker";
 import Loader from "../components/Loader/Loader";
 
 export default function InsightsPage() {
-  const { strongestHabit, completed, completedThisWeek, fetchInsights } = useInsightStore();
+  const { completed, completedThisWeek, fetchInsights } = useInsightStore();
 
   const [quote, setQuote] = useState<IQuote | null>(null);
   const [loadingQuote, setLoadingQuote] = useState(true);
