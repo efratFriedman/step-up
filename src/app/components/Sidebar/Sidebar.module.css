@@ -41,13 +41,24 @@
     cursor: pointer;
 }
 
-.profileImg {
-    width: 100px;
-    height: 100px;
+.profileImgWrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  
+  .profileImg {
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 10px;
-}
+  }
+  
+  .placeholderImg {
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
 
 .name {
     font-size: 18px;
