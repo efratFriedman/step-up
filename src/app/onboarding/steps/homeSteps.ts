@@ -31,11 +31,21 @@ export function homeSteps(hasHabits: boolean) {
     position: "bottom",
   });
 
+  steps.push({
+    id: "today-habits-explain",
+    title: "Your Habits Area",
+    text: hasHabits
+      ? "Here you can see all the habits planned for today."
+      : "Here is where your habits will appear. We added two example habits so you can see how it works!",
+    selector: "#onboarding-today-habits",
+    position: "top",
+  });
+
   if (hasHabits) {
     steps.push({
       id: "today-habits",
       title: "Today's Habits",
-      text: "These are your habits for today.",
+      text: "These are your habits for today. Tap one to mark it as done.",
       selector: "#onboarding-today-habits",
       position: "top",
     });
