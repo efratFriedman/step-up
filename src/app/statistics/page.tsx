@@ -7,12 +7,12 @@ import WeeklyGraph from "../components/Statistics/WeeklyGraph/WeeklyGraph";
 import { useStatisticsStore } from "@/app/store/useStatisticsStore";
 
 export default function StatisticsPage() {
-  const fetchStatisticsFor = useStatisticsStore(s => s.fetchStatisticsFor);
+  // const fetchStatisticsFor = useStatisticsStore(s => s.fetchStatisticsFor);
 
-  useEffect(() => {
-    fetchStatisticsFor(7); 
-    fetchStatisticsFor(365); 
-  }, [fetchStatisticsFor]);
+  // useEffect(() => {
+  //   fetchStatisticsFor(7); 
+  //   fetchStatisticsFor(365); 
+  // }, [fetchStatisticsFor]);
 
   return (
     <div

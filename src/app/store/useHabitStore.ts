@@ -7,6 +7,7 @@ import {
   updateHabit,
 } from "@/services/client/habitsService";
 import { useHabitLogStore } from "./useHabitLogStore";
+import { useStatisticsStore } from "./useStatisticsStore";
 
 interface HabitStore {
   habits: IHabit[];
@@ -67,7 +68,10 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
         habits: [...get().habits, created],
         error: null,
       });
+
       useHabitLogStore.getState().clearLogs();
+
+      useStatisticsStore.getState().invalidateAll();
 
     } catch (err: any) {
       set({ error: err.message });
@@ -87,6 +91,8 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
 
       useHabitLogStore.getState().clearLogs();
 
+      useStatisticsStore.getState().invalidateAll();
+
     } catch (err: any) {
       set({ error: err.message });
     }
@@ -99,9 +105,12 @@ export const useHabitStore = create<HabitStore>((set, get) => ({
       set({
         habits: get().habits.filter((h) => h._id !== id),
         error: null,
+        lastFetched: null
       });
 
       useHabitLogStore.getState().clearLogs();
+
+      useStatisticsStore.getState().invalidateAll();
 
     } catch (err: any) {
       set({ error: err.message });

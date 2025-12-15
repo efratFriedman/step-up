@@ -16,6 +16,8 @@ interface StatisticsStore {
   loading365: boolean;
 
   fetchStatisticsFor: (range: 7 | 30 | 365) => Promise<void>;
+
+  invalidateAll: () => void;
 }
 
 export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
@@ -31,11 +33,24 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
   loading30: false,
   loading365: false,
 
+  // ⭐ סימון כל הטווחים כלא־מעודכנים
+  invalidateAll() {
+    set({
+      stats7: [],
+      stats30: [],
+      stats365: [],
+      category7: [],
+      category30: [],
+      category365: [],
+    });
+  },
+
   async fetchStatisticsFor(range) {
     const statsKey = `stats${range}` as const;
     const categoryKey = `category${range}` as const;
     const loadingKey = `loading${range}` as const;
 
+    // אם כבר יש מידע — לא נטען מחדש
     if (get()[statsKey].length > 0 && get()[categoryKey].length > 0) {
       return;
     }

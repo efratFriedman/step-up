@@ -6,6 +6,7 @@ import RangeSelector from "../RangeSelector/RangeSelector";
 import WaveProgressChart from "../WaveProgressChart/WaveProgressChart";
 import Loader from "../../Loader/Loader";
 import styles from '@/app/components/Statistics/WeeklyGraph/WeeklyGraph.module.css'
+
 export default function WeeklyGraph() {
     const [range, setRange] = useState<7 | 30>(7);
 
@@ -19,11 +20,16 @@ export default function WeeklyGraph() {
 
     useEffect(() => {
         fetchStatisticsFor(range);
-    }, [range, fetchStatisticsFor]);
+    }, [range]);
 
     const stats = range === 7 ? stats7 : stats30;
-
     const loading = range === 7 ? loading7 : loading30;
+
+    useEffect(() => {
+        if (stats.length === 0) {
+            fetchStatisticsFor(range);
+        }
+    }, [stats, range]);
 
     return (
         <div style={{ marginBottom: "1.5rem", padding: "0 8px" }}>
@@ -41,5 +47,4 @@ export default function WeeklyGraph() {
             {loading ? <Loader /> : <WaveProgressChart data={stats} />}
         </div>
     );
-
 }

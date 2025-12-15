@@ -20,9 +20,17 @@ export default function HeatmapMonth() {
   const RANGE = 365;
   const { stats365, loading365, fetchStatisticsFor } = useStatisticsStore();
 
+  // טעינה ראשונית
   useEffect(() => {
     fetchStatisticsFor(RANGE);
   }, []);
+
+  // ⭐ NEW — אם invalidateAll אפס את stats365 → לטעון מחדש
+  useEffect(() => {
+    if (stats365.length === 0) {
+      fetchStatisticsFor(RANGE);
+    }
+  }, [stats365]);
 
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());

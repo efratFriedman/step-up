@@ -21,17 +21,23 @@ export default function CategoryGraph() {
 
     const loading =
         range === 7 ? loading7 :
-        range === 30 ? loading30 :
-        loading365;
+            range === 30 ? loading30 :
+                loading365;
 
     const categoryStats =
         range === 7 ? category7 :
-        range === 30 ? category30 :
-        category365;
+            range === 30 ? category30 :
+                category365;
 
     useEffect(() => {
         fetchStatisticsFor(range);
     }, [range]);
+
+    useEffect(() => {
+        if (categoryStats.length === 0) {
+            fetchStatisticsFor(range);
+        }
+    }, [categoryStats, range]);
 
     return (
         <div className={styles.container}>
