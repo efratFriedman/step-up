@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "@/app/store/useUserStore";
 import { IPost, IUserPopulated } from "@/interfaces/IPost";
 import Slider from "../Slider/Slider";
 import styles from "@/app/components/Post/PostItem/PostItem.module.css";
-import { Heart, UserRound } from "lucide-react";
+import { Heart, UserRound, Share2  } from "lucide-react";
 import { usePostStore } from "@/app/store/usePostStore";
 import { translateText } from "@/services/client/postService";
 import toast from "react-hot-toast";
@@ -55,6 +54,45 @@ export default function PostItem({ post }: { post: IPost }) {
     }
   };
 
+  const [showShare, setShowShare] = useState(false);
+  const shareRef = useRef<HTMLDivElement>(null);
+
+  const postUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/posts/${post._id}`
+      : "";
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (shareRef.current && !shareRef.current.contains(e.target as Node)) {
+        setShowShare(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "STEPUP Post",
+          text: post.content,
+          url: postUrl,
+        });
+      } catch (err: any) {
+        if (err?.name !== "AbortError") {
+          toast.error("Failed to share post");
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(postUrl);
+      toast.success("Post link copied!");
+    }
+  };
+
+
   return (
     <div className={styles.postItem}>
       <div className={styles.profile}>
@@ -94,7 +132,6 @@ export default function PostItem({ post }: { post: IPost }) {
           {!translated || showOriginal ? post.content : translated}
         </p>
 
-        {/* ⭐ TRANSLATION BUTTON */}
         <button
           className={styles.translateBtn}
           onClick={handleTranslate}
@@ -124,6 +161,29 @@ export default function PostItem({ post }: { post: IPost }) {
               className={styles.likeIcon}
             />
             <span className={styles.likesCount}>{likes}</span>
+          </div>
+          <div ref={shareRef} className={styles.shareWrapper}>
+            <Share2 className={styles.shareIcon} onClick={() => setShowShare((p) => !p)} />
+            
+            {showShare && (
+              <div className={styles.shareMenu}>
+                <button onClick={handleNativeShare}>
+                  <img src="/images/share.jpg" alt="Copy link" className={styles.shareIconSmall} />
+                  <span>Share</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(postUrl);
+                    toast.success("Post link copied!");
+                    setShowShare(false);
+                  }}
+                >
+                  <img src="/images/link.jpg" alt="Copy link" className={styles.shareIconSmall} />
+                  <span>Copy link</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

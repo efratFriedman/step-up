@@ -90,3 +90,14 @@ export async function translateText(text: string, targetLang: string) {
 
   return res.json();
 }
+
+export const getPostById = async (id: string) => {
+  const res = await fetch(`http://localhost:3000/api/posts/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.post;
+};
+
