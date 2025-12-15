@@ -6,6 +6,7 @@ interface TokenUser {
   name: string;
   email: string;
   profileImg?: string;
+  isFirstLogin?: boolean;
 }
 
 export function createAuthResponse(user: TokenUser, message?: string) {
@@ -22,7 +23,8 @@ export function createAuthResponse(user: TokenUser, message?: string) {
       id: user._id,
       name: user.name,
       email: user.email,
-      profileImg: user.profileImg
+      profileImg: user.profileImg,
+      isFirstLogin:user.isFirstLogin??false,
     }
   });
 

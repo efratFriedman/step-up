@@ -7,34 +7,35 @@ import { useModalPostStore } from "@/app/store/usePostModelStore"
 import { useUserStore } from "@/app/store/useUserStore";
 import { NAV_LINKS } from "@/config/navLinks";
 import styles from "./BottomNavbar.module.css";
+import { useOnboardingStore } from "@/app/store/useOnboardingStore";
 
 
 export default function BottomNavbar() {
-    const user = useUserStore((state) => state.user);
-    const pathName = usePathname();
+  const user = useUserStore((state) => state.user);
+  const pathName = usePathname();
 
-    const openHabitModal = useModalStore((s) => s.openHabitModal);
-    const openPostModal = useModalPostStore((s) => s.openPostModal);
+  const openHabitModal = useModalStore((s) => s.openHabitModal);
+  const openPostModal = useModalPostStore((s) => s.openPostModal);
+  const isOnboardingActive  = useOnboardingStore((s) => s.isOnboardingActive);
 
-    if(!user) return null;
+  if (!user) return null;
 
-    const isPostsPage = pathName === "/posts";
+  const isPostsPage = pathName === "/posts";
 
-    return (
-           <nav className={styles.nav}>
+  return (
+    <nav id="onboarding-bottom-nav" className={styles.nav}>
       <div className={styles.navContainer}>
         {NAV_LINKS.map(({ href, icon: Icon, label }) => {
-          const isActive = pathName === href;
+          const isSelected = pathName === href;
           return (
             <Link key={href} href={href}>
-              {isActive && (
+              {isSelected && (
                 <div className={styles.iconBackground} aria-hidden="true" />
               )}
               <Icon
                 size={22}
-                className={`transition-colors ${
-                  isActive ? "text-sky-800" : "text-gray-700"
-                } relative z-10`}
+                className={`transition-colors ${isSelected ? "text-sky-800" : "text-gray-700"
+                  } relative z-10`}
                 aria-label={label}
               />
             </Link>
@@ -42,6 +43,8 @@ export default function BottomNavbar() {
         })}
 
         <button
+          id="onboarding-add-habit-button"
+          disabled={isOnboardingActive}
           onClick={() => {
             if (isPostsPage) openPostModal();
             else openHabitModal();
@@ -52,5 +55,5 @@ export default function BottomNavbar() {
         </button>
       </div>
     </nav>
-    );
+  );
 }

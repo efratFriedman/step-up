@@ -18,7 +18,7 @@ export default function DaysSlider({ onDaySelect }: { onDaySelect: (day: Date) =
   };
 
   return (
-    <div className={styles.sliderWrapper}>
+    <div  className={styles.sliderWrapper}>
     <div className={styles.sliderContainer}>
     {days.map(day => (
     <div

@@ -28,7 +28,7 @@ export default function ProgressBar() {
     const circumference = 2 * Math.PI * CIRCLE_RADIUS; 
     const dashOffset = circumference * (1 - percent / 100);
     return (
-        <div className={styles.container}>
+        <div  className={styles.container}>
             <div className={styles.progressCard}>
                 <div className={styles.textSection}>
                     <p className={styles.encouragement}>

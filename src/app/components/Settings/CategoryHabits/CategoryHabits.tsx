@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { toUrlName } from "@/app/components/Settings/CategoryItem/CategoryItem";
 import { useCategoriesStore } from "@/app/store/useCategoriesStore";
-import { useHabitStore } from "@/app/store/useHabitStore";
 import { useRouter } from "next/navigation";
 import Loader from "@/app/components/Loader/Loader";
 import { IHabit } from "@/interfaces/IHabit";
@@ -11,6 +10,7 @@ import HabitForm from "@/app/components/Habit/AddHabit/HabitForm/HabitForm";
 import HabitsListDisplay from "../HabitsListDisplay/HabitsListDisplay";
 import styles from "./CategoryHabits.module.css";
 import { X, AlertTriangle } from "lucide-react";
+import { useHabitAppStore } from "@/app/store/habitAppStore/store";
 
 interface CategoryHabitsProps {
     routeName: string;
@@ -23,14 +23,14 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
     const [deletingHabitId, setDeletingHabitId] = useState<string | null>(null);
 
     const { categories, fetchCategories, loading: catLoading } = useCategoriesStore();
-    const { habits, fetchHabits, loading: habitsLoading, deleteHabit, updateHabit } = useHabitStore();
+    const { habits, fetchHabits, loadingHabits, deleteHabit, updateHabit } = useHabitAppStore();
 
     useEffect(() => {
         fetchCategories();
         fetchHabits();
     }, [fetchCategories, fetchHabits]);
 
-    if (catLoading || habitsLoading) {
+    if (catLoading || loadingHabits) {
         return <Loader />;
     }
 
@@ -69,7 +69,7 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
 
     const handleUpdateHabit = async (data: any) => {
         if (!editingHabit?._id) return;
-        
+
         await updateHabit(editingHabit._id.toString(), {
             name: data.name,
             description: data.description,
@@ -77,7 +77,7 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
             reminderTime: data.reminderTime,
             days: data.days,
         });
-        
+
         await fetchHabits();
         setEditingHabit(null);
     };
@@ -89,7 +89,7 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
 
     const handleConfirmDelete = async () => {
         if (!deletingHabitId) return;
-        
+
         await deleteHabit(deletingHabitId);
         await fetchHabits();
         setDeletingHabitId(null);
@@ -128,16 +128,16 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
                         <div className={styles.modalContent}>
                             <div className={styles.modalHeader}>
                                 <h2 className={styles.modalTitle}>Edit Habit</h2>
-                                <button 
+                                <button
                                     className={styles.modalClose}
                                     onClick={() => setEditingHabit(null)}
                                 >
                                     <X size={24} />
                                 </button>
                             </div>
-                            
+
                             <HabitForm
-                                isOpen={true} 
+                                isOpen={true}
                                 categories={categories}
                                 onSubmit={handleUpdateHabit}
                                 onCancel={() => setEditingHabit(null)}
@@ -162,17 +162,17 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
                             </div>
                             <h2 className={styles.deleteTitle}>Delete Habit?</h2>
                             <p className={styles.deleteMessage}>
-                                Are you sure you want to delete <strong>"{deletingHabit?.name}"</strong>? 
+                                Are you sure you want to delete <strong>"{deletingHabit?.name}"</strong>?
                                 This action cannot be undone.
                             </p>
                             <div className={styles.deleteActions}>
-                                <button 
+                                <button
                                     className={styles.deleteCancel}
                                     onClick={handleCancelDelete}
                                 >
                                     Cancel
                                 </button>
-                                <button 
+                                <button
                                     className={styles.deleteConfirm}
                                     onClick={handleConfirmDelete}
                                 >

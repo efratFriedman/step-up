@@ -8,6 +8,7 @@ export interface IUser extends Document {
   password?: string;
   profileImg?: string;
   googleId?: string;
+  isFirstLogin?:boolean;
   habits?: Types.ObjectId[];
   posts?: Types.ObjectId[];
 }

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { getStatistics } from "@/services/client/statisticsService";
 import { DailyStat } from "@/utils/statistics";
 
-interface StatisticsStore {
+interface StatisticsStore {// 
   stats7: DailyStat[];
   stats30: DailyStat[];
   stats365: DailyStat[];
@@ -15,8 +15,11 @@ interface StatisticsStore {
   loading30: boolean;
   loading365: boolean;
 
-  fetchStatisticsFor: (range: 7 | 30 | 365) => Promise<void>;
+  fetched7: boolean;
+  fetched30: boolean;
+  fetched365: boolean;
 
+  fetchStatisticsFor: (range: 7 | 30 | 365) => Promise<void>;
   invalidateAll: () => void;
 }
 
@@ -33,7 +36,10 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
   loading30: false,
   loading365: false,
 
-  // ⭐ סימון כל הטווחים כלא־מעודכנים
+  fetched7: false,
+  fetched30: false,
+  fetched365: false,
+
   invalidateAll() {
     set({
       stats7: [],
@@ -42,6 +48,9 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
       category7: [],
       category30: [],
       category365: [],
+      fetched7: false,
+      fetched30: false,
+      fetched365: false,
     });
   },
 
@@ -49,11 +58,9 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
     const statsKey = `stats${range}` as const;
     const categoryKey = `category${range}` as const;
     const loadingKey = `loading${range}` as const;
+    const fetchedKey = `fetched${range}` as const;
 
-    // אם כבר יש מידע — לא נטען מחדש
-    if (get()[statsKey].length > 0 && get()[categoryKey].length > 0) {
-      return;
-    }
+    if (get()[fetchedKey]) return;
 
     set({ [loadingKey]: true });
 
@@ -61,13 +68,14 @@ export const useStatisticsStore = create<StatisticsStore>((set, get) => ({
       const res = await getStatistics(range);
 
       set({
-        [statsKey]: res.stats,
-        [categoryKey]: res.categories,
+        [statsKey]: res.stats,              
+        [categoryKey]: res.categories,       
         [loadingKey]: false,
+        [fetchedKey]: true,                 
       });
     } catch (err) {
       console.error("Statistics store error:", err);
-      set({ [loadingKey]: false });
+      set({ [loadingKey]: false, [fetchedKey]: true });
     }
   },
 }));

@@ -5,4 +5,5 @@ export interface IUserClient {
   profileImg?: string;
   phone?: string;
   birthDate?: string;
+  isFirstLogin?:boolean;
 }

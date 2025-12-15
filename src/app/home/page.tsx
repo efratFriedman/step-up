@@ -10,17 +10,25 @@ import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
-  
+
   const dayName = selectedDate.toLocaleDateString('en-US', { weekday: 'long' });
 
   return (
     <div className={styles.container}>
-      <ProgressBar />
-      <DaysSlider onDaySelect={setSelectedDate} />
+      <div id="onboarding-progress-bar">
+        <ProgressBar />
+      </div>
+
+      <div id="onboarding-days-slider">
+        <DaysSlider onDaySelect={setSelectedDate} />
+      </div>
+
       <h2 className={styles.habitsHeader}>
         {dayName} habits!
       </h2>
-      <TodayHabits selectedDate={selectedDate} />
+      <div id="onboarding-today-habits">
+        <TodayHabits selectedDate={selectedDate} />
+      </div>
       <NewHabit />
     </div>
   );

@@ -38,4 +38,18 @@ export async function resetUserPassword(email: string, newPassword: string) {
   
     return data; 
   }
+
+  export async function finishOnboardingService() {
+  const res = await fetch("/api/finish-onboarding", {
+    method: "POST",
+  });
+
+  if (!res.ok) {
+    console.error("Failed to finish onboarding");
+    return { ok: false };
+  }
+
+  return { ok: true };
+}
+
   

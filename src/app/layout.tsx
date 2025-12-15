@@ -7,6 +7,7 @@ import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NewHabit from "./components/Habit/AddHabit/NewHabit/NewHabit";
 import PageTransitionWrapper from "./components/PageTransitionWrapper/PageTransitionWrapper";
 import { Toaster } from "react-hot-toast";
+import OnboardingProvider from "./onboarding/OnboardingProvider";
 
 
 
@@ -46,7 +47,9 @@ export default function RootLayout({ children }:
         />
         <ProfileSidebarWrapper />
         <PageTransitionWrapper>
-          {children}
+          <OnboardingProvider>
+            {children}
+          </OnboardingProvider>
         </PageTransitionWrapper>
         <NewHabit />
         <footer>

@@ -8,5 +8,6 @@ export function mapUserToClient(user: any): IUserClient {
     profileImg: user.profileImg,
     phone: user.phone,
     birthDate: user.birthDate,
+    isFirstLogin:user.isFirstLogin??false,
   };
 }

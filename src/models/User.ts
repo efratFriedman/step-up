@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema({
     birthDate: Date,
     password:String,
     profileImg: String,
+    isFirstLogin:{type:Boolean,default:true},
     googleId: { type: String, unique: true, sparse: true }, 
     habits: [{ type: Schema.Types.ObjectId, ref: 'Habit' }],
     posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }]
