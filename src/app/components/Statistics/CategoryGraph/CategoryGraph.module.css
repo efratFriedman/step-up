@@ -7,7 +7,6 @@
   padding: 0 0.5rem;
 }
 
-/* מרכז את ה־RangeSelector בדיוק */
 .selectorWrapper {
   display: flex;
   justify-content: center;
@@ -27,6 +26,21 @@
   font-style: italic;
   text-align: center;
 }
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #666;
+  background-color: #f7f9fa;
+  border-radius: 16px;
+  margin-top: 16px;
+  text-align: center;
+  gap: 8px;
+}
+
 
 .statsContainer {
   display: flex;

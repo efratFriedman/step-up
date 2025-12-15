@@ -5,6 +5,7 @@ import { useStatisticsStore } from "@/app/store/useStatisticsStore";
 import RangeSelector from "../RangeSelector/RangeSelector";
 import styles from "./CategoryGraph.module.css";
 import Loader from "../../Loader/Loader";
+import { Activity } from "lucide-react"; 
 
 export default function CategoryGraph() {
     const [range, setRange] = useState<7 | 30 | 365>(7);
@@ -21,23 +22,20 @@ export default function CategoryGraph() {
 
     const loading =
         range === 7 ? loading7 :
-            range === 30 ? loading30 :
-                loading365;
+        range === 30 ? loading30 :
+        loading365;
 
     const categoryStats =
         range === 7 ? category7 :
-            range === 30 ? category30 :
-                category365;
+        range === 30 ? category30 :
+        category365;
 
     useEffect(() => {
         fetchStatisticsFor(range);
     }, [range]);
 
-    useEffect(() => {
-        if (categoryStats.length === 0) {
-            fetchStatisticsFor(range);
-        }
-    }, [categoryStats, range]);
+    const isEmpty = !categoryStats || categoryStats.filter(cat => cat.percent > 0).length === 0;
+
 
     return (
         <div className={styles.container}>
@@ -57,6 +55,12 @@ export default function CategoryGraph() {
             {loading ? (
                 <div className={styles.loaderWrapper}>
                     <Loader />
+                </div>
+            ) : isEmpty ? (
+                <div className={styles.emptyState}>
+                    <Activity size={36} color="#4f9cf9" />
+                    <p>There is no data to display yet.</p>
+                    <small>When you start using, categories and graphs will appear here!</small>
                 </div>
             ) : (
                 <div className={styles.statsContainer}>

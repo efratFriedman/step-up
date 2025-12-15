@@ -153,7 +153,6 @@ export default function CategoryHabits({ routeName }: CategoryHabitsProps) {
                     </div>
                 )}
 
-                {/* Delete Confirmation Modal */}
                 {deletingHabitId && (
                     <div className={styles.deleteModal}>
                         <div className={styles.deleteContent}>
