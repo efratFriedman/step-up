@@ -5,6 +5,14 @@ export function homeSteps(hasHabits: boolean) {
     id: "welcome",
     title: "Welcome to StepUp! 🌱",
     text: "Let's take a quick tour!",
+    attachTo: {
+      element: "body",
+      on: "center"
+    },
+    advanceOn: {
+      selector: ".shepherd-button-next",
+      event: "click"
+    }
   });
 
   steps.push({
@@ -23,23 +31,11 @@ export function homeSteps(hasHabits: boolean) {
     position: "bottom",
   });
 
-  // ⭐ שלב חדש — הסבר על אזור ההרגלים
-  steps.push({
-    id: "today-habits-explain",
-    title: "Your Habits Area",
-    text: hasHabits
-      ? "Here you can see all the habits planned for today."
-      : "Here is where your habits will appear. We added two example habits so you can see how it works!",
-    selector: "#onboarding-today-habits",
-    position: "top",
-  });
-
-  // ⭐ אם יש הרגלים אמיתיים — הדגש נוסף
   if (hasHabits) {
     steps.push({
       id: "today-habits",
       title: "Today's Habits",
-      text: "These are your habits for today. Tap one to mark it as done.",
+      text: "These are your habits for today.",
       selector: "#onboarding-today-habits",
       position: "top",
     });
