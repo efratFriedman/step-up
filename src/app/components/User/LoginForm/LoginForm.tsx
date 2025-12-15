@@ -22,6 +22,9 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+
+    setLoading(true);
     setError("");
 
     try {
@@ -30,6 +33,8 @@ export default function LoginForm() {
       router.push(ROUTES.HOME);
     } catch {
       setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,13 +112,16 @@ export default function LoginForm() {
         <a href="/forgot-password">Forgot your password?</a>
       </p>
 
-
-
       {error && <p className={styles.error}>{error}</p>}
 
-      <button type="submit" className={styles.loginButton}>
-        Log In
+      <button
+        type="submit"
+        className={styles.loginButton}
+        disabled={loading}
+      >
+        {loading ? "Logging in..." : "Log In"}
       </button>
+
 
       <p className={styles.orDivider}>Or</p>
 
