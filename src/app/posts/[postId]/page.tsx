@@ -1,5 +1,6 @@
 import PostItem from "@/app/components/Post/PostItem/PostItem";
-import { getPostById } from "@/services/client/postService";
+import { getPostById } from "@/services/server/postService";
+import { notFound } from "next/navigation";
 
 interface PostPageProps {
   params: {
@@ -13,9 +14,9 @@ export default async function SinglePostPage({ params }: PostPageProps) {
   if (!postId) return <div>Invalid post</div>;
 
   const post = await getPostById(postId);
-
+  
   if (!post) {
-    return <div>Post not found</div>;
+    notFound();
   }
 
   return (
