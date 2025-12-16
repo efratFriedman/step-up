@@ -31,6 +31,6 @@ export const getPostById = async (id: string): Promise<IPost | null> => {
   .populate("userId")
   .lean<IPost>();
 
-    return post as IPost;
+    return post || null;
 };
 
