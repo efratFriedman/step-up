@@ -4,28 +4,33 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface OnboardingState {
-  isOnboardingActive: boolean;
-  hasStarted: boolean;
-  hasCreatedFirstHabit: boolean;
+    isOnboardingActive: boolean;
+    currentStep: number;
 
-  start: () => void;
-  finish: () => void;
-  setFirstHabitCreated: () => void;
+    start: () => void;
+    finish: () => void;
+    goToStep: (index: number) => void;
 }
 
 export const useOnboardingStore = create<OnboardingState>()(
-  persist(
-    (set) => ({
-      isOnboardingActive: false,
-      hasStarted: false,
-      hasCreatedFirstHabit: false,
+    persist(
+        (set) => ({
+            isOnboardingActive: false,
+            currentStep: 0,
 
-      start: () => set({ isOnboardingActive: true, hasStarted: true }),
-      finish: () => set({ isOnboardingActive: false }),
-      setFirstHabitCreated: () => set({ hasCreatedFirstHabit: true }),
-    }),
-    {
-      name: "onboarding-storage", 
-    }
-  )
+            start: () => set({ isOnboardingActive: true, currentStep: 0 }),
+
+            finish: () => set({ isOnboardingActive: false, currentStep: 0 }),
+
+            goToStep: (index) => set({ currentStep: index }),
+        }),
+
+        {
+            name: "onboarding-storage",
+            partialize: (state) => ({
+                isOnboardingActive: state.isOnboardingActive,
+                currentStep: state.currentStep,
+            }),
+        }
+    )
 );
