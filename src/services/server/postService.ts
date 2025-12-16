@@ -6,6 +6,7 @@
 //     return res.json();
 //   }
 // src/services/server/postService.ts
+// src/services/server/postService.ts
 import Post from "@/models/Post";
 import { dbConnect } from "@/lib/DB";
 import { IPost } from "@/interfaces/IPost";
@@ -21,5 +22,5 @@ export async function getPostById(id: string) {
 
   if (!post || !post.userId) return null;
 
-  return post;
+  return JSON.parse(JSON.stringify(post));
 }
