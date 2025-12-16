@@ -25,9 +25,7 @@ export function homeSteps(hasHabits: boolean) {
     steps.push({
         id: "add-habit",
         title: "Add Habit",
-        text: hasHabits
-            ? "Tap + anytime to create more habits."
-            : "Let’s create your first habit!",
+        text: "Tap + anytime to create more habits.",
         selector: "#onboarding-add-habit-button",
         position: "top",
     });
