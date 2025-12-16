@@ -9,8 +9,9 @@ interface PostPageProps {
 }
 
 export default async function SinglePostPage({ params }: PostPageProps) {
-  const { postId } = await params;
-  if (!postId) return notFound();
+  const resolvedParams = await params;
+  const postId = resolvedParams?.postId;
+  if (!postId) return <div>Invalid post</div>;
 
   const post = await getPostById(postId);
   

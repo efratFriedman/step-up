@@ -1,36 +1,25 @@
-// import { cookies } from "next/headers";
-// import { getBaseUrl } from "@/utils/baseUrl";
+// import { getBaseUrl } from "@/lib/baseUrl";
 
-// export const getPostById = async (id: string) => {
-//   const cookieStore = cookies();
-
-//   const res = await fetch(
-//     `${getBaseUrl()}/api/posts/${id}`,
-//     {
-//       cache: "no-store",
-//       headers: {
-//         Cookie: cookieStore.toString(),
-//       },
-//     }
-//   );
-
-//   if (!res.ok) return null;
-
-//   const data = await res.json();
-//   return data.post;
-// };
-
-import { dbConnect } from "@/lib/DB";
+// export async function getPostById(postId: string) {
+//     const res = await fetch(`${getBaseUrl()}/api/posts/${postId}`);
+//     if (!res.ok) throw new Error("Failed to load post");
+//     return res.json();
+//   }
+// src/services/server/postService.ts
 import Post from "@/models/Post";
+import { dbConnect } from "@/lib/DB";
 import { IPost } from "@/interfaces/IPost";
 
-export const getPostById = async (id: string): Promise<IPost | null> => {
+export async function getPostById(id: string) {
   await dbConnect();
 
+  if (!/^[0-9a-fA-F]{24}$/.test(id)) return null;
+
   const post = await Post.findById(id)
-  .populate("userId")
-  .lean<IPost>();
+    .populate("userId") 
+    .lean() as IPost | null;
 
-    return post || null;
-};
+  if (!post || !post.userId) return null;
 
+  return post;
+}
