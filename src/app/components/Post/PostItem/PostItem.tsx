@@ -57,10 +57,12 @@ export default function PostItem({ post }: { post: IPost }) {
   const [showShare, setShowShare] = useState(false);
   const shareRef = useRef<HTMLDivElement>(null);
 
-  const postUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/posts/${post._id}`
-      : "";
+  const BASE_URL = globalThis?.location?.origin ?? "";
+  const postUrl = `${BASE_URL}/posts/${post._id}`;
+  // const postUrl =
+  //   typeof window !== "undefined"
+  //     ? `${window.location.origin}/posts/${post._id}`
+  //     : "";
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
