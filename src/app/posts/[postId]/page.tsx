@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 import PostItem from "@/app/components/Post/PostItem/PostItem";
 import { getPostById } from "@/services/server/postService";
 import { notFound } from "next/navigation";
