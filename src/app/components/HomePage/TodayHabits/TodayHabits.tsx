@@ -124,16 +124,14 @@ export default function TodayHabits({ selectedDate }: { selectedDate: Date }) {
               if (isOnboardingActive) return;
               if (!isToday) return;
               toggleTodayStatus(habit.logId);
-
-              // if (user?.id) {
-              //   const iso = selectedDate.toISOString();
-              //   await fetchLogs(user.id, iso);
-              // }
             }}
           >
-            <div className={styles.statusCircle}>
-              {habit.isDone && <span className={styles.checkmark}>✓</span>}
-            </div>
+            {isToday && (
+              <div className={styles.statusCircle}>
+                {habit.isDone && <span className={styles.checkmark}>✓</span>}
+              </div>
+            )}
+
 
             <div className={styles.iconWrapper}>
               {habit.category?.image && (
