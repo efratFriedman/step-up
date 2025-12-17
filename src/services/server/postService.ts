@@ -9,7 +9,7 @@ export async function getPostById(id: string) {
 
   const post = await Post.findById(id)
     .populate("userId") 
-    .lean() as IPost | null | any;
+    .lean() as IPost | null | undefined;
 
   if (!post || !post.userId) return null;
 
