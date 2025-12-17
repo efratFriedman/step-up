@@ -8,7 +8,7 @@ export async function getPostById(id: string) {
   if (!/^[0-9a-fA-F]{24}$/.test(id)) return null;
 
   const post = await Post.findById(id)
-    .populate("userId") 
+    .populate("userId", "name profileImg")
     .lean() as IPost | null | undefined;
 
   if (!post || !post.userId) return null;

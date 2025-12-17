@@ -1,6 +1,6 @@
-import User from './User';
+import "../models/User"; 
 import { IPost } from '@/interfaces/IPost';
-import mongoose, { Schema, Model, model } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const PostSchema = new mongoose.Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
