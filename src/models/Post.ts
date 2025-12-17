@@ -1,3 +1,4 @@
+import User from './User';
 import { IPost } from '@/interfaces/IPost';
 import mongoose, { Schema, Model, model } from 'mongoose';
 
