@@ -12,6 +12,8 @@
 ![Mongoose](https://img.shields.io/badge/Mongoose-880000)
 ![Zod](https://img.shields.io/badge/Zod-3E67B1)
 ![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990)
+![Pusher](https://img.shields.io/badge/Pusher-300D4F?logo=pusher&logoColor=white)
+![Recharts](https://img.shields.io/badge/Recharts-22B5BF?logo=recharts&logoColor=white)
 
 ## About the Project
 
