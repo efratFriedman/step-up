@@ -47,8 +47,8 @@ At its current stage, StepUp serves as a foundation for future expansion, featur
 
 ## Contact
 
-For questions, feedback, or collaboration opportunities:
-gmail: stepup.betterhabits@gmail.com
+For questions, feedback, or collaboration opportunities:  
+ **stepup.betterhabits@gmail.com**
 
 👩‍💻 **Efrat Friedman**  
 Software Engineer  
