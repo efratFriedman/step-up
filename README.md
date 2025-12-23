@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StepUp
 
-## Getting Started
+![Last Commit](https://img.shields.io/github/last-commit/efratFriedman/step-up)
+![TypeScript](https://img.shields.io/github/languages/top/efratFriedman/step-up?color=3178C6)
+![Languages](https://img.shields.io/github/languages/count/efratFriedman/step-up)
 
-First, run the development server:
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black)
+![Mongoose](https://img.shields.io/badge/Mongoose-880000)
+![Zod](https://img.shields.io/badge/Zod-3E67B1)
+![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## About the Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**StepUp** is a mobile-first web application designed to encourage personal growth, motivation, and taking meaningful steps forward.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The project focuses on creating a simple, clear, and engaging experience that helps users connect with the idea of progress — one step at a time.  
+The interface is intentionally minimal and optimized for mobile usage, allowing users to interact with the platform comfortably from their phones.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+At its current stage, StepUp serves as a foundation for future expansion, feature growth, and broader platform support.
 
-## Learn More
+> 📱 **Important:**  
+> The website is currently optimized for **mobile devices only**.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What You’ll Find in StepUp
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- A clean, mobile-first user experience  
+- Clear messaging focused on progress and self-improvement  
+- A structured and scalable frontend foundation  
+- A project built with future features and growth in mind  
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Live Website
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🌐 **Visit StepUp:**  
+[https://www.step-up.life/](https://www.step-up.life/)
+
+---
+
+## Contact
+
+For questions, feedback, or collaboration opportunities:
+gmail: stepup.betterhabits@gmail.com
+
+👩‍💻 **Efrat Friedman**  
+Software Engineer  
+GitHub: https://github.com/efratFriedman
+Linkedin: https://www.linkedin.com/in/efrat-friedman-746534348
+👩‍💻 **Mimi kenig**  
+Software Engineer  
+GitHub: 
+Linkedin: 
+👩‍💻 **Shira Levi**  
+Software Engineer  
+GitHub: 
+Linkedin: 
+
+---
+
+## Follow the Project
+
+⭐ Star the repository to follow updates  
+👀 Watch the repo to stay informed about future changes  
+
+
+
