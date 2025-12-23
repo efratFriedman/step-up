@@ -52,14 +52,14 @@ gmail: stepup.betterhabits@gmail.com
 Software Engineer  
 GitHub: https://github.com/efratFriedman  
 Linkedin: https://www.linkedin.com/in/efrat-friedman-746534348  
-👩‍💻 **Mimi kenig**  
-Software Engineer  
-GitHub: 
-Linkedin: 
-👩‍💻 **Shira Levi**  
-Software Engineer  
-GitHub: 
-Linkedin: 
+👩‍💻 **Mimi kenig**    
+Software Engineer   
+GitHub:   
+Linkedin:   
+👩‍💻 **Shira Levi**    
+Software Engineer    
+GitHub:   
+Linkedin:   
 
 ---
 
