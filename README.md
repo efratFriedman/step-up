@@ -50,8 +50,8 @@ gmail: stepup.betterhabits@gmail.com
 
 👩‍💻 **Efrat Friedman**  
 Software Engineer  
-GitHub: https://github.com/efratFriedman
-Linkedin: https://www.linkedin.com/in/efrat-friedman-746534348
+GitHub: https://github.com/efratFriedman  
+Linkedin: https://www.linkedin.com/in/efrat-friedman-746534348  
 👩‍💻 **Mimi kenig**  
 Software Engineer  
 GitHub: 
